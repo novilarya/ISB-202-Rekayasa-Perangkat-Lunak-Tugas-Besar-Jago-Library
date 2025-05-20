@@ -767,6 +767,36 @@ Container Styles
     box-shadow: var(--shadow-light);
 }
 
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #007BFF;
+}
+
+.form-check-label {
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    color: #5285a6;
+}
+
+.form-check:hover .form-check-label {
+    color: #007BFF;
+}
+
+.message {
+    text-align: left;
+    font-weight: lighter;
+    color: red;
+}
 
 
 
