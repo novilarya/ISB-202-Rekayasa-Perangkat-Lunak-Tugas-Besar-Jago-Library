@@ -1,3 +1,23 @@
+<?php
+    include '../database/connection.php';
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = mysqli_real_escape_string($conn, $_POST['username']);
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+        $query = "SELECT * FROM user WHERE username='$username' AND password='$password'";
+        $result = mysqli_query($conn, $query);
+        
+        if (mysqli_num_rows($result) == 1) {
+            $_SESSION['username'] = $username;
+            header("Location: index.php");
+            exit();
+        } else {
+            echo "<script>alert('Username atau Password salah!'); window.location.href='login.php';</script>";
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,21 +35,20 @@
             <h1>Login</h1>
             <p>Welcome back! Please login to your account.</p>
 
-            <form method="post" action="login.php">
+            <form method="POST" action="login.php">
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Email Address" required>
+                    <input type="email" name="email" id="email" placeholder="Masukkan email" required>
                 </div>
 
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="password" id="password" placeholder="Masukkan password" required>
                 </div>
 
                 <button type="submit" class="signup-button">Login</button>
             </form>
-
-            <p class="signin-link">Don't have an account? <a href="registration.php">Sign Up</a></p>
+            <p class="signin-link">Belum punya akun><a href="registration.php">Daftar</a></p>
         </div>
     </div>
 </body>
