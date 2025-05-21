@@ -1,5 +1,4 @@
 <?php
-session_start();
 echo '
 <link rel="stylesheet" href="/Jago_library%20Program/css/styles.css">
 <div class="header-container">
