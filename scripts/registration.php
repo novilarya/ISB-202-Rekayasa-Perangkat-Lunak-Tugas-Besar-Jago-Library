@@ -18,8 +18,12 @@
             $message = ' (Username sudah ada!)';
         } else {
             $conn->query("INSERT INTO users (role, email, username, password, nrp_nidn) VALUES ('$role', '$email', '$username', '$password', '$nrp_nidn')");
-            header("Location: login.php");
+            echo '<script>
+                alert("Akun sudah berhasil dibuat!");
+                window.location.href = "login.php";
+            </script>';
             $conn->close();
+            exit();
         }
     }
 ?>
