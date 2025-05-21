@@ -28,7 +28,7 @@
     <div class="book-slider">
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter.jpg" alt="Harry Potter">
+                <img src="/images/harry-potter.jpg" alt="Harry Potter">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Sorcerer's Stone</h3>
@@ -41,7 +41,7 @@
 
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter2.jpg" alt="The Da Vinci Code">
+                <img src="/images/harry-potter2.jpg" alt="The Da Vinci Code">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Prisoner of Azkaban</h3>
@@ -54,7 +54,7 @@
 
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter6.jpg" alt="The Catcher in the Rye">
+                <img src="/images/harry-potter6.jpg" alt="The Catcher in the Rye">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Deathyl Hallows</h3>
@@ -67,7 +67,7 @@
 
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter4.jpg" alt="The Da Vinci Code">
+                <img src="/images/harry-potter4.jpg" alt="The Da Vinci Code">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Prisoner of Azkaban</h3>
@@ -80,7 +80,7 @@
 
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter5.jpg" alt="The Da Vinci Code">
+                <img src="/images/harry-potter5.jpg" alt="The Da Vinci Code">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Prisoner of Azkaban</h3>
@@ -93,7 +93,7 @@
 
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter6.jpg" alt="The Da Vinci Code">
+                <img src="/images/harry-potter6.jpg" alt="The Da Vinci Code">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Prisoner of Azkaban</h3>
@@ -120,7 +120,7 @@
             <div class="col-md-4">
                 <div class="card category-card mb-4 rounded-4 position-relative overflow-hidden">
                     <a href="index.html" class="text-decoration-none">
-                        <img src="/Silib/Jago_library%20Program/images/category1.jpg" class="img-fluid rounded-3" alt="Romance">
+                        <img src="/images/category1.jpg" class="img-fluid rounded-3" alt="Romance">
                         <h6 class="position-absolute bottom-0 m-4 py-2 px-3 rounded-3 text-white">Romance</h6>
                     </a>
                 </div>
@@ -128,7 +128,7 @@
             <div class="col-md-4">
                 <div class="card category-card mb-4 rounded-4 position-relative overflow-hidden">
                     <a href="index.html" class="text-decoration-none">
-                        <img src="/Silib/Jago_library%20Program/images/category2.jpg" class="img-fluid rounded-3" alt="Lifestyle">
+                        <img src="/images/category2.jpg" class="img-fluid rounded-3" alt="Lifestyle">
                         <h6 class="position-absolute bottom-0 m-4 py-2 px-3 rounded-3 text-white">Lifestyle</h6>
                     </a>
                 </div>
@@ -136,7 +136,7 @@
             <div class="col-md-4">
                 <div class="card category-card mb-4 rounded-4 position-relative overflow-hidden">
                     <a href="index.html" class="text-decoration-none">
-                        <img src="/Silib/Jago_library%20Program/images/category3.jpg" class="img-fluid rounded-3" alt="Recipe">
+                        <img src="/images/category3.jpg" class="img-fluid rounded-3" alt="Recipe">
                         <h6 class="position-absolute bottom-0 m-4 py-2 px-3 rounded-3 text-white">Recipe</h6>
                     </a>
                 </div>
