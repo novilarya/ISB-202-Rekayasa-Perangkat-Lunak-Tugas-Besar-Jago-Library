@@ -15,9 +15,9 @@ echo '
             </ul>
         </div>
         <div class="footer-social">
-            <a href="#"><img src="/Jago_library%20Program/images/footers/fb.png" alt="Facebook"></a>
-            <a href="#"><img src="/Jago_library%20Program/images/footers/ig.png" alt="Instagram"></a>
-            <a href="#"><img src="/Jago_library%20Program/images/footers/yt.png" alt="yt"></a>
+            <a href="#"><img src="/images/footers/fb.png" alt="Facebook"></a>
+            <a href="#"><img src="/images/footers/ig.png" alt="Instagram"></a>
+            <a href="#"><img src="/images/footers/yt.png" alt="yt"></a>
         </div>
         <div class="footer-copyright">
             <p>© ' . date("2024/10/2002") . ' Library. All Rights Reserved.</p>

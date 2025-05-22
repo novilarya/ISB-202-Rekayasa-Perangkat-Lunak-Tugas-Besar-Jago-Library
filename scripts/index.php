@@ -28,7 +28,7 @@
     <div class="book-slider">
         <div class="book-card">
             <div class="book-image">
-                <img src="/Silib/Jago_library%20Program/images/harry-potter.jpg" alt="Harry Potter">
+                <img src="/images/harry-potter.jpg" alt="Harry Potter">
             </div>
             <div class="book-info-index">
                 <h3>Harry Potter And The Sorcerer's Stone</h3>

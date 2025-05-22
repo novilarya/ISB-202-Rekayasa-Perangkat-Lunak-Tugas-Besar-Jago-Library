@@ -1,6 +1,6 @@
 <?php
 echo '
-<link rel="stylesheet" href="/Jago_library%20Program/css/styles.css">
+<link rel="stylesheet" href="/css/styles.css">
 <div class="header-container">
     <div class="logo">
         <a href="index.php">Jago Library</a>
@@ -8,7 +8,7 @@ echo '
     <div class="footer-links">
         <ul>
             <li><a href="about.php">About</a></li>
-            <li><a href="book.php">Book</a></li>
+            <li><a href="/scripts/daftar-pinjam.php">Book</a></li>
             <li><a href="authors.php">Authors</a></li>
             <li><a href="geners.php">Geners</a></li>
             <li><a href="lists.php">Lists</a></li>
@@ -19,7 +19,7 @@ echo '
 if (isset($_SESSION['username'])) {
     echo '
     <div class="profile-icon">
-        <a href="profile.php"><img src="/Jago_library%20Program/images/footers/profile.png" alt="Profile"></a>
+        <a href="profile.php"><img src="/images/footers/profile.png" alt="Profile"></a>
     </div>';
 } else {
     echo '
