@@ -1,3 +1,13 @@
+<?php
+    include('../database/connection.php');
+
+    $query = "SELECT * FROM buku";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $buku = $stmt->get_result();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,83 +36,20 @@
     <div class="featured-container" id="container">
     <h2>Featured Books</h2>
     <div class="book-slider">
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter.jpg" alt="Harry Potter">
+        <?php while($row = $buku->fetch_assoc()) { ?>
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="/images/<?php echo $row['cover_buku']; ?>" alt="Harry Potter">
+                </div>
+                <div class="book-info-index">
+                    <h3><?php echo $row['nama_buku']; ?></h3>
+                    <p><?php echo $row['pengarang']; ?></p>
+                    <p class="rating">⭐ 5/5</p>
+                    <p class="description"><?php echo $row['deskripsi_buku']; ?></p>
+                    <a href="<?php echo "pinjam.php?kode_buku=" . $row['kode_buku']; ?>"><button class="pinjam-button"> Pinjam </button></a>
+                </div>
             </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Sorcerer's Stone</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 5/5</p>
-                <p class="description">A major update in the detective section...</p>
-                <a href="pinjam.php"><button class="pinjam-button"> Pinjam </button></a>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter2.jpg" alt="The Da Vinci Code">
-            </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Prisoner of Azkaban</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 4.5/5</p>
-                <p class="description">A major update in the detective section...</p>
-                <button class="pinjam-button"> Pinjam </button>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter6.jpg" alt="The Catcher in the Rye">
-            </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Deathyl Hallows</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 4/5</p>
-                <p class="description">A story of teenage rebellion and angst...</p>
-                <button class="pinjam-button"> Pinjam </button>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter4.jpg" alt="The Da Vinci Code">
-            </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Prisoner of Azkaban</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 4.5/5</p>
-                <p class="description">A major update in the detective section...</p>
-                <button class="pinjam-button"> Pinjam </button>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter5.jpg" alt="The Da Vinci Code">
-            </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Prisoner of Azkaban</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 4.5/5</p>
-                <p class="description">A major update in the detective section...</p>
-                <button class="pinjam-button"> Pinjam </button>
-            </div>
-        </div>
-
-        <div class="book-card">
-            <div class="book-image">
-                <img src="/images/harry-potter6.jpg" alt="The Da Vinci Code">
-            </div>
-            <div class="book-info-index">
-                <h3>Harry Potter And The Prisoner of Azkaban</h3>
-                <p>By J.K. Rowling</p>
-                <p class="rating">⭐ 4.5/5</p>
-                <p class="description">A major update in the detective section...</p>
-                <button class="pinjam-button"> Pinjam </button>
-            </div>
-        </div>
+        <?php } ?>
     </div>
 
     <div class="slider-controls">
