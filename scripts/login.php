@@ -13,6 +13,9 @@
         $result = $stmt->get_result();
 
         if ($result && $result->num_rows === 1) {
+            $stmt2 = $conn->prepare("UPDATE users SET status = 'logged' WHERE email = ?");
+            $stmt2->bind_param("s", $email);
+            $stmt2->execute();
             $_SESSION['email'] = $email;
             header("Location: index.php");
             exit();

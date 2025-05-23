@@ -21,7 +21,7 @@
 </head>
 <body>
     <header>
-        <?php include "header.php"; ?>
+        <?php include "header.php"?>
     </header>
 
     <div class="hero">
