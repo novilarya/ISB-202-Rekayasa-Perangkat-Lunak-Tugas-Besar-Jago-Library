@@ -16,17 +16,24 @@ echo '
     </div>
     <div class="user-options">';
     
-if (isset($_SESSION['username'])) {
-    echo '
-    <div class="profile-icon">
-        <a href="profile.php"><img src="/images/footers/profile.png" alt="Profile"></a>
-    </div>';
-} else {
-    echo '
-   <div class="auth-buttons">
-            <a href="login.php" class="login-btn">Login</a>
-            <a href="registration.php" class="signup-btn">Sign Up</a>';
-}
+
+    $query = "SELECT * FROM users WHERE status = 'logged'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $user = $stmt->get_result();
+
+    if ($user && $user->num_rows === 1) {
+        $row = $user->fetch_assoc();
+        echo '
+        <div class="profile-icon">
+            <a href="profile.php"><img src="/images/footers/' . htmlspecialchars($row['foto']) . '" alt="Profile"></a>
+        </div>';
+    } else {
+        echo '
+    <div class="auth-buttons">
+                <a href="login.php" class="login-btn">Login</a>
+                <a href="registration.php" class="signup-btn">Sign Up</a>';
+    }
 
 echo '
     </div>
