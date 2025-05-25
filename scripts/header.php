@@ -26,7 +26,7 @@ echo '
         $row = $user->fetch_assoc();
         echo '
         <div class="profile-icon">
-            <a href="profile.php"><img src="/images/footers/' . htmlspecialchars($row['foto']) . '" alt="Profile"></a>
+            <a href="profile.php"><img src="/images/user' . htmlspecialchars($row['foto']) . '" alt="Profile"></a>
         </div>';
     } else {
         echo '
