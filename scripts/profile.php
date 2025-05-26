@@ -48,59 +48,61 @@
   <?php include "header.php" ?>
 </header>
 <body>
-    <div class="container-login">
-        <div class="form-card">
-            <h1>Profile<?php 
-                if ($row['role'] === 'mahasiswa') {
-                    echo ' Mahasiswa';
-                } elseif ($row['role'] === 'dosen') {
-                    echo ' Dosen';
-                }
-            ?></h1>         
-            <form method="POST" action="">
-                <div class="input-group" id="nrp-group">
-                    <label for="nrp_nidn">
-                    <?php 
-                        if ($row['role'] === 'mahasiswa') {
-                            echo 'NRP';
-                        } elseif ($row['role'] === 'dosen') {
-                            echo 'NIDN';
-                        } else {
-                            echo 'NRP/NIDN';
-                        }
-                    ?>
-                    </label>
-                    <input type="text" name="nrp_nidn" id="nrp_nidn" placeholder="<?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN'; ?>" value="<?php echo $row['nrp_nidn']; ?>" required>
-                </div>
+    <div class="container-profile">
+  <div class="profile-sidebar">
+      <img src="/images/user.jpg" alt="Foto Profil">
+  </div>
 
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Masukkan email" value="<?php echo $row['email']; ?>" required>
-                </div>
+  <div class="form-card-profile">
+      <h1>My Profile<?php 
+          if ($row['role'] === 'mahasiswa') {
+              echo ' Mahasiswa';
+          } elseif ($row['role'] === 'dosen') {
+              echo ' Dosen';
+          }
+      ?></h1>         
+          <div class="input-profile" id="nrp-group-profile">
+              <label for="nrp_nidn">
+              <?php 
+                  if ($row['role'] === 'mahasiswa') {
+                      echo 'NRP';
+                  } elseif ($row['role'] === 'dosen') {
+                      echo 'NIDN';
+                  } else {
+                      echo 'NRP/NIDN';
+                  }
+              ?>
+              </label>
+              <input type="text" name="nrp_nidn" id="nrp_nidn" placeholder="<?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN'; ?>" value="<?php echo $row['nrp_nidn']; ?>" required>
+          </div>
 
-                <div class="input-group">
-                    <label for="username">Username
-                        <?php if ($message): ?>
-                            <div class="message"><?= $message ?></div>
-                        <?php endif; ?>
-                    </label>
-                    <input type="text" name="username" id="username" placeholder="Masukkan username" value="<?php echo $row['username']; ?>"required>
-                </div>
+          <div class="input-profile">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" placeholder="Masukkan email" value="<?php echo $row['email']; ?>" required>
+          </div>
 
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Masukkan password" value="<?php echo $row['password']; ?>"required>
-                </div>
+          <div class="input-profile">
+              <label for="username">Username
+                  <?php if ($message): ?>
+                      <div class="message"><?= $message ?></div>
+                  <?php endif; ?>
+              </label>
+              <input type="text" name="username" id="username" placeholder="Masukkan username" value="<?php echo $row['username']; ?>"required>
+          </div>
 
-                <div class="form-check">
-                    <input type="checkbox" id="tampilkanPassword" onclick="password.type = this.checked ? 'text' : 'password'">  
-                    <label class="form-check-label" for="showPassword">Tampilkan Password</label>
-                </div>
+          <div class="input-profile">
+              <label for="password">Password</label>
+              <input type="password" name="password" id="password" placeholder="Masukkan password" value="<?php echo $row['password']; ?>"required>
+          </div>
 
-                <button type="submit" class="signup-button">Update</button>
-            </form>
+          <div class="form-check">
+          <input type="checkbox" id="tampilkanPassword" onclick="password.type = this.checked ? 'text' : 'password'" />
+          <label for="tampilkanPassword">Tampilkan Password</label>
         </div>
-    </div>
+
+        <button type="submit" class="signup-button">Update</button>
+  </div>
+</div>
 </body>
 
 </html>
