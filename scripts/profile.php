@@ -50,7 +50,8 @@
 <body>
     <div class="container-profile">
   <div class="profile-sidebar">
-      <img src="/images/user.jpg" alt="Foto Profil">
+      <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil">
+      <input type="file" name="foto" class="form-control mb-2" required>
   </div>
 
   <div class="form-card-profile">
