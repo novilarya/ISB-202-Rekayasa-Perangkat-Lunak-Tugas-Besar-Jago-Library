@@ -8,14 +8,39 @@
         </div>
         <div class="footer-links">
             <ul>
+                <li><a href="index.php">Beranda</a></li>
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Buku</button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="/scripts/daftar-buku.php">Daftar Buku</a>
+                        <a href="/scripts/daftar-pinjam.php">Peminjaman Buku</a>
+                    </div>
+                </div>
                 <li><a href="about.php">About</a></li>
-                <li><a href="/scripts/daftar-pinjam.php">Book</a></li>
-                <li><a href="authors.php">Authors</a></li>
-                <li><a href="geners.php">Geners</a></li>
-                <li><a href="lists.php">Lists</a></li>
             </ul>
         </div>
         <div class="user-options">';
+
+        echo '
+        <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches(".dropbtn")) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains("show")) {
+                        openDropdown.classList.remove("show");
+                    }
+                }
+            }
+        }
+        </script>
+        ';
+
 
         if (isset($_SESSION['email'])) {
             include_once '../database/connection.php';
