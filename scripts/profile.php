@@ -1,6 +1,5 @@
 <?php
     include '../database/connection.php';
-    session_start();
     $message ='';
     $foto = '';
 

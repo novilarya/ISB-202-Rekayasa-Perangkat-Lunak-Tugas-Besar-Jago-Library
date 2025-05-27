@@ -1,6 +1,5 @@
 <?php
     include '../database/connection.php';
-    session_start();
     $message = '';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
