@@ -27,8 +27,12 @@
     <div class="book-image-container">
         <?php while($row = $buku->fetch_assoc()) { ?>
             <img src="/images/<?php echo $row['cover_buku']; ?>" alt="Harry Potter and The Sorcerer's Stone" />
-            <span class="type-badge"><?php echo $row['status']; ?></span>
             <div class="book-info-wrapper">
+                <?php
+                    $status = $row['status'];
+                    $badgeClass = ($status === 'Tersedia') ? 'badge-green' : 'badge-red';
+                ?>
+                <span class="type-badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
                 <div class="book-info">
                     <h1 class="book-title"><?php echo $row['nama_buku']; ?></h1>
                     <p class="book-author"><?php echo $row['pengarang']; ?></p>
@@ -58,6 +62,7 @@
                     </div>
                 </div>
             </div>
+
         <?php } ?>
     </div>
     <footer>
