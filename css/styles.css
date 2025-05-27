@@ -884,7 +884,7 @@ Container Styles
 
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 20px;
   padding: 20px;
 }
@@ -951,7 +951,7 @@ Container Styles
 }
 
 .book-description .detail-label {
-  width: 140px;
+  width: 100px;
   text-align: left;
   font-weight: 600;
   color: #333;
