@@ -1,5 +1,18 @@
 <?php
-include 'layout/sidebar.php';
+    session_start();
+    include '../database/connection.php';
+    include 'layout/sidebar.php';
+
+    if (isset($_SESSION['email'])) {
+        $email = $_SESSION['email'];
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $user = $stmt->get_result();
+      $row = $user->fetch_assoc();
+    } else {
+        header('location: ../scripts/login.php');
+    }
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +103,8 @@ include 'layout/sidebar.php';
           </div>
         </div>
       </nav>
+
+
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
@@ -104,15 +119,7 @@ include 'layout/sidebar.php';
                     <img class="avatar border-gray" src="../assets/img/mike.jpg" alt="...">
                     <h5 class="title">Chet Faker</h5>
                   </a>
-                  <p class="description">
-                    @chetfaker
-                  </p>
                 </div>
-                <p class="description text-center">
-                  "I like the way you work it <br>
-                  No diggity <br>
-                  I wanna bag it up"
-                </p>
               </div>
               <div class="card-footer">
                 <hr>
@@ -202,70 +209,36 @@ include 'layout/sidebar.php';
                   <div class="row">
                     <div class="col-md-5 pr-1">
                       <div class="form-group">
-                        <label>Company (disabled)</label>
-                        <input type="text" class="form-control" disabled="" placeholder="Company" value="Creative Code Inc.">
-                      </div>
-                    </div>
-                    <div class="col-md-3 px-1">
-                      <div class="form-group">
                         <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username" value="michael23">
+                        <input type="text" name="username" class="form-control" disabled="" value="<?php echo $row['username']; ?>">
                       </div>
                     </div>
                     <div class="col-md-4 pl-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>">
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6 pr-1">
+                    <div class="col-md-3 px-1">
                       <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" placeholder="Company" value="Chet">
-                      </div>
-                    </div>
-                    <div class="col-md-6 pl-1">
-                      <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" placeholder="Last Name" value="Faker">
+                        <label>Password</label>
+                        <input type="text" name="password" class="form-control" value="<?php echo $row['password']; ?>">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" class="form-control" placeholder="Home Address" value="Melbourne, Australia">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4 pr-1">
-                      <div class="form-group">
-                        <label>City</label>
-                        <input type="text" class="form-control" placeholder="City" value="Melbourne">
-                      </div>
-                    </div>
-                    <div class="col-md-4 px-1">
-                      <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" class="form-control" placeholder="Country" value="Australia">
-                      </div>
-                    </div>
-                    <div class="col-md-4 pl-1">
-                      <div class="form-group">
-                        <label>Postal Code</label>
-                        <input type="number" class="form-control" placeholder="ZIP Code">
+                        <label>Nama</label>
+                        <input type="text" name="nama" class="form-control" value="<?php echo $row['nama']; ?>">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>About Me</label>
-                        <textarea class="form-control textarea">Oh so, your weak rhyme You doubt I'll bother, reading into it</textarea>
+                        <label>Kode Autentikasi</label>
+                        <input type="text" nama="kode-autentikasi" class="form-control" value="<?php echo $row['kode_autentikasi']; ?>">
                       </div>
                     </div>
                   </div>

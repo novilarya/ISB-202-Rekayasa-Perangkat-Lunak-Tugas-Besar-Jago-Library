@@ -1,7 +1,8 @@
 <?php
     include '../database/connection.php';
-    session_start();
     $message = '';
+    $kode = '';
+
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
@@ -13,11 +14,17 @@
         $result = $stmt->get_result();
 
         if ($result && $result->num_rows === 1) {
+            $user = $result->fetch_assoc();
             $stmt2 = $conn->prepare("UPDATE users SET status = 'logged' WHERE email = ?");
             $stmt2->bind_param("s", $email);
             $stmt2->execute();
             $_SESSION['email'] = $email;
-            header("Location: index.php");
+            $role = $user['role'];
+            if($role === 'dosen' || $role === 'mahasiswa'){
+                header("Location: index.php");
+            }else{
+                header("Location: ../admin/authentication.php");
+            }
             exit();
         } else {
             $message = '(Email atau Password Anda Salah!)';
