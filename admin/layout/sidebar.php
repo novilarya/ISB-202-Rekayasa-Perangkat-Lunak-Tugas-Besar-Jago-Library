@@ -38,13 +38,19 @@
           <li>
             <a href="/admin/manajemen-buku.php">
               <i class="nc-icon nc-tile-56"></i>
-              <p>Manajemen Buku</p>
+              <p>Daftar Peminjaman Buku</p>
             </a>
           </li>
           <li>
-            <a href="/admin/table-laporan.php">
+            <a href="/admin/tambah-buku.php">
               <i class="nc-icon nc-tile-56"></i>
-              <p>Table Laporan</p>
+              <p>Tambah Buku</p>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/tambah-admin.php">
+              <i class="nc-icon nc-tile-56"></i>
+              <p>Tambah Admin</p>
             </a>
           </li>
           <li class="active-pro">
