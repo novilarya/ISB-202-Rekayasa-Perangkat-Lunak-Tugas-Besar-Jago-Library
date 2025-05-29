@@ -1,19 +1,28 @@
 <?php
-  include 'layout/sidebar.php';
-  include '../database/connection.php';
-  session_start();
+    session_start();
+    include '../database/connection.php';
+    include 'layout/sidebar.php';
 
-  $query = "SELECT count(kode_buku) FROM buku";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $jumlahBuku = $stmt->get_result();
-  $jumlahKeseluruhanBuku = $jumlahBuku->fetch_assoc();
+    $email = $_POST['email'] ?? '';
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $nama = $_POST['nama'] ?? '';
+    $kode = $_POST['kode-autentikasi'] ?? '';
 
-  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'dipinjam'";
-  $stmt2 = $conn->prepare($query);
-  $stmt2->execute();
-  $jumlahDipinjam = $stmt2->get_result();
-  $jumlahKeseluruhanDipinjam = $jumlahDipinjam->fetch_assoc();
+    function kodeAutentikasi($length = 6) {
+        return str_pad(random_int(0, 999999), $length, '0', STR_PAD_LEFT);
+    }
+
+    if (isset($_POST['generate'])) {
+        $kode = kodeAutentikasi();
+    }
+
+    if (isset($_POST['submit'])) {
+        $stmt = $conn->prepare("INSERT INTO users (role, email, username, password, kode_autentikasi, nama) VALUES (?, ?, ?, ?, ?, ?)");
+        $role = 'admin';
+        $stmt->bind_param("ssssss", $role, $email, $username, $password, $kode, $nama);
+        $stmt->execute();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +48,7 @@
 </head>
 
 <body class="">
-  <div class="wrapper ">
+  <div class="wrapper">
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -104,123 +113,61 @@
           </div>
         </div>
       </nav>
+
+
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-globe text-warning"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Jumlah Buku</p>
-                      <p class="card-title"><?php echo $jumlahKeseluruhanBuku['count(kode_buku)']; ?><p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update Now
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-money-coins text-success"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Jumlah Buku Dipinjam</p>
-                      <p class="card-title"><?php echo $jumlahKeseluruhanDipinjam['count(id_peminjaman)']; ?><p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar-o"></i>
-                  Last day
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Users Behavior</h5>
-                <p class="card-category">24 Hours performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id=chartHours width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-history"></i> Updated 3 minutes ago
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Email Statistics</h5>
-                <p class="card-category">Last Campaign Performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id="chartEmail"></canvas>
-              </div>
-              <div class="card-footer ">
-                <div class="legend">
-                  <i class="fa fa-circle text-primary"></i> Opened
-                  <i class="fa fa-circle text-warning"></i> Read
-                  <i class="fa fa-circle text-danger"></i> Deleted
-                  <i class="fa fa-circle text-gray"></i> Unopened
-                </div>
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar"></i> Number of emails sent
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="col-md-8">
-            <div class="card card-chart">
+            <div class="card card-user">
               <div class="card-header">
-                <h5 class="card-title">NASDAQ: AAPL</h5>
-                <p class="card-category">Line Chart with Points</p>
+                <h5 class="card-title">Tambah Admin</h5>
               </div>
               <div class="card-body">
-                <canvas id="speedChart" width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer">
-                <div class="chart-legend">
-                  <i class="fa fa-circle text-info"></i> Tesla Model S
-                  <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                </div>
-                <hr />
-                <div class="card-stats">
-                  <i class="fa fa-check"></i> Data information certified
-                </div>
+                <form method="POST" action="">
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Masukkan username" value="<?= htmlspecialchars($username) ?>" require>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" name="email" class="form-control" placeholder="Masukkan email" value="<?= htmlspecialchars($email) ?>" require>
+                      </div>
+                    </div>
+                    <div class="col-md-3 px-1">
+                      <div class="form-group">
+                        <label>Password</label>
+                        <input type="text" name="password" class="form-control" placeholder="Masukkan password" value="<?= htmlspecialchars($password) ?>" require>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Nama</label>
+                        <input type="text" name="nama" class="form-control" placeholder="Masukkan nama" value="<?= htmlspecialchars($nama) ?>" require>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Kode Autentikasi</label>
+                        <input type="text" name="kode-autentikasi" class="form-control" value="<?= htmlspecialchars($kode) ?>" readonly>
+                        <button type="submit" name="generate" class="btn btn-secondary">Generate</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="update ml-auto mr-auto">
+                      <button type="submit" name="submit" class="btn btn-primary">Tambah Admin</button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -262,12 +209,6 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-      demo.initChartsPages();
-    });
-  </script>
 </body>
 
 </html>
