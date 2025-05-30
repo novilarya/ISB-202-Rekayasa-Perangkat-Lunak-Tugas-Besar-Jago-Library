@@ -1,5 +1,8 @@
 <?php
     include '../database/connection.php';
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
     $message = '';
     $role = $_POST['role'] ?? '';
     $email = $_POST['email'] ?? '';
