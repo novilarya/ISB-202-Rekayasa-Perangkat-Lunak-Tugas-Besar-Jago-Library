@@ -1,12 +1,30 @@
 <?php
+    session_start();
     include('../database/connection.php');
 
-    $query = "SELECT * FROM buku";
-    $stmt = $conn->prepare($query);
+    $email = $_SESSION['email'];
+    $stmt = $conn->prepare("SELECT * FROM peminjaman 
+              INNER JOIN users ON peminjaman.nrp_nidn = users.nrp_nidn
+              INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+              WHERE users.email = ? AND peminjaman.status = 'dipinjam'");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $buku = $stmt->get_result();
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
+      $kode_buku = $_POST['kode_buku'];
+      $nrp_nidn = $_POST['nrp_nidn'];
+
+      $stmt = $conn->prepare("UPDATE peminjaman SET status = 'kembali' WHERE kode_buku = ? AND nrp_nidn = ? AND status = 'dipinjam'");
+      $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
+      $stmt->execute();
+
+      $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia' WHERE kode_buku = ?");
+      $stmtUpdateBuku->bind_param("s", $kode_buku);
+      $stmtUpdateBuku->execute();
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,8 +68,11 @@
                 <img src="/images/<?php echo $row['cover_buku']; ?>" alt="Harry Potter Book" />
                 <div class="book-info-daftar">
                   <h3><?php echo $row['nama_buku']; ?></h3>
-
                   <div class="book-description">
+                    <div class="row">
+                      <span class="detail-label">Kode buku</span>
+                      <span class="detail-value">: <?php echo $row['kode_buku']; ?></span>
+                    </div>
                     <div class="row">
                       <span class="detail-label">Pengarang</span>
                       <span class="detail-value">: <?php echo $row['pengarang']; ?></span>
@@ -69,7 +90,11 @@
                       <span class="detail-value">: <?php echo $row['kode_buku']; ?></span>
                     </div>
                   </div>
-                  <button class="kembalikan">Kembalikan</button>
+                  <form method="POST" action="">
+                    <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
+                    <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
+                    <button type="submit" name="kembalikan" class="kembalikan">Kembalikan</button>
+                  </form>
                 </div>
               </div>
             <?php } ?>

@@ -88,13 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         <label for="jenis_buku">Jenis Buku</label>
                         <select name="jenis_buku" id="jenis_buku">
                             <option value="">-- Pilih Jenis --</option>
-                            <option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>TA</option>
-                            <option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>KP</option>
-                            <option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>SIP</option>
-                            <option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>MBKM</option>
-                            <option value="PAP" <?= $jenis_buku == 'PAP' ? 'selected' : '' ?>>PAP</option>
-                            <option value="PEM" <?= $jenis_buku == 'PEM' ? 'selected' : '' ?>>PEM</option>
-                            <option value="DB" <?= $jenis_buku == 'DB' ? 'selected' : '' ?>>DB</option>
+                            <option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
+                            <option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Project</option>
+                            <option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>Sistem Informasi Pengabdian</option>
+                            <option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>Merdeka Belajar Kampus Merdeka</option>
+                            <option value="Umum" <?= $jenis_buku == 'Umum' ? 'selected' : '' ?>>Umum</option>
                         </select>
                     </div>
 
@@ -128,16 +126,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                             <img src="/images/<?php echo $row['cover_buku']; ?>" alt="Harry Potter Book" />
                             <div class="book-info-daftar">
                                 <?php
-                                $status = $row['status'];
-                                $badgeClass = ($status === 'Tersedia') ? 'badge-green' : 'badge-red';
+                                    $status = $row['status'];
+                                    $badgeClass = ($status === 'Tersedia') ? 'badge-green' : 'badge-red';
+                                    $isTersedia = ($status === 'Tersedia');
                                 ?>
                                 <span class="type-badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
 
                                 <h3><?php echo $row['nama_buku']; ?></h3>
 
                                 <div class="book-description">
-
-
                                     <div class="row">
                                         <span class="detail-label">Pengarang</span>
                                         <span class="detail-value">: <?php echo $row['pengarang']; ?></span>
@@ -156,7 +153,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                     </div>
                                 </div>
                                 <div class="book-info-index">
-                                    <a href="<?php echo "pinjam.php?kode_buku=" . $row['kode_buku']; ?>"><button class="pinjam-button"> Pinjam </button></a>
+                                    <?php if ($isTersedia) { ?>
+                                        <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
+                                            <button class="pinjam-button">Pinjam</button>
+                                        </a>
+                                    <?php } else { ?>
+                                        <button class="pinjam-button" onclick="showModal()">Pinjam</button>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -165,9 +168,24 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             </section>
         </main>
     </div>
+    <div id="unavailableModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal()">&times;</span>
+            <p>Buku ini tidak tersedia untuk dipinjam saat ini.</p>
+        </div>
+    </div>
     <footer>
         <?php include "footer.php"; ?>
     </footer>
+    <script>
+        function showModal() {
+            document.getElementById('unavailableModal').style.display = 'flex';
+        }
+
+        function hideModal() {
+            document.getElementById('unavailableModal').style.display = 'none';
+        }
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </body>
