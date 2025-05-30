@@ -10,7 +10,7 @@
       <div class="logo">
         <a href="https://www.creative-tim.com" class="simple-text logo-mini">
           <div class="logo-image-small">
-            <img src="../assets/img/logo-small.png">
+            <img src="assets/img/logo-small.png">
           </div>
           <!-- <p>CT</p> -->
         </a>
