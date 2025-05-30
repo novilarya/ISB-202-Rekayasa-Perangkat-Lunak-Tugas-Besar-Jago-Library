@@ -111,12 +111,12 @@
           <div class="col-md-4">
             <div class="card card-user">
               <div class="image">
-                <img src="../assets/img/damir-bosnjak.jpg" alt="...">
+                <img src="assets/img/damir-bosnjak.jpg" alt="...">
               </div>
               <div class="card-body">
                 <div class="author">
                   <a href="#">
-                    <img class="avatar border-gray" src="../assets/img/mike.jpg" alt="...">
+                    <img class="avatar border-gray" src="assets/img/mike.jpg" alt="...">
                     <h5 class="title">Chet Faker</h5>
                   </a>
                 </div>
