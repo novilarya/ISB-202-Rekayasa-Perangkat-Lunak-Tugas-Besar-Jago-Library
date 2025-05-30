@@ -56,7 +56,7 @@ echo '
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $user = $stmt->get_result();
-
+            
             if ($user && $user->num_rows === 1) {
                 $row = $user->fetch_assoc();
                 $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "default.jpg";
