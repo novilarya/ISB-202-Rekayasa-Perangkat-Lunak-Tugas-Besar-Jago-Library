@@ -1,6 +1,8 @@
 <?php
+    session_start();
     include('../database/connection.php');
-    
+    $success ='';
+
     if (isset($_GET['kode_buku'])) {
         $kode_buku = $_GET['kode_buku'];
         $query = "SELECT * FROM buku WHERE kode_buku = '$kode_buku'";
@@ -9,6 +11,26 @@
         $buku = $stmt->get_result();
     } else {
         header('location: index.php');
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST"){
+        $email = $_SESSION['email'];
+        $stmt2 = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt2->bind_param("s", $email);
+        $stmt2->execute();
+        $user = $stmt2->get_result();
+        $kode_user = $user->fetch_assoc();
+        $nrp_nidn = $kode_user['nrp_nidn'];
+
+        $tanggal_pinjam = $_POST['tanggal_pinjam'];
+        $tanggal_kembali = $_POST['tanggal_kembali'];
+
+        $stmtInsert = $conn->prepare("INSERT INTO peminjaman (kode_buku, nrp_nidn, tanggal_peminjaman, tanggal_pengembalian, status) VALUES (?, ?, ?, ?, 'dipinjam')");
+        $stmtInsert->bind_param("ssss", $kode_buku, $nrp_nidn, $tanggal_pinjam, $tanggal_kembali);
+    
+        if ($stmtInsert->execute()) {
+            $success = true;
+        }
     }
 ?>
 
@@ -74,23 +96,22 @@
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Input Tanggal Pinjam</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form method="POST" action="proses_pinjam.php" class="form-pinjam">
+                    <form method="POST" action="">
+                        <div class="modal-body">
                             <div class="form-group">
                                 <label for="tanggal_pinjam">Tanggal Pinjam</label>
                                 <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" required>
                             </div>
-
                             <div class="form-group">
                                 <label for="tanggal_kembali">Tanggal Kembali</label>
                                 <input type="date" name="tanggal_kembali" id="tanggal_kembali" required>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Pinjam</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Pinjam</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -99,6 +120,29 @@
 
         <?php } ?>
     </div>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Sukses</h5>
+            </div>
+            <div class="modal-body">
+                Buku berhasil dipinjam!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if ($success): ?>
+        <script>
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        </script>
+    <?php endif; ?>
+
     <footer>
         <?php include "footer.php"; ?>
     </footer>
