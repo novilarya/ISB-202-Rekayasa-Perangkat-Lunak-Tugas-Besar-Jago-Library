@@ -1,64 +1,74 @@
 <?php
-include('../database/connection.php');
+    include('../database/connection.php');
+    session_start();
 
-$jenis_buku = '';
-$status_buku = '';
-$search = '';
+    $jenis_buku = '';
+    $jenis_buku_dipilih = '';
+    $status_buku = '';
+    $search = '';
 
-$query = "SELECT * FROM buku";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$buku = $stmt->get_result();
+    $query = "SELECT * FROM buku";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $buku = $stmt->get_result();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $jenis_buku = $_POST['jenis_buku'] ?? '';
-    $status_buku = $_POST['status'] ?? '';
+    $email = $_SESSION['email'];
+    $query = "SELECT * FROM users WHERE email = '$email'";
+    $stmtUser = $conn->prepare($query);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result();
+    $kode_user = $user->fetch_assoc();
+    $semester = $kode_user['semester'];
 
-    $query = "SELECT * FROM buku WHERE 1=1";
-    $params = [];
-    $types = "";
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $jenis_buku = $_POST['jenis_buku'] ?? '';
+        $status_buku = $_POST['status'] ?? '';
 
-    if (!empty($jenis_buku)) {
-        $query .= " AND jenis_buku = ?";
-        $params[] = $jenis_buku;
-        $types .= "s";
+        $query = "SELECT * FROM buku WHERE 1=1";
+        $params = [];
+        $types = "";
+
+        if (!empty($jenis_buku)) {
+            $query .= " AND jenis_buku = ?";
+            $params[] = $jenis_buku;
+            $types .= "s";
+        }
+
+        if (!empty($status_buku)) {
+            $query .= " AND status = ?";
+            $params[] = $status_buku;
+            $types .= "s";
+        }
+
+        $stmt2 = $conn->prepare($query);
+        if (!empty($params)) {
+            $stmt2->bind_param($types, ...$params);
+        }
+        $stmt2->execute();
+        $buku = $stmt2->get_result();
     }
 
-    if (!empty($status_buku)) {
-        $query .= " AND status = ?";
-        $params[] = $status_buku;
-        $types .= "s";
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        $search = $_GET['cariBuku'] ?? '';
+
+        $query = "SELECT * FROM buku WHERE 1=1";
+        $params = [];
+        $types = "";
+
+        if (!empty($search)) {
+            $query .= " AND (nama_buku LIKE ? OR pengarang LIKE ?)";
+            $params[] = "%$search%";
+            $params[] = "%$search%";
+            $types .= "ss";
+        }
+
+        $stmt2 = $conn->prepare($query);
+        if (!empty($params)) {
+            $stmt2->bind_param($types, ...$params);
+        }
+        $stmt2->execute();
+        $buku = $stmt2->get_result();
     }
-
-    $stmt2 = $conn->prepare($query);
-    if (!empty($params)) {
-        $stmt2->bind_param($types, ...$params);
-    }
-    $stmt2->execute();
-    $buku = $stmt2->get_result();
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $search = $_GET['cariBuku'] ?? '';
-
-    $query = "SELECT * FROM buku WHERE 1=1";
-    $params = [];
-    $types = "";
-
-    if (!empty($search)) {
-        $query .= " AND (nama_buku LIKE ? OR pengarang LIKE ?)";
-        $params[] = "%$search%";
-        $params[] = "%$search%";
-        $types .= "ss";
-    }
-
-    $stmt2 = $conn->prepare($query);
-    if (!empty($params)) {
-        $stmt2->bind_param($types, ...$params);
-    }
-    $stmt2->execute();
-    $buku = $stmt2->get_result();
-}
 
 ?>
 
@@ -151,12 +161,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                         <span class="detail-label">Kode buku</span>
                                         <span class="detail-value">: <?php echo $row['kode_buku']; ?></span>
                                     </div>
+
                                 </div>
                                 <div class="book-info-index">
                                     <?php if ($isTersedia) { ?>
-                                        <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
-                                            <button class="pinjam-button">Pinjam</button>
-                                        </a>
+                                        <input type="hidden" name="jenis_buku_dipilih" value="<?php echo $row['jenis_buku']; ?>">
+                                        <?php
+                                            $jenis_buku_dipilih = $row['jenis_buku'];
+                                        ?>
+                                        <?php if ($semester >= 7 && $jenis_buku_dipilih == 'TA') { ?>
+                                            <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
+                                                <button class="pinjam-button">Pinjam</button>
+                                            </a>
+                                        <?php } else if ($semester <= 7 && $jenis_buku_dipilih == 'TA') { ?>
+                                            <button class="pinjam-button" onclick="showModalTA()">Pinjam</button>
+                                        <?php } else if ($jenis_buku_dipilih != 'TA'){ ?>
+                                            <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
+                                                <button class="pinjam-button">Pinjam</button>
+                                            </a>
+                                        <?php } ?>
                                     <?php } else { ?>
                                         <button class="pinjam-button" onclick="showModal()">Pinjam</button>
                                     <?php } ?>
@@ -174,6 +197,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             <p>Buku ini tidak tersedia untuk dipinjam saat ini.</p>
         </div>
     </div>
+    <div id="unavailableModalTA" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="hideModalTA()">&times;</span>
+            <p>Buku ini tidak tersedia untuk dipinjam saat ini dikarenakan Anda belum memenuhi semester untuk meminjam buku ini.</p>
+        </div>
+    </div>
     <footer>
         <?php include "footer.php"; ?>
     </footer>
@@ -184,6 +213,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         function hideModal() {
             document.getElementById('unavailableModal').style.display = 'none';
+        }
+
+        function showModalTA() {
+            document.getElementById('unavailableModalTA').style.display = 'flex';
+        }
+
+        function hideModalTA() {
+            document.getElementById('unavailableModalTA').style.display = 'none';
         }
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
