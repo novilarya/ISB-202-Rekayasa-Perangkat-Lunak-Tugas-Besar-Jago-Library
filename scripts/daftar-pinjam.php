@@ -1,6 +1,7 @@
 <?php
     session_start();
     include('../database/connection.php');
+    $success ='';
 
     $email = $_SESSION['email'];
     $stmt = $conn->prepare("SELECT * FROM peminjaman 
@@ -21,7 +22,12 @@
 
       $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia' WHERE kode_buku = ?");
       $stmtUpdateBuku->bind_param("s", $kode_buku);
-      $stmtUpdateBuku->execute();
+      
+      if ($stmtUpdateBuku->execute()) {
+          $_SESSION['success'] = true; // simpan status sukses di session
+          header("Location: " . $_SERVER['PHP_SELF']); // redirect untuk menghentikan POST
+          exit();
+      }
     }
 ?>
 
@@ -102,8 +108,43 @@
         </section>
       </main>
     </div>
+
+
     <footer>
       <?php include "footer.php"; ?>
     </footer>
+
+        
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">Sukses</h5>
+          </div>
+          <div class="modal-body">
+            Buku berhasil dikembalikan!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <?php if (isset($_SESSION['success']) && $_SESSION['success'] === true): ?>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+
+        const modalEl = document.getElementById('successModal');
+        modalEl.addEventListener('hidden.bs.modal', function () {
+          window.location.reload();
+        });
+      });
+    </script>
+    <?php unset($_SESSION['success']); endif; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
