@@ -1,8 +1,10 @@
 <?php
+
     include('../database/connection.php');
     session_start();
 
     $jenis_buku = '';
+
     $jenis_buku_dipilih = '';
     $status_buku = '';
     $search = '';
@@ -62,6 +64,7 @@
             $types .= "ss";
         }
 
+
         $stmt2 = $conn->prepare($query);
         if (!empty($params)) {
             $stmt2->bind_param($types, ...$params);
@@ -74,156 +77,164 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Buku | Jago_library</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <script src="/scripts/daftar-buku.js"></script>
-    <script> src = "/scripts/refresh-pencarian.js"</script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<title>BookSaw - Free Book Store HTML CSS Template</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="../icomoon/icomoon.css">
+	<link rel="stylesheet" type="text/css" href="../css/vendor.css">
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+
+
 </head>
 <header>
-    <?php include "header.php"; ?>
-</header>
+      <?php include "header.php" ?>
+    </header>
+	
+<body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
 
-<body>
-    <div class="dashboard">
-        <aside class="sidebar">
-            <h1 class="logo">Kategori</h1>
-            <nav class="menu">
-                <form method="POST">
-                    <div class="input-group">
-                        <label for="jenis_buku">Jenis Buku</label>
-                        <select name="jenis_buku" id="jenis_buku">
-                            <option value="">-- Pilih Jenis --</option>
-                            <option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
-                            <option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Project</option>
-                            <option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>Sistem Informasi Pengabdian</option>
-                            <option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>Merdeka Belajar Kampus Merdeka</option>
-                            <option value="Umum" <?= $jenis_buku == 'Umum' ? 'selected' : '' ?>>Umum</option>
-                        </select>
-                    </div>
+	<div class="container">
+		<h2 class="section-title text-center mb-4">Daftar Buku</h2>
 
-                    <div class="input-group">
-                        <label for="status">Status Buku</label>
-                        <select name="status" id="status">
-                            <option value="">-- Pilih Status --</option>
-                            <option value="Tersedia" <?= $status_buku == 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
-                            <option value="Tidak Tersedia" <?= $status_buku == 'Tidak Tersedia' ? 'selected' : '' ?>>Tidak Tersedia</option>
-                        </select>
-                    </div>
+		<!-- Search -->
+		<form method="GET" class="row g-3 mb-4 align-items-end">
+			<div class="col-md-4">
+				<label for="searchInput" class="form-label">Cari Buku</label>
+				<input type="text" class="form-control" name="cariBuku" placeholder="Judul atau Pengarang" value="<?= htmlspecialchars($search) ?>">
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-primary rounded 4" style="height: 50px; width: 150px; border-radius: 2;">Cari</button>
+			</div>
+		</form>
 
-                    <button type="submit" class="signup-button">Update</button>
-                </form>
-            </nav>
-        </aside>
+		<!-- Filter -->
+		<form method="POST" class="row g-3 mb-4 align-items-end">
+			<div class="col-md-3">
+				<label for="jenis_buku" class="form-label">Jenis Buku</label>
+				<select name="jenis_buku" id="jenis_buku" class="form-select">
+					<option value="">Pilih Jenis</option>
+					<option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
+					<option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Project</option>
+					<option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>Sistem Informasi Pengabdian</option>
+					<option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>Merdeka Belajar Kampus Merdeka</option>
+					<option value="PAP" <?= $jenis_buku == 'PAP' ? 'selected' : '' ?>>Umum</option>
+				</select>
+			</div>
 
-        <main class="main-content">
-            <section class="books-section">
-                <div class="section-header">
-                    <h2>My Books</h2>
-                    <form class="d-flex" role="search" method="GET" id="searcForm">
-                        <input class="form-control me-2" type="search" name="cariBuku" id="searchInput"
-                            placeholder="Cari judul atau pengarang" value="<?= htmlspecialchars($search) ?>" />
-                        <button class="btn btn-outline-primary" type="submit">Cari</button>
-                    </form>
-                </div>
-                <div class="book-grid">
-                    <?php while ($row = $buku->fetch_assoc()) { ?>
-                        <div class="book-card-daftar">
-                            <img src="/images/<?php echo $row['cover_buku']; ?>" alt="Harry Potter Book" />
-                            <div class="book-info-daftar">
-                                <?php
-                                    $status = $row['status'];
-                                    $badgeClass = ($status === 'Tersedia') ? 'badge-green' : 'badge-red';
-                                    $isTersedia = ($status === 'Tersedia');
-                                ?>
-                                <span class="type-badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
+			<div class="col-md-2">
+				<label for="status" class="form-label">Status</label>
+				<select name="status" id="status" class="form-select">
+					<option value="">Pilih Status</option>
+					<option value="Tersedia" <?= $status_buku == 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
+					<option value="Tidak Tersedia" <?= $status_buku == 'Tidak Tersedia' ? 'selected' : '' ?>>Tidak Tersedia</option>
+				</select>
+			</div>
 
-                                <h3><?php echo $row['nama_buku']; ?></h3>
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-primary rounded 4" style="height: 50px; width: 150px; border-radius: 2;">Filter</button>
+			</div>
+		</form>
 
-                                <div class="book-description">
-                                    <div class="row">
-                                        <span class="detail-label">Pengarang</span>
-                                        <span class="detail-value">: <?php echo $row['pengarang']; ?></span>
-                                    </div>
-                                    <div class="row">
-                                        <span class="detail-label">Jumlah halaman</span>
-                                        <span class="detail-value">: <?php echo $row['jumlah_halaman']; ?></span>
-                                    </div>
-                                    <div class="row">
-                                        <span class="detail-label">Tahun terbit</span>
-                                        <span class="detail-value">: <?php echo $row['tahun_terbit']; ?></span>
-                                    </div>
-                                    <div class="row">
-                                        <span class="detail-label">Kode buku</span>
-                                        <span class="detail-value">: <?php echo $row['kode_buku']; ?></span>
-                                    </div>
+		<!-- Buku -->
+		<div class="row">
+			<?php while ($row = $buku->fetch_assoc()) {
+				$isTersedia = $row['status'] === 'Tersedia';
+				$badgeClass = $isTersedia ? 'badge-green' : 'badge-red';
+				$jenisBuku = $row['jenis_buku'];
+			?>
+				<div class="col-md-3 mb-4">
+					<div class="product-item">
+						<figure class="product-style">
+							<img src="/images/<?php echo $row['cover_buku']; ?>" alt="<?php echo $row['nama_buku']; ?>" class="product-item">
+							<?php if ($isTersedia): ?>
+								<?php if ($jenisBuku == 'TA' && $semester < 7): ?>
+									<button type="button" class="add-to-cart" onclick="showModalTA()">Pinjam</button>
+								<?php else: ?>
+									<a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
+										<button type="button" class="add-to-cart">Pinjam</button>
+									</a>
+								<?php endif; ?>
+							<?php else: ?>
+								<button class="add-to-cart" onclick="showModal()">Pinjam</button>
+							<?php endif; ?>
+						</figure>
+						<figcaption>
+							<h3><?php echo $row['nama_buku']; ?></h3>
+							<span><?php echo $row['pengarang']; ?></span>
+							<div class="item-price">
+								<span class="<?php echo $badgeClass; ?>"><?php echo $row['status']; ?></span>
+							</div>
+						</figcaption>
+					</div>
+				</div>
+			<?php } ?>
+		</div>
+	</div>
+	</section>
 
-                                </div>
-                                <div class="book-info-index">
-                                    <?php if ($isTersedia) { ?>
-                                        <input type="hidden" name="jenis_buku_dipilih" value="<?php echo $row['jenis_buku']; ?>">
-                                        <?php
-                                            $jenis_buku_dipilih = $row['jenis_buku'];
-                                        ?>
-                                        <?php if ($semester >= 7 && $jenis_buku_dipilih == 'TA') { ?>
-                                            <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
-                                                <button class="pinjam-button">Pinjam</button>
-                                            </a>
-                                        <?php } else if ($semester <= 7 && $jenis_buku_dipilih == 'TA') { ?>
-                                            <button class="pinjam-button" onclick="showModalTA()">Pinjam</button>
-                                        <?php } else if ($jenis_buku_dipilih != 'TA'){ ?>
-                                            <a href="pinjam.php?kode_buku=<?php echo $row['kode_buku']; ?>">
-                                                <button class="pinjam-button">Pinjam</button>
-                                            </a>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <button class="pinjam-button" onclick="showModal()">Pinjam</button>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </div>
-            </section>
-        </main>
-    </div>
-    <div id="unavailableModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal()">&times;</span>
-            <p>Buku ini tidak tersedia untuk dipinjam saat ini.</p>
-        </div>
-    </div>
-    <div id="unavailableModalTA" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close" onclick="hideModalTA()">&times;</span>
-            <p>Buku ini tidak tersedia untuk dipinjam saat ini dikarenakan Anda belum memenuhi semester untuk meminjam buku ini.</p>
-        </div>
-    </div>
-    <footer>
-        <?php include "footer.php"; ?>
-    </footer>
-    <script>
-        function showModal() {
-            document.getElementById('unavailableModal').style.display = 'flex';
-        }
+	<!-- Modal Tidak Tersedia -->
+	<div id="unavailableModal" class="custom-modal" style="display: none;">
+		<div class="custom-modal-content">
+			<button class="custom-close" onclick="hideModal()">&times;</button>
+			<div class="custom-modal-body">
+				<h4 class="modal-title">Buku Tidak Tersedia</h4>
+				<p>Buku ini tidak tersedia untuk dipinjam saat ini.</p>
+			</div>
+		</div>
+	</div>
 
-        function hideModal() {
-            document.getElementById('unavailableModal').style.display = 'none';
-        }
+	<!-- Modal Syarat TA -->
+	<div id="unavailableModalTA" class="custom-modal" style="display: none;">
+		<div class="custom-modal-content">
+			<button class="custom-close" onclick="hideModalTA()">&times;</button>
+			<div class="custom-modal-body">
+				<h4 class="modal-title">Syarat Belum Terpenuhi</h4>
+				<p>Buku TA hanya dapat dipinjam oleh mahasiswa semester 7 ke atas.</p>
+			</div>
+		</div>
+	</div>
 
-        function showModalTA() {
-            document.getElementById('unavailableModalTA').style.display = 'flex';
-        }
+	<script src="../js/jquery-1.11.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script src="../js/plugins.js"></script>
+	<script src="../js/script.js"></script>
 
-        function hideModalTA() {
-            document.getElementById('unavailableModalTA').style.display = 'none';
-        }
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<footer>
+		<?php
+		include 'footer.php';
+		?>
+	</footer>
+	<script>
+		function showModal() {
+			document.getElementById('unavailableModal').style.display = 'flex';
+		}
+
+		function hideModal() {
+			document.getElementById('unavailableModal').style.display = 'none';
+		}
+
+		function showModalTA() {
+			document.getElementById('unavailableModalTA').style.display = 'flex';
+		}
+
+		function hideModalTA() {
+			document.getElementById('unavailableModalTA').style.display = 'none';
+		}
+	</script>
 </body>
+
 </html>
