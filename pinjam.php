@@ -1,6 +1,6 @@
     <?php
     session_start();
-    include('../database/connection.php');
+    include('./database/connection.php');
     $success = '';
 
     if (isset($_GET['kode_buku'])) {
@@ -62,7 +62,7 @@
       <link rel="stylesheet" type="text/css" href="css/normalize.css">
       <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
       <link rel="stylesheet" type="text/css" href="css/vendor.css">
-      <link rel="stylesheet" type="text/css" href="/css/styles.css">
+      <link rel="stylesheet" type="text/css" href="style.css">
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     </head>

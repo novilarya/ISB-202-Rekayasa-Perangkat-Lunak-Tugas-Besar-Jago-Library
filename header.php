@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include('../database/connection.php');
+include './database/connection.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,11 +21,10 @@ include('../database/connection.php');
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="../icomoon/icomoon.css">
-	<link rel="stylesheet" type="text/css" href="../css/vendor.css">
-	<link rel="stylesheet" type="text/css" href="../css/styles.css">
-    
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
+	<link rel="stylesheet" type="text/css" href="css/vendor.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
@@ -57,7 +56,7 @@ include('../database/connection.php');
 
                             if ($user && $user->num_rows === 1) {
                                 $row = $user->fetch_assoc();
-                                $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "../images/default.jpg";
+                                $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "default.jpg";
                                 $imgPath = "/images/" . $foto;
                                 echo '
                                 <div class="dropdown">
@@ -87,7 +86,7 @@ include('../database/connection.php');
             <div class="row">
                 <div class="col-md-2">
                     <div class="main-logo">
-                        <a href="index.php"><img src="../images/main-logo.png" alt="logo"></a>
+                        <a href="index.php"><img src="images/main-logo.png" alt="logo"></a>
                     </div>
                 </div>
                 <div class="col-md-10">
@@ -120,12 +119,12 @@ include('../database/connection.php');
 
 </div><!--header-wrap-->
 
-<script src="../js/jquery-1.11.0.min.js"></script>
+<script src="js/jquery-1.11.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
-<script src="../js/plugins.js"></script>
-<script src="../js/script.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/script.js"></script>
 
 
 </body>
