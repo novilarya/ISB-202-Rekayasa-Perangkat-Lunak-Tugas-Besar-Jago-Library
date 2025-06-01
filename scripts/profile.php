@@ -1,108 +1,144 @@
 <?php
-    include '../database/connection.php';
-    $message ='';
-    $foto = '';
+session_start();
+include('../database/connection.php');
+$message = '';
+$foto = '';
 
-    if (isset($_SESSION['email'])) {
-        $email = $_SESSION['email'];
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $user = $stmt->get_result();
-        $row = $user->fetch_assoc();
-    } else {
-        header('location: index.php');
-    }
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $user = $stmt->get_result();
+    $row = $user->fetch_assoc();
+} else {
+    header('location: index.php');
+}
 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
-        $username_new = $_POST['username'] ?? '';
-        $email_new = $_SESSION['email']; 
-        $password_new = $_POST['password'] ?? '';
-        $foto = $_POST['foto'] ?? '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
+    $username_new = $_POST['username'] ?? '';
+    $email_new = $_SESSION['email'];
+    $password_new = $_POST['password'] ?? '';
+    $foto = $_POST['foto'] ?? '';
 
-        $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, password = ?, foto = ? WHERE email = ?");
-        $stmt->bind_param("sssss", $nrp_nidn_new, $username_new, $password_new, $foto, $email_new);
-        
-        if ($stmt->execute()) {
-            echo '<script>
+    $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, password = ?, foto = ? WHERE email = ?");
+    $stmt->bind_param("sssss", $nrp_nidn_new, $username_new, $password_new, $foto, $email_new);
+
+    if ($stmt->execute()) {
+        echo '<script>
                 alert("Akun berhasil diperbarui!");
                 window.location.href = "profile.php";
             </script>';
-        } else {
-            echo '<script>alert("Gagal mengupdate data.");</script>';
-        }
+    } else {
+        echo '<script>alert("Gagal mengupdate data.");</script>';
     }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <title>BookSaw - Free Book Store HTML CSS Template</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    </head>
-<header>
-  <?php include "header.php" ?>
-</header>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+
 <body>
-    <div class="container-profile">
-  <div class="profile-sidebar">
-      <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil">
-      <input type="file" name="foto" class="form-control mb-2" required>
-  </div>
+    <header>
+        <?php include "header.php" ?>
+    </header>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-  <div class="form-card-profile">
-      <h1>My Profile<?php 
-          if ($row['role'] === 'mahasiswa') {
-              echo ' Mahasiswa';
-          } elseif ($row['role'] === 'dosen') {
-              echo ' Dosen';
-          }
-      ?></h1>         
-          <div class="input-profile" id="nrp-group-profile">
-              <label for="nrp_nidn">
-              <?php 
-                  if ($row['role'] === 'mahasiswa') {
-                      echo 'NRP';
-                  } elseif ($row['role'] === 'dosen') {
-                      echo 'NIDN';
-                  } else {
-                      echo 'NRP/NIDN';
-                  }
-              ?>
-              </label>
-              <input type="text" name="nrp_nidn" id="nrp_nidn" placeholder="<?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN'; ?>" value="<?php echo $row['nrp_nidn']; ?>" required>
-          </div>
+                <div class="card shadow border-0">
+                    <div class="row g-0">
+                        <!-- FOTO PROFIL -->
+                        <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
+                            <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            <input type="file" name="foto" class="form-control" required>
+                        </div>
 
-          <div class="input-profile">
-              <label for="email">Email</label>
-              <input type="email" name="email" id="email" placeholder="Masukkan email" value="<?php echo $row['email']; ?>" required>
-          </div>
+                        <!-- FORM PROFIL -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h3 class="card-title mb-3">My Profile <?php echo ucfirst($row['role']); ?></h3>
 
-          <div class="input-profile">
-              <label for="username">Username
-                  <?php if ($message): ?>
-                      <div class="message"><?= $message ?></div>
-                  <?php endif; ?>
-              </label>
-              <input type="text" name="username" id="username" placeholder="Masukkan username" value="<?php echo $row['username']; ?>"required>
-          </div>
+                                <form method="POST" action="">
+                                    <div class="mb-3">
+                                        <label for="nrp_nidn" class="form-label">
+                                            <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
+                                        </label>
+                                        <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
+                                    </div>
 
-          <div class="input-profile">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" placeholder="Masukkan password" value="<?php echo $row['password']; ?>"required>
-          </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
+                                    </div>
 
-          <div class="form-check">
-          <input type="checkbox" id="tampilkanPassword" onclick="password.type = this.checked ? 'text' : 'password'" />
-          <label for="tampilkanPassword">Tampilkan Password</label>
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <?php if ($message): ?>
+                                            <div class="text-danger small mb-1"><?= $message ?></div>
+                                        <?php endif; ?>
+                                        <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
+                                    </div>
+
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
+                                        <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary px-4">Update</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <button type="submit" class="signup-button">Update</button>
-  </div>
-</div>
+    </div>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/script.js"></script>
+    <footer>
+        <?php
+        include 'footer.php';
+        ?>
+    </footer>
+    <script>
+        function togglePassword() {
+            var pwd = document.getElementById('password');
+            pwd.type = (pwd.type === 'password') ? 'text' : 'password';
+        }
+    </script>
 </body>
 
 </html>

@@ -2,96 +2,131 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-echo '
-<!-- MDBootstrap CDN (wajib agar ikon dan JS berfungsi) -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="/css/styles.css">
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
-  <div class="container-fluid">
-    <!-- Logo -->
-    <a class="navbar-brand" href="index.php">
-      <img src="/images/jago-logo.png" alt="Logo" height="60" />
-    </a>
-
-    <!-- Toggle button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="index.php">Beranda</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBuku" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Buku
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownBuku">
-            <li><a class="dropdown-item" href="/scripts/daftar-buku.php">Daftar Buku</a></li>
-            <li><a class="dropdown-item" href="/scripts/daftar-pinjam.php">Peminjaman Buku</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.php">About</a>
-        </li>
-      </ul>
-
-      <!-- Right side -->
-      <div class="d-flex align-items-center">';
-        // PHP: user logic
-        if (isset($_SESSION['email'])) {
-            include_once '../database/connection.php';
-            $email = $_SESSION['email'];
-            $query = "SELECT * FROM users WHERE email = ?";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $user = $stmt->get_result();
-            
-            if ($user && $user->num_rows === 1) {
-                $row = $user->fetch_assoc();
-                $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "default.jpg";
-                $imgPath = "/images/" . $foto;
-
-                echo '
-                <!-- Profile avatar -->
-                <div class="dropdown">
-                  <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" role="button" id="navbarDropdownMenuAvatar" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="' . $imgPath . '" class="rounded-circle" height="50" alt="User Avatar" loading="lazy" />
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                    <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                  </ul>
-                </div>';
-            } else {
-                echo '
-                <div>
-                  <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
-                  <a href="registration.php" class="btn btn-primary">Sign Up</a>
-                </div>';
-            }
-        } else {
-            echo '
-            <div>
-              <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
-              <a href="registration.php" class="btn btn-primary">Sign Up</a>
-            </div>';
-        }
-
-echo '
-      </div>
-    </div>
-  </div>
-</nav>
-';
+include('../database/connection.php');
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BookSaw - Free Book Store HTML CSS Template</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="../icomoon/icomoon.css">
+	<link rel="stylesheet" type="text/css" href="../css/vendor.css">
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+    
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
+
+	<div id="header-wrap">
+
+    <div class="top-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="social-links">
+                        <ul>
+                            <li><a href="#"><i class="icon icon-facebook"></i></a></li>
+                            <li><a href="#"><i class="icon icon-twitter"></i></a></li>
+                            <li><a href="#"><i class="icon icon-youtube-play"></i></a></li>
+                            <li><a href="#"><i class="icon icon-behance-square"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-element">
+                        <?php
+                        if (isset($_SESSION['email'])) {
+                            $email = $_SESSION['email'];
+                            $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+                            $stmt->bind_param("s", $email);
+                            $stmt->execute();
+                            $user = $stmt->get_result();
+
+                            if ($user && $user->num_rows === 1) {
+                                $row = $user->fetch_assoc();
+                                $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "../images/default.jpg";
+                                $imgPath = "/images/" . $foto;
+                                echo '
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-dark" href="#" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="icon icon-user"></i> <span>Hi, ' . htmlspecialchars($row["username"]) . '</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+                                        <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
+                                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                    </ul>
+                                </div>';
+                            }
+                        } else {
+                            echo '
+                                <a href="login.php" class="user-account for-buy"><span> Login</span></a>
+                                <a href="registration.php" class="user-account for-buy"><span> SignUp</span></a>';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--top-content-->
+
+    <header id="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="main-logo">
+                        <a href="index.php"><img src="../images/main-logo.png" alt="logo"></a>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <nav id="navbar">
+                        <div class="main-menu stellarnav">
+                            <ul class="menu-list">
+                                <li class="menu-item active"><a href="index.php">Home</a></li>
+                                <li class="menu-item has-sub">
+                                    <a href="#pages" class="nav-link">Buku</a>
+                                    <ul>
+                                        <li><a href="daftar-buku.php">Daftar Buku</a></li>
+                                        <li><a href="daftar-pinjam.php">Peminjaman</a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item"><a href="#featured-books" class="nav-link">Featured</a></li>
+                                <li class="menu-item"><a href="#popular-books" class="nav-link">Popular</a></li>
+                            </ul>
+
+                            <div class="hamburger">
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+</div><!--header-wrap-->
+
+<script src="../js/jquery-1.11.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+<script src="../js/plugins.js"></script>
+<script src="../js/script.js"></script>
+
+
+</body>
+</html>
