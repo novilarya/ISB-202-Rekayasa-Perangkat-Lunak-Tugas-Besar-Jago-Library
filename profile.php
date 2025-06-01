@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../database/connection.php');
+include './database/connection.php';
 $message = '';
 $foto = '';
 
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
     <link rel="stylesheet" type="text/css" href="css/vendor.css">
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>

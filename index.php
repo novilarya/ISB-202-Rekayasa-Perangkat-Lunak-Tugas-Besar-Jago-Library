@@ -1,6 +1,7 @@
 <?php
-include './header.php';
+include 'header.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,7 @@ include './header.php';
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="format-detection" content="telephone=no">
-	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="author" content="">
 	<meta name="keywords" content="">
 	<meta name="description" content="">
@@ -18,10 +19,10 @@ include './header.php';
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="../css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="../icomoon/icomoon.css">
-	<link rel="stylesheet" type="text/css" href="../css/vendor.css">
-	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
+	<link rel="stylesheet" type="text/css" href="css/vendor.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -50,7 +51,7 @@ include './header.php';
 											class="icon icon-ns-arrow-right"></i></a>
 								</div>
 							</div><!--banner-content-->
-							<img src="../images/harry-potter51.jpg" alt="banner" class="banner-image">
+							<img src="images/harry-potter51.jpg" alt="banner" class="banner-image">
 						</div><!--slider-item-->
 
 						<div class="slider-item">
@@ -64,7 +65,7 @@ include './header.php';
 											class="icon icon-ns-arrow-right"></i></a>
 								</div>
 							</div><!--banner-content-->
-							<img src="../images/main-banner2.jpg" alt="banner" class="banner-image">
+							<img src="images/main-banner2.jpg" alt="banner" class="banner-image">
 						</div><!--slider-item-->
 
 					</div><!--slider-->
@@ -85,11 +86,11 @@ include './header.php';
 				<div class="inner-content">
 					<div class="logo-wrap">
 						<div class="grid">
-							<a href="#"><img src="../images/client-image1.png" alt="client"></a>
-							<a href="#"><img src="../images/client-image2.png" alt="client"></a>
-							<a href="#"><img src="../images/client-image3.png" alt="client"></a>
-							<a href="#"><img src="../images/client-image4.png" alt="client"></a>
-							<a href="#"><img src="../images/client-image5.png" alt="client"></a>
+							<a href="#"><img src="images/client-image1.png" alt="client"></a>
+							<a href="#"><img src="images/client-image2.png" alt="client"></a>
+							<a href="#"><img src="images/client-image3.png" alt="client"></a>
+							<a href="#"><img src="images/client-image4.png" alt="client"></a>
+							<a href="#"><img src="images/client-image5.png" alt="client"></a>
 						</div>
 					</div><!--image-holder-->
 				</div>
@@ -115,7 +116,7 @@ include './header.php';
 							<div class="col-md-3">
 								<div class="product-item">
 									<figure class="product-style">
-										<img src="../images/product-item1.jpg" alt="Books" class="product-item">
+										<img src="images/product-item1.jpg" alt="Books" class="product-item">
 										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 											Cart</button>
 									</figure>
@@ -130,7 +131,7 @@ include './header.php';
 							<div class="col-md-3">
 								<div class="product-item">
 									<figure class="product-style">
-										<img src="../images/product-item2.jpg" alt="Books" class="product-item">
+										<img src="images/product-item2.jpg" alt="Books" class="product-item">
 										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 											Cart</button>
 									</figure>
@@ -145,7 +146,7 @@ include './header.php';
 							<div class="col-md-3">
 								<div class="product-item">
 									<figure class="product-style">
-										<img src="../images/product-item3.jpg" alt="Books" class="product-item">
+										<img src="images/product-item3.jpg" alt="Books" class="product-item">
 										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 											Cart</button>
 									</figure>
@@ -160,7 +161,7 @@ include './header.php';
 							<div class="col-md-3">
 								<div class="product-item">
 									<figure class="product-style">
-										<img src="../images/product-item4.jpg" alt="Books" class="product-item">
+										<img src="images/product-item4.jpg" alt="Books" class="product-item">
 										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 											Cart</button>
 									</figure>
@@ -227,7 +228,7 @@ include './header.php';
 
 						<div class="col-md-6">
 							<figure class="products-thumb">
-								<img src="../images/single-image.jpg" alt="book" class="single-image">
+								<img src="images/single-image.jpg" alt="book" class="single-image">
 							</figure>
 						</div>
 
@@ -287,7 +288,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item1.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -302,7 +303,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item2.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item2.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -317,7 +318,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item3.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -332,7 +333,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item4.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item4.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -350,7 +351,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item5.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -365,7 +366,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item6.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item6.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -380,7 +381,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item7.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -395,7 +396,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item8.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item8.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -415,7 +416,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item2.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item2.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -430,7 +431,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item4.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item4.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -445,7 +446,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item6.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item6.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -460,7 +461,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item8.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item8.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -480,7 +481,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item1.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -495,7 +496,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item3.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -510,7 +511,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item5.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -525,7 +526,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item7.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -544,7 +545,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item1.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -559,7 +560,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item3.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -574,7 +575,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item5.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -589,7 +590,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item7.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -608,7 +609,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item5.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -623,7 +624,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item7.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -642,7 +643,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item5.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -657,7 +658,7 @@ include './header.php';
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
-											<img src="../images/tab-item7.jpg" alt="Books" class="product-item">
+											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
 											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 												Cart</button>
 										</figure>
@@ -706,7 +707,7 @@ include './header.php';
 						<div class="grid product-grid">
 							<div class="product-item">
 								<figure class="product-style">
-									<img src="../images/product-item5.jpg" alt="Books" class="product-item">
+									<img src="images/product-item5.jpg" alt="Books" class="product-item">
 									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 										Cart</button>
 								</figure>
@@ -721,7 +722,7 @@ include './header.php';
 
 							<div class="product-item">
 								<figure class="product-style">
-									<img src="../images/product-item6.jpg" alt="Books" class="product-item">
+									<img src="images/product-item6.jpg" alt="Books" class="product-item">
 									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 										Cart</button>
 								</figure>
@@ -736,7 +737,7 @@ include './header.php';
 
 							<div class="product-item">
 								<figure class="product-style">
-									<img src="../images/product-item7.jpg" alt="Books" class="product-item">
+									<img src="images/product-item7.jpg" alt="Books" class="product-item">
 									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 										Cart</button>
 								</figure>
@@ -751,7 +752,7 @@ include './header.php';
 
 							<div class="product-item">
 								<figure class="product-style">
-									<img src="../images/product-item8.jpg" alt="Books" class="product-item">
+									<img src="images/product-item8.jpg" alt="Books" class="product-item">
 									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 										Cart</button>
 								</figure>
@@ -766,7 +767,7 @@ include './header.php';
 
 							<div class="product-item">
 								<figure class="product-style">
-									<img src="../images/product-item2.jpg" alt="Books" class="product-item">
+									<img src="images/product-item2.jpg" alt="Books" class="product-item">
 									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
 										Cart</button>
 								</figure>
@@ -840,7 +841,7 @@ include './header.php';
 
 								<figure>
 									<a href="#" class="image-hvr-effect">
-										<img src="../images/post-img1.jpg" alt="post" class="post-image">
+										<img src="images/post-img1.jpg" alt="post" class="post-image">
 									</a>
 								</figure>
 
@@ -874,7 +875,7 @@ include './header.php';
 							<article class="column" data-aos="fade-up" data-aos-delay="200">
 								<figure>
 									<a href="#" class="image-hvr-effect">
-										<img src="../images/post-img2.jpg" alt="post" class="post-image">
+										<img src="images/post-img2.jpg" alt="post" class="post-image">
 									</a>
 								</figure>
 								<div class="post-item">
@@ -907,7 +908,7 @@ include './header.php';
 							<article class="column" data-aos="fade-up" data-aos-delay="400">
 								<figure>
 									<a href="#" class="image-hvr-effect">
-										<img src="../images/post-img3.jpg" alt="post" class="post-image">
+										<img src="images/post-img3.jpg" alt="post" class="post-image">
 									</a>
 								</figure>
 								<div class="post-item">
@@ -960,7 +961,7 @@ include './header.php';
 
 						<div class="col-md-5">
 							<figure>
-								<img src="../images/device.png" alt="phone" class="single-image">
+								<img src="images/device.png" alt="phone" class="single-image">
 							</figure>
 						</div>
 
@@ -971,8 +972,8 @@ include './header.php';
 									liberolectus nonet psryroin. Amet sed lorem posuere sit iaculis amet, ac urna.
 									Adipiscing fames semper erat ac in suspendisse iaculis.</p>
 								<div class="google-app">
-									<img src="../images/google-play.jpg" alt="google play">
-									<img src="../images/app-store.jpg" alt="app store">
+									<img src="images/google-play.jpg" alt="google play">
+									<img src="images/app-store.jpg" alt="app store">
 								</div>
 							</div>
 						</div>
@@ -987,12 +988,13 @@ include './header.php';
 	include 'footer.php';
 	?>
 	
-	<script src="../js/jquery-1.11.0.min.js"></script>
+	<script src="js/jquery-1.11.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
-	<script src="../js/plugins.js"></script>
-	<script src="../js/script.js"></script>
+	<script src="js/plugins.js"></script>
+	<script src="js/script.js"></script>
 
 </body>
+
 </html>

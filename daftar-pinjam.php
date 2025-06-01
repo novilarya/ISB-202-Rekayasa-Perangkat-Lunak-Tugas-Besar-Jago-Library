@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../database/connection.php');
+include './database/connection.php';
 
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT * FROM peminjaman 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
     <link rel="stylesheet" type="text/css" href="css/vendor.css">
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
