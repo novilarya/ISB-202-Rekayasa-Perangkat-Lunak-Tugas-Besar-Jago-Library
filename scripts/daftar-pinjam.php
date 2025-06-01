@@ -1,6 +1,7 @@
 <?php
-session_start();
-include('../database/connection.php');
+    session_start();
+    include('../database/connection.php');
+    $success ='';
 
 $email = $_SESSION['email'];
 $stmt = $conn->prepare("SELECT * FROM peminjaman 
@@ -113,7 +114,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
         </div>
       </div>
     </div>
-    
+  
+    <footer>
+      <?php include "footer.php"; ?>
+    </footer>
+
+        
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">Sukses</h5>
+          </div>
+          <div class="modal-body">
+            Buku berhasil dikembalikan!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <?php if (isset($_SESSION['success']) && $_SESSION['success'] === true): ?>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -128,6 +150,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
     </script>
     <?php unset($_SESSION['success']); endif; ?>
 
+
 </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 
 </html>

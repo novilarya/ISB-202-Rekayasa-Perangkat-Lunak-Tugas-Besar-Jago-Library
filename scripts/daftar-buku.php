@@ -1,8 +1,10 @@
 <?php
-include('../database/connection.php');
-session_start();
 
-$jenis_buku = '';
+    include('../database/connection.php');
+    session_start();
+
+    $jenis_buku = '';
+
     $jenis_buku_dipilih = '';
     $status_buku = '';
     $search = '';
@@ -61,6 +63,7 @@ $jenis_buku = '';
             $params[] = "%$search%";
             $types .= "ss";
         }
+
 
         $stmt2 = $conn->prepare($query);
         if (!empty($params)) {
