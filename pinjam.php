@@ -76,7 +76,7 @@
         <div class="row align-items-center">
           <?php while ($row = $buku->fetch_assoc()) { ?>
             <div class="col-md-4 text-center mb-4">
-              <img src="/images/<?php echo $row['cover_buku']; ?>" alt="<?php echo $row['nama_buku']; ?>" class="img-fluid rounded shadow-sm" style="max-height: 400px; object-fit: cover;">
+              <img src="/images/buku/<?php echo $row['cover_buku']; ?>" alt="<?php echo $row['nama_buku']; ?>" class="img-fluid rounded shadow-sm" style="max-height: 400px; object-fit: cover;">
             </div>
             <div class="col-md-8">
               <h1 class="display-5 fw-bold"><?php echo $row['nama_buku']; ?></h1>
