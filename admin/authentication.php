@@ -1,5 +1,4 @@
 <?php
-    include "../header.php";
     include '../database/connection.php';
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
@@ -46,6 +45,9 @@
     <link rel="stylesheet" href="../css/vendor.css">
     <link rel="stylesheet" href="../style.css">
     </head>
+    <header>
+      <?php include "header.php" ?>
+    </header>
 <body>
     <div class="auth-container">
         <div class="auth-card">
