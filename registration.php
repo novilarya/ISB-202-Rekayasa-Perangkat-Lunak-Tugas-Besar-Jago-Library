@@ -1,5 +1,5 @@
 <?php
-include './database/connection.php';
+include 'database/connection.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -11,7 +11,7 @@ $password = $_POST['password'] ?? '';
 $nrp_nidn = $_POST['nrp_nidn'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT username FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();

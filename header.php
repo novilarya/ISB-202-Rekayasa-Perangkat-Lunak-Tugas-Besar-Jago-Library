@@ -1,8 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-include './database/connection.php';
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    include 'database/connection.php';
 ?>
 
 <!DOCTYPE html>

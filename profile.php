@@ -1,39 +1,46 @@
 <?php
-session_start();
-include './database/connection.php';
-$message = '';
-$foto = '';
+    session_start();
+    include 'database/connection.php';
+    $message = '';
+    $foto = '';
 
-if (isset($_SESSION['email'])) {
-    $email = $_SESSION['email'];
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $user = $stmt->get_result();
-    $row = $user->fetch_assoc();
-} else {
-    header('location: index.php');
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
-    $username_new = $_POST['username'] ?? '';
-    $email_new = $_SESSION['email'];
-    $password_new = $_POST['password'] ?? '';
-    $foto = $_POST['foto'] ?? '';
-
-    $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, password = ?, foto = ? WHERE email = ?");
-    $stmt->bind_param("sssss", $nrp_nidn_new, $username_new, $password_new, $foto, $email_new);
-
-    if ($stmt->execute()) {
-        echo '<script>
-                alert("Akun berhasil diperbarui!");
-                window.location.href = "profile.php";
-            </script>';
+    if (isset($_SESSION['email'])) {
+        $email = $_SESSION['email'];
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $user = $stmt->get_result();
+        $row = $user->fetch_assoc();
     } else {
-        echo '<script>alert("Gagal mengupdate data.");</script>';
+        header('location: index.php');
     }
-}
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
+        $username_new = $_POST['username'] ?? '';
+        $email_new = $_SESSION['email'];
+        $password_new = $_POST['password'] ?? '';
+        $foto = $_FILES['foto'];
+        $uploadDir = "images/user/";
+        $nama_file = basename($foto['name']);
+        $filePath = $uploadDir . $nama_file;
+
+        if (move_uploaded_file($foto['tmp_name'], $filePath)) {
+            $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, password = ?, foto = ? WHERE email = ?");
+            $stmt->bind_param("sssss", $nrp_nidn_new, $username_new, $password_new, $nama_file, $email_new);
+
+            if ($stmt->execute()) {
+                echo '<script>
+                        alert("Akun berhasil diperbarui!");
+                        window.location.href = "profile.php";
+                    </script>';
+            } else {
+                echo '<script>alert("Gagal mengupdate data.");</script>';
+            }
+        } else {
+            echo "Gagal mengupload file foto.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -70,52 +77,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card shadow border-0">
                     <div class="row g-0">
                         <!-- FOTO PROFIL -->
-                        <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
-                            <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                            <input type="file" name="foto" class="form-control" required>
-                        </div>
-
-                        <!-- FORM PROFIL -->
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h3 class="card-title mb-3">My Profile <?php echo ucfirst($row['role']); ?></h3>
-
-                                <form method="POST" action="">
-                                    <div class="mb-3">
-                                        <label for="nrp_nidn" class="form-label">
-                                            <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
-                                        </label>
-                                        <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <?php if ($message): ?>
-                                            <div class="text-danger small mb-1"><?= $message ?></div>
-                                        <?php endif; ?>
-                                        <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
-                                    </div>
-
-                                    <div class="form-check mb-3">
-                                        <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
-                                        <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary px-4">Update</button>
-                                </form>
-
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
+                                <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                <input type="file" name="foto" class="form-control" required>
                             </div>
-                        </div>
+
+                            <!-- FORM PROFIL -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-3">My Profile <?php echo ucfirst($row['role']); ?></h3>
+                                        <div class="mb-3">
+                                            <label for="nrp_nidn" class="form-label">
+                                                <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
+                                            </label>
+                                            <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Username</label>
+                                            <?php if ($message): ?>
+                                                <div class="text-danger small mb-1"><?= $message ?></div>
+                                            <?php endif; ?>
+                                            <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
+                                        </div>
+
+                                        <div class="form-check mb-3">
+                                            <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
+                                            <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary px-4">Update</button>
+                                    
+
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
