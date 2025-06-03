@@ -121,7 +121,7 @@ include('./database/connection.php');
 							<div class="col-md-3">
 								<div class="product-item">
 									<figure class="product-style">
-										<img src="images/<?php echo $row['cover_buku']; ?>" alt="Books" class="product-item">
+										<img src="images/buku/<?php echo $row['cover_buku']; ?>" alt="Books" class="product-item">
 										<a href="<?php echo "pinjam.php?kode_buku=" . $row['kode_buku']; ?>"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Pinjam
 											</button></a>
 									</figure>

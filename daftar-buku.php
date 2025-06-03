@@ -125,10 +125,10 @@
 				<select name="jenis_buku" id="jenis_buku" class="form-select">
 					<option value="">Pilih Jenis</option>
 					<option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
-					<option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Project</option>
-					<option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>Sistem Informasi Pengabdian</option>
+					<option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Praktik</option>
+					<option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>Sistem Informasi Perusahaan</option>
 					<option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>Merdeka Belajar Kampus Merdeka</option>
-					<option value="PAP" <?= $jenis_buku == 'PAP' ? 'selected' : '' ?>>Umum</option>
+					<option value="Umum" <?= $jenis_buku == 'PAP' ? 'selected' : '' ?>>Umum</option>
 				</select>
 			</div>
 
@@ -156,7 +156,7 @@
 				<div class="col-md-3 mb-4">
 					<div class="product-item">
 						<figure class="product-style">
-							<img src="/images/<?php echo $row['cover_buku']; ?>" alt="<?php echo $row['nama_buku']; ?>" class="product-item">
+							<img src="/images/buku/<?php echo $row['cover_buku']; ?>" alt="<?php echo $row['nama_buku']; ?>" class="product-item">
 							<?php if ($isTersedia): ?>
 								<?php if ($jenisBuku == 'TA' && $semester < 7): ?>
 									<button type="button" class="add-to-cart" onclick="showModalTA()">Pinjam</button>

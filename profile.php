@@ -79,7 +79,7 @@
                         <!-- FOTO PROFIL -->
                         <form method="POST" action="" enctype="multipart/form-data">
                             <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
-                                <img src="/images/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                                 <input type="file" name="foto" class="form-control" required>
                             </div>
 

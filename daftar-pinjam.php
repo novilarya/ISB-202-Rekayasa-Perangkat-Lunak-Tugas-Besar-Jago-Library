@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
             <?php while ($row = $buku->fetch_assoc()) { ?>
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 shadow-sm border-0">
-                        <img src="/images/<?php echo $row['cover_buku']; ?>"
+                        <img src="/images/buku/<?php echo $row['cover_buku']; ?>"
                             class="card-img-top"
                             style="height: auto; max-height: 500px; object-fit: contain; margin-top: 40px;"
                             alt="<?php echo $row['nama_buku']; ?>">
@@ -75,6 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
                             <p class="card-text mb-1"><strong>Pengarang:</strong> <?php echo $row['pengarang']; ?></p>
                             <p class="card-text mb-1"><strong>Halaman:</strong> <?php echo $row['jumlah_halaman']; ?></p>
                             <p class="card-text mb-3"><strong>Tahun Terbit:</strong> <?php echo $row['tahun_terbit']; ?></p>
+                            <p class="card-text mb-3"><strong>Tanggal Pinjam:</strong> <?php echo $row['tanggal_peminjaman']; ?></p>
+                            <p class="card-text mb-3"><strong>Tanggal Kembali:</strong> <?php echo $row['tanggal_pengembalian']; ?></p>
 
                             <form method="POST" action="">
                                 <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">

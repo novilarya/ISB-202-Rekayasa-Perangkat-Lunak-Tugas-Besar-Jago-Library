@@ -57,7 +57,7 @@
                             if ($user && $user->num_rows === 1) {
                                 $row = $user->fetch_assoc();
                                 $foto = !empty($row["foto"]) ? htmlspecialchars($row["foto"]) : "default.jpg";
-                                $imgPath = "/images/" . $foto;
+                                $imgPath = "/images/user/" . $foto;
                                 echo '
                                 <div class="dropdown">
                                     <a class="dropdown-toggle text-dark" href="#" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
