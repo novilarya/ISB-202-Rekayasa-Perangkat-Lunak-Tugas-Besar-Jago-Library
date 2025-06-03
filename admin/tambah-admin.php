@@ -18,10 +18,19 @@
     }
 
     if (isset($_POST['submit'])) {
-        $stmt = $conn->prepare("INSERT INTO users (role, email, username, password, kode_autentikasi, nama) VALUES (?, ?, ?, ?, ?, ?)");
+      $foto = $_FILES['foto'];
+      $uploadDir = "../images/user/";
+      $nama_file = basename($foto['name']);
+      $filePath = $uploadDir . $nama_file;
+      
+      if (move_uploaded_file($foto['tmp_name'], $filePath)) {
+        $stmt = $conn->prepare("INSERT INTO users (role, email, username, password, kode_autentikasi, nama, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $role = 'admin';
-        $stmt->bind_param("ssssss", $role, $email, $username, $password, $kode, $nama);
+        $stmt->bind_param("sssssss", $role, $email, $username, $password, $kode, $nama, $nama_file);
         $stmt->execute();
+      } else {
+        echo "Gagal mengupload file foto.";
+      }
     }
 ?>
 
@@ -124,7 +133,7 @@
                 <h5 class="card-title">Tambah Admin</h5>
               </div>
               <div class="card-body">
-                <form method="POST" action="">
+                <form method="POST" action="" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-5 pr-1">
                       <div class="form-group">
@@ -160,6 +169,12 @@
                         <input type="text" name="kode-autentikasi" class="form-control" value="<?= htmlspecialchars($kode) ?>" readonly>
                         <button type="submit" name="generate" class="btn btn-secondary">Generate</button>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Foto</label>
+                      <input type="file" name="foto" class="form-control" required>
                     </div>
                   </div>
                   <div class="row">

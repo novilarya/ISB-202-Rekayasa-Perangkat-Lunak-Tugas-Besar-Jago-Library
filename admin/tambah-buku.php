@@ -1,26 +1,42 @@
 <?php
-    session_start();
-    include '../database/connection.php';
-    include 'layout/sidebar.php';
+  session_start();
+  include '../database/connection.php';
+  include 'layout/sidebar.php';
 
-    $kode_buku = $_POST['kode_buku'] ?? '';
-    $jenis_buku = $_POST['jenis_buku'] ?? '';
-    $nama_buku = $_POST['nama_buku'] ?? '';
-    $pengarang = $_POST['pengarang'] ?? '';
-    $penerbit = $_POST['penerbit'] ?? '';
-    $jumlah_halaman = $_POST['jumlah_halaman'] ?? '';
-    $tahun_terbit = $_POST['tahun_terbit'] ?? '';
-    $deskripsi_buku = $_POST['deskripsi_buku'] ?? '';
-    $status = $_POST['status'] ?? '';
-    $penyumbang = $_POST['penyumbang'] ?? '';
-    $cover_buku = $_POST['cover_buku'] ?? '';
+  $kode_buku = $_POST['kode_buku'] ?? '';
+  $jenis_buku = $_POST['jenis_buku'] ?? '';
+  $nama_buku = $_POST['nama_buku'] ?? '';
+  $pengarang = $_POST['pengarang'] ?? '';
+  $penerbit = $_POST['penerbit'] ?? '';
+  $jumlah_halaman = $_POST['jumlah_halaman'] ?? '';
+  $tahun_terbit = $_POST['tahun_terbit'] ?? '';
+  $deskripsi_buku = $_POST['deskripsi_buku'] ?? '';
+  $status = $_POST['status'] ?? '';
+  $jumlah_buku = $_POST['jumlah_buku'] ?? '';
+  $penyumbang = $_POST['penyumbang'] ?? '';
 
-    if (isset($_POST['submit'])) {
-        $stmt = $conn->prepare("INSERT INTO buku (kode_buku, jenis_buku, nama_buku, pengarang, penerbit, jumlah_halaman, tahun_terbit, deskripsi_buku, status, penyumbang, cover_buku) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssssss", $kode_buku, $jenis_buku, $nama_buku, $pengarang, $penerbit, $jumlah_halaman, $tahun_terbit, $deskripsi_buku, $status, $penyumbang, $cover_buku);
-        $stmt->execute();
-    }
+  if (isset($_POST['submit'])) {
+      $cover_buku = $_FILES['cover_buku'];
+      $uploadDir = "../images/buku/";
+      $nama_file = basename($cover_buku['name']);
+      $filePath = $uploadDir . $nama_file;
+
+      if (move_uploaded_file($cover_buku['tmp_name'], $filePath)) {
+          $stmt = $conn->prepare("INSERT INTO buku (
+              kode_buku, jenis_buku, nama_buku, pengarang, penerbit, jumlah_halaman, 
+              tahun_terbit, deskripsi_buku, status, penyumbang, cover_buku, jumlah_buku
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          
+          $stmt->bind_param(
+              "ssssssssssss",
+              $kode_buku, $jenis_buku, $nama_buku, $pengarang, $penerbit,
+              $jumlah_halaman, $tahun_terbit, $deskripsi_buku, $status,
+              $penyumbang, $nama_file, $jumlah_buku
+          );
+      } else {
+          echo "Gagal mengupload file cover.";
+      }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +138,7 @@
                 <h5 class="card-title">Tambah Buku</h5>
               </div>
               <div class="card-body">
-                <form method="POST" action="">
+                <form method="POST" action="" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-5 pr-1">
                       <div class="form-group">
@@ -197,11 +213,9 @@
                   </div>
                   <div class="row">
                     <div class="col-md-5 pr-1">
-                      <div class="form-group">
-                        <label>Cover Buku</label>
-                        <input type="text" name="jumlah_buku" class="form-control" placeholder="Masukkan jumlah buku" required>
-                      </div>
-                    </div>
+                      <label>Cover Buku</label>
+                      <input type="file" name="cover_buku" class="form-control" required>
+                    </div>                       
                   </div>
                   <div class="row">
                     <div class="update ml-auto mr-auto">

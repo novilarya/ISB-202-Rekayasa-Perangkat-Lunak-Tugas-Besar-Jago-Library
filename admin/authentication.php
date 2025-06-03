@@ -18,9 +18,6 @@
                 $test_kode = $_POST['kode_autentikasi'];
 
                 if ($kode == $test_kode) {
-                    $stmt2 = $conn->prepare("UPDATE users SET kode_autentikasi = NULL WHERE email = ?");
-                    $stmt2->bind_param("s", $email);
-                    $stmt2->execute();
                     header("Location: dashboard.php");
                 } else {
                     $message = 'Kode Autentikasi Anda Salah!';
@@ -43,7 +40,7 @@
     <link rel="stylesheet" href="/css/styles.css">
     </head>
 <header>
-  <?php include "../scripts/header.php" ?>
+  <?php include "../header.php" ?>
 </header>
 <body>
     <div class="container-login">

@@ -1,6 +1,6 @@
     <?php
     session_start();
-    include('./database/connection.php');
+    include('database/connection.php');
     $success = '';
 
     if (isset($_GET['kode_buku'])) {
