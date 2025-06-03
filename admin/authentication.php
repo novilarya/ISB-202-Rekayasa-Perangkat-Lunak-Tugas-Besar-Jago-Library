@@ -1,6 +1,9 @@
 <?php
+    include "../header.php";
     include '../database/connection.php';
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $message = '';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,28 +40,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autentikasi Admin</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../icomoon/icomoon.css">
+    <link rel="stylesheet" href="../css/vendor.css">
+    <link rel="stylesheet" href="../style.css">
     </head>
-<header>
-  <?php include "../header.php" ?>
-</header>
 <body>
-    <div class="container-login">
-        <div class="form-card">
-            <h1>Masukkan Kode Autentikasi</h1>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Autentikasi Admin</h2>
             <form method="POST" action="">
-                <div class="input-group">
-                    <label for="kode_autentikasi">Kode Autentikasi</label>
-                    <input type="kode_autentikasi" name="kode_autentikasi" id="kode_autentikasi" placeholder="Masukkan kode autentikasi" required>
+                <div class="mb-3">
+                    <label for="kode_autentikasi" class="form-label">Kode Autentikasi</label>
+                    <input type="text" class="form-control" id="kode_autentikasi" name="kode_autentikasi" placeholder="Masukkan kode autentikasi" required>
                 </div>
-                <button type="submit" class="signup-button">Login</button>
+                <button type="submit" class="btn btn-primary-1 rounded 5">Masuk</button>
                 <?php if ($message): ?>
-                    <div class="message" style="text-align: center; margin-top: 10px"><?= $message ?></div>
+                    <div class="message"><?= $message ?></div>
                 <?php endif; ?>
             </form>
             <p class="signin-link">Belum punya akun? <a href="registration.php">Daftar</a></p>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
