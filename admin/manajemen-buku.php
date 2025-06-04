@@ -1,12 +1,20 @@
 <?php
   include 'layout/sidebar.php';
   include('../database/connection.php');
+  $buku = null;
+  $buku_terlambat = null;
 
-  $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
+  $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian, peminjaman.kode_buku, peminjaman.nrp_nidn
             FROM users
             INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
             INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
             WHERE peminjaman.status = 'dipinjam'";
+
+  $query2 = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian, peminjaman.denda, peminjaman.kode_buku, peminjaman.nrp_nidn
+            FROM users
+            INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
+            INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+            WHERE peminjaman.status = 'pembayaran'";
 
   if ($_SERVER["REQUEST_METHOD"] == "GET") {
       $search_username = $_GET['search_username'] ?? '';
@@ -19,6 +27,12 @@
                     INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
                     INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
                     WHERE peminjaman.status = 'dipinjam'";
+                  
+          $query2 = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
+                    FROM users
+                    INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
+                    INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+                    WHERE peminjaman.status = 'pembayaran'";
 
           $params = [];
           $types = '';
@@ -27,16 +41,28 @@
               $query .= " AND users.nama LIKE ?";
               $params[] = "%$search_username%";
               $types .= 's';
+              
+              $query2 .= " AND users.nama LIKE ?";
+              $params[] = "%$search_username%";
+              $types .= 's';
           }
 
           if (!empty($search_peminjaman)) {
               $query .= " AND peminjaman.tanggal_peminjaman >= ?";
               $params[] = $search_peminjaman;
               $types .= 's';
+              
+              $query2 .= " AND peminjaman.tanggal_peminjaman >= ?";
+              $params[] = $search_peminjaman;
+              $types .= 's';
           }
 
           if (!empty($search_pengembalian)) {
               $query .= " AND peminjaman.tanggal_pengembalian <= ?";
+              $params[] = $search_pengembalian;
+              $types .= 's';
+              
+              $query2 .= " AND peminjaman.tanggal_pengembalian <= ?";
               $params[] = $search_pengembalian;
               $types .= 's';
           }
@@ -47,11 +73,30 @@
           }
           $stmt->execute();
           $buku = $stmt->get_result();
+
+          $stmt2 = $conn->prepare($query2);
+          if ($params) {
+              $stmt2->bind_param($types, ...$params);
+          }
+          $stmt2->execute();
+          $buku_terlambat = $stmt2->get_result();
       } else {
           $stmt = $conn->prepare($query);
           $stmt->execute();
           $buku = $stmt->get_result();
+          $stmt2 = $conn->prepare($query2);
+          $stmt2->execute();
+          $buku_terlambat = $stmt2->get_result();
       }
+  }
+
+  if (isset($_POST['update'])){
+    $kode_buku = $_POST['kode_buku'];
+    $nrp_nidn = $_POST['nrp_nidn'];
+
+    $stmt = $conn->prepare("UPDATE peminjaman SET status = 'lunas' WHERE kode_buku = ? AND nrp_nidn = ?");
+    $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
+    $stmt->execute();
   }
 ?>
 
@@ -217,7 +262,7 @@
                       </th>
                     </thead>
                     <tbody>
-                      <?php while($row = $buku->fetch_assoc()) { ?>
+                      <?php if ($buku): while($row = $buku->fetch_assoc()) { ?>
                         <tr>
                           <td>
                             <?php echo $row['nama_buku']; ?>
@@ -232,7 +277,70 @@
                             <?php echo $row['tanggal_pengembalian']; ?>
                           </td>
                         </tr>
-                      <?php } ?>
+                      <?php } endif; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Daftar Pengemblian Buku</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        Nama Buku
+                      </th>
+                      <th>
+                        Nama Peminjam
+                      </th>
+                      <th>
+                        Tanggal Peminjaman
+                      </th>
+                      <th>
+                        Tanggal Pengembalian
+                      </th>
+                      <th>
+                        Denda
+                      </th>
+                      <th>
+                        Status
+                      </th>
+                    </thead>
+                    <tbody>
+                      <form method="POST">
+                        <?php while($row = $buku_terlambat->fetch_assoc()) { ?>
+                          <tr>
+                            <td>
+                              <?php echo $row['nama_buku']; ?>
+                            </td>
+                            <td>
+                              <?php echo $row['nama']; ?>
+                            </td>
+                            <td>
+                              <?php echo $row['tanggal_peminjaman']; ?>
+                            </td>
+                            <td>
+                              <?php echo $row['tanggal_pengembalian']; ?>
+                            </td>
+                            <td>
+                              <?php echo $row['denda']; ?>
+                            </td>
+                            <td>
+                                <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
+                                <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
+                                <button type="submit" name="update" class="btn btn-primary d-block w-100">Terima</button>
+                            </td>
+                          </tr>
+                        <?php } ?>
+                      </form>
                     </tbody>
                   </table>
                 </div>
