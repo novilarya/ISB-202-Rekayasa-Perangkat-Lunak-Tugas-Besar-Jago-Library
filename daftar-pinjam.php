@@ -2,31 +2,53 @@
     session_start();
     include('database/connection.php');
     $success ='';
-$email = $_SESSION['email'];
-$stmt = $conn->prepare("SELECT * FROM peminjaman 
-              INNER JOIN users ON peminjaman.nrp_nidn = users.nrp_nidn
-              INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
-              WHERE users.email = ? AND peminjaman.status = 'dipinjam'");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$buku = $stmt->get_result();
+    $email = $_SESSION['email'];
+    $stmt = $conn->prepare("SELECT * FROM peminjaman 
+                  INNER JOIN users ON peminjaman.nrp_nidn = users.nrp_nidn
+                  INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+                  WHERE users.email = ? AND peminjaman.status = 'dipinjam'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $buku = $stmt->get_result();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
-      $kode_buku = $_POST['kode_buku'];
-      $nrp_nidn = $_POST['nrp_nidn'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
+        $kode_buku = $_POST['kode_buku'];
+        $nrp_nidn = $_POST['nrp_nidn'];
+        $tanggal_kembali = $_POST['tanggal_kembali'];
+        $today = date('Y-m-d');
+        $denda = 0;
+        $lama_terlambat = 0;
 
-      $stmt = $conn->prepare("UPDATE peminjaman SET status = 'kembali' WHERE kode_buku = ? AND nrp_nidn = ? AND status = 'dipinjam'");
-      $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
-      $stmt->execute();
+        if ($today > $tanggal_kembali) {
+            $datetime1 = new DateTime($tanggal_kembali);
+            $datetime2 = new DateTime($today);
+            $interval = $datetime1->diff($datetime2);
+            $lama_terlambat = $interval->days;
+            $denda = $lama_terlambat * 5000;
 
-      $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia' WHERE kode_buku = ?");
-      $stmtUpdateBuku->bind_param("s", $kode_buku);
-      
-      if ($stmtUpdateBuku->execute()) {
-          $_SESSION['success'] = true; // simpan status sukses di session
-          header("Location: " . $_SERVER['PHP_SELF']); // redirect untuk menghentikan POST
-          exit();
-      }
+            $_SESSION['denda'] = [
+                'kode_buku' => $kode_buku,
+                'nrp_nidn' => $nrp_nidn,
+                'lama' => $lama_terlambat,
+                'total' => $denda,
+                'metode' => $metode
+            ];
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            $stmt = $conn->prepare("UPDATE peminjaman SET status = 'kembali' WHERE kode_buku = ? AND nrp_nidn = ? AND status = 'dipinjam'");
+            $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
+            $stmt->execute();
+
+            $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia' WHERE kode_buku = ?");
+            $stmtUpdateBuku->bind_param("s", $kode_buku);
+
+            if ($stmtUpdateBuku->execute()) {
+                $_SESSION['success'] = true;
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            }
+        }
     }
 ?>
 
@@ -81,7 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
                             <form method="POST" action="">
                                 <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
                                 <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
-                                <button type="submit" name="kembalikan" class="btn btn-outline-info btn-sm mt-3 rounded 4" style="height: 50px; width: 200px; border-radius: 2;">Kembalikan</button>
+                                <input type="hidden" name="tanggal_kembali" value="<?php echo $row['tanggal_pengembalian']; ?>">
+                                <button type="submit" name="kembalikan" class="btn btn-outline-info btn-sm mt-3" style="height: 50px; width: 200px;">Kembalikan</button>
                             </form>
                         </div>
                     </div>
@@ -151,6 +174,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['kembalikan'])){
     </script>
     <?php unset($_SESSION['success']); endif; ?>
 
+    <?php if (isset($_SESSION['denda'])): ?>
+      <div class="modal fade" id="dendaModal" tabindex="-1" aria-labelledby="dendaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <form method="POST" action="proses-denda.php">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Denda Terlambat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+              </div>
+              <div class="modal-body">
+                <p>Buku terlambat dikembalikan selama <strong><?= $_SESSION['denda']['lama']; ?></strong> hari.</p>
+                <p>Total denda: <strong>Rp <?= number_format($_SESSION['denda']['total'], 0, ',', '.'); ?></strong></p>
+                <p>Pilih metode pembayaran:</p>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="metode" id="cash" value="Cash" required>
+                  <label class="form-check-label" for="cash">Cash</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="metode" id="va" value="Virtual Account" required>
+                  <label class="form-check-label" for="va">Virtual Account</label>
+                </div>
+
+                <input type="hidden" name="kode_buku" value="<?= $_SESSION['denda']['kode_buku'] ?>">
+                <input type="hidden" name="nrp_nidn" value="<?= $_SESSION['denda']['nrp_nidn'] ?>">
+                <input type="hidden" name="denda" value="<?= $_SESSION['denda']['total'] ?>">
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Bayar Denda</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <script>
+        const modal = new bootstrap.Modal(document.getElementById('dendaModal'));
+        window.addEventListener('load', () => {
+          modal.show();
+        });
+      </script>
+    <?php unset($_SESSION['denda']); endif; ?>
 
 </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
