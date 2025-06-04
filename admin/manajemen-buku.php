@@ -2,13 +2,57 @@
   include 'layout/sidebar.php';
   include('../database/connection.php');
 
-  $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian FROM users
-                    inner join peminjaman on users.nrp_nidn = peminjaman.nrp_nidn
-                    inner join buku on peminjaman.kode_buku = buku.kode_buku
+  $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
+            FROM users
+            INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
+            INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+            WHERE peminjaman.status = 'dipinjam'";
+
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+      $search_username = $_GET['search_username'] ?? '';
+      $search_peminjaman = $_GET['search_tanggal_peminjaman'] ?? '';
+      $search_pengembalian = $_GET['search_tanggal_pengembalian'] ?? '';
+
+      if (!empty($search_username) || !empty($search_peminjaman) || !empty($search_pengembalian)) {
+          $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
+                    FROM users
+                    INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
+                    INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
                     WHERE peminjaman.status = 'dipinjam'";
-  $stmt = $conn->prepare($query);
-  $stmt->execute();
-  $buku = $stmt->get_result();
+
+          $params = [];
+          $types = '';
+
+          if (!empty($search_username)) {
+              $query .= " AND users.nama LIKE ?";
+              $params[] = "%$search_username%";
+              $types .= 's';
+          }
+
+          if (!empty($search_peminjaman)) {
+              $query .= " AND peminjaman.tanggal_peminjaman >= ?";
+              $params[] = $search_peminjaman;
+              $types .= 's';
+          }
+
+          if (!empty($search_pengembalian)) {
+              $query .= " AND peminjaman.tanggal_pengembalian <= ?";
+              $params[] = $search_pengembalian;
+              $types .= 's';
+          }
+
+          $stmt = $conn->prepare($query);
+          if ($params) {
+              $stmt->bind_param($types, ...$params);
+          }
+          $stmt->execute();
+          $buku = $stmt->get_result();
+      } else {
+          $stmt = $conn->prepare($query);
+          $stmt->execute();
+          $buku = $stmt->get_result();
+      }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -99,6 +143,54 @@
           </div>
         </div>
       </nav>
+
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <form method="GET">
+                    <div class="row">
+                      <div class="col-md-3 pr-1">
+                        <div class="form-group">
+                          <label>Username Peminjam</label>
+                          <input type="text" name="search_username" class="form-control"
+                                placeholder="Masukkan username"
+                                value="<?= htmlspecialchars($_GET['search_username'] ?? '') ?>">
+                        </div>
+                      </div>
+                      <div class="col-md-3 pl-1">
+                        <div class="form-group">
+                          <label for="tanggal_pinjam" class="form-label">Tanggal Pinjam</label>
+                          <input type="date" name="search_tanggal_peminjaman" id="tanggal_pinjam"
+                                class="form-control"
+                                value="<?= htmlspecialchars($_GET['search_tanggal_peminjaman'] ?? '') ?>">
+                        </div>
+                      </div>
+                      <div class="col-md-3 px-1">
+                        <div class="form-group">
+                          <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
+                          <input type="date" name="search_tanggal_pengembalian" id="tanggal_kembali"
+                                class="form-control"
+                                value="<?= htmlspecialchars($_GET['search_tanggal_pengembalian'] ?? '') ?>">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>&nbsp;</label>
+                          <button type="submit" class="btn btn-primary d-block w-100">Cari</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
