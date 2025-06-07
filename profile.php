@@ -70,62 +70,65 @@
     <header>
         <?php include "header.php" ?>
     </header>
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+    <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
 
-                <div class="card shadow border-0">
-                    <div class="row g-0">
-                        <!-- FOTO PROFIL -->
-                        <form method="POST" action="" enctype="multipart/form-data">
-                            <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
-                                <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                                <input type="file" name="foto" class="form-control" required>
-                            </div>
+                    <div class="card shadow border-0">
+                        <div class="row g-0">
+                            <form method="POST" action="" enctype="multipart/form-data" class="d-flex flex-wrap w-100">
 
-                            <!-- FORM PROFIL -->
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h3 class="card-title mb-3">My Profile <?php echo ucfirst($row['role']); ?></h3>
-                                        <div class="mb-3">
-                                            <label for="nrp_nidn" class="form-label">
-                                                <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
-                                            </label>
-                                            <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
-                                        </div>
+                                <!-- FOTO PROFIL -->
+                                <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-4 border-end">
+                                    <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 140px; height: 140px; object-fit: cover;">
+                                    <input type="file" name="foto" class="form-control" required>
+                                </div>
 
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
-                                        </div>
+                                <!-- FORM PROFIL -->
+                                <div class="col-md-8 p-4">
+                                    <h3 class="card-title mb-4">My Profile <?php echo ucfirst($row['role']); ?></h3>
 
-                                        <div class="mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <?php if ($message): ?>
-                                                <div class="text-danger small mb-1"><?= $message ?></div>
-                                            <?php endif; ?>
-                                            <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="nrp_nidn" class="form-label">
+                                            <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
+                                        </label>
+                                        <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
+                                    </div>
 
-                                        <div class="mb-3">
-                                            <label for="password" class="form-label">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
+                                    </div>
 
-                                        <div class="form-check mb-3">
-                                            <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
-                                            <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <?php if ($message): ?>
+                                            <div class="text-danger small mb-1"><?= $message ?></div>
+                                        <?php endif; ?>
+                                        <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-primary px-4">Update</button>
-                                    
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
+                                    </div>
+
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
+                                        <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary px-4 rounded">Update</button>
+                                    </div>
 
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
