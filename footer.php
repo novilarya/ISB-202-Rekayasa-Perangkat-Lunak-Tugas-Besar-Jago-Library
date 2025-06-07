@@ -29,10 +29,8 @@
 
 					<div class="footer-item">
 						<div class="company-brand">
-							<img src="images/main-logo.png" alt="logo" class="footer-logo">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus liberolectus
-								nonet psryroin. Amet sed lorem posuere sit iaculis amet, ac urna. Adipiscing fames
-								semper erat ac in suspendisse iaculis.</p>
+							<img src="images/Group.png" alt="logo" class="footer-logo">
+							<p>Jl. Khp Hasan Mustopa No.23, Neglasari, Kec. Cibeunying Kaler, Kota Bandung, Jawa Barat 40124</p>
 						</div>
 					</div>
 
@@ -44,19 +42,10 @@
 						<h5>About Us</h5>
 						<ul class="menu-list">
 							<li class="menu-item">
-								<a href="#">vision</a>
+								<a href="daftar-buku.php">Daftar Buku</a>
 							</li>
 							<li class="menu-item">
-								<a href="#">articles </a>
-							</li>
-							<li class="menu-item">
-								<a href="#">careers</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">service terms</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">donate</a>
+								<a href="daftar-pinjam.php">Peminjaman Buku</a>
 							</li>
 						</ul>
 					</div>
@@ -144,8 +133,8 @@
 						<div class="row">
 
 							<div class="col-md-6">
-								<p>© 2022 All rights reserved. Free HTML Template by <a
-										href="https://www.templatesjungle.com/" target="_blank">TemplatesJungle</a></p>
+								<p>© 2025 All Right Deserve <a
+										href="https://www.templatesjungle.com/" target="_blank">E-Silib</a></p>
 							</div>
 
 							<div class="col-md-6">
