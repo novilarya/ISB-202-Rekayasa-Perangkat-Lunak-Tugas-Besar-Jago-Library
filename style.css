@@ -391,7 +391,7 @@ figure {
 img {
   display: inline-block;
   border: 0;
-  max-width: 100%;
+  max-width: 600px;
   height: auto;
   vertical-align: middle;
 }
@@ -1006,8 +1006,8 @@ fieldset[disabled] a.btn {
 
 .btn.btn-outline-accent {
   background: transparent;
-  border-color: var(--accent-color);
-  color: var(--accent-color);
+  border-color: #5A72A0;
+  color: #5A72A0;
 }
 
 .btn.btn-outline-accent:hover {
@@ -1859,12 +1859,13 @@ img.post-image {
 }
 
 .banner-content h2.banner-title {
-  font-size: 4.5em;
+  font-size: 3.0em;
   font-weight: 500;
   color: #222;
 }
 
 .banner-content p {
+  font-size: 1.5em;
   margin: 0 0 30px 0;
 }
 
@@ -2446,10 +2447,10 @@ img.book-cover {
   height: 60px;
   line-height: 60px;
   border-radius: 50%;
-  border: 1px solid #daa556;
+  border: 1px solid #5A72A0;
   display: inline-block;
   font-size: 24px;
-  color: #daa556;
+  color: #5A72A0;
 }
 
 .form-label {
@@ -2827,6 +2828,16 @@ input[type="file"] {
   font-weight: 500;
   color: #74642F;
   margin: 0;
+}
+
+.daftar-pinjam-section {
+  background-color: #edebe4;
+}
+
+.daftar-pinjam-section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
 }
 
 
