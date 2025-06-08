@@ -2020,6 +2020,7 @@ img.post-image {
 }
 
 .tabs {
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
   flex-wrap: wrap;
   margin: 55px 0;
@@ -2597,6 +2598,7 @@ img.book-cover {
 }
 
 .btn-primary-1 {
+  height: 50px;
   width: 100%;
   padding: 10px;
   font-weight: 600;
@@ -2607,6 +2609,21 @@ img.book-cover {
 
 .btn-primary-1:hover {
   background-color: #daa556;
+  color: #f1f1f0;
+}
+
+.btn-primary-12 {
+  height: 50px;
+  width: 150px;
+  padding: 10px;
+  font-weight: 300;
+  background-color: #7882A4;
+  color: #f1f1f0;
+  border: none;
+}
+
+.btn-primary-12:hover {
+  background-color: #C0A080;
   color: #f1f1f0;
 }
 
@@ -2753,3 +2770,64 @@ input[type="file"] {
   #scrollContainer::-webkit-scrollbar {
     display: none;
   }
+
+  .product-style-buku {
+  position: relative;
+  overflow: hidden;
+}
+
+.slick-slider .product-style-buku {
+  margin: 0 15px 25px;
+}
+
+.product-style-buku figcaption p {
+  margin-bottom: 20px;
+}
+
+.product-style-buku img.product-item {
+  position: relative;
+  background: #EFEEE8;
+  border: 1px solid #EAE8DF;
+  padding: 15%;
+  cursor: pointer;
+  width: 100%;
+}
+
+.product-style-buku button.add-to-cart {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222323;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-style-buku:hover button.add-to-cart {
+  opacity: 1;
+  bottom: 15px;
+}
+
+.product-item-buku figcaption {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.product-item-buku figcaption>h3 {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: #74642F;
+  margin: 0;
+}
+
+
+

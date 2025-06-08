@@ -92,8 +92,8 @@
               <span class="badge <?php echo $badgeClass; ?> py-2 px-3 mb-3"><?php echo $status; ?></span>
 
               <div>
-                <p class="text-info-1" style="">Tersisa 5 buku lagi</p>
-                <button class="btn btn-primary px-4 rounded 4 " data-bs-toggle="modal" data-bs-target="#exampleModal">Pinjam Buku</button>
+                <p class="text-info-1">Tersisa 5 buku lagi</p>
+                <button class="btn-primary-12 px-4 rounded 4 " data-bs-toggle="modal" data-bs-target="#exampleModal">Pinjam Buku</button>
               </div>
             </div>
 
