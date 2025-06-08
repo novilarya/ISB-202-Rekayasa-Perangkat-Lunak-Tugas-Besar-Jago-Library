@@ -2840,5 +2840,9 @@ input[type="file"] {
   border-radius: 12px;
 }
 
+.profile-cover {
+    border-top-left-radius: 0.375rem; /* Bootstrap default border radius */
+    border-bottom-left-radius: 0.375rem;
+}
 
 
