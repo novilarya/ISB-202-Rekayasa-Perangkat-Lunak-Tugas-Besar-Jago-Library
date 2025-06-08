@@ -82,7 +82,7 @@
                                 <!-- FOTO PROFIL -->
                                 <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-4 border-end">
                                     <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 140px; height: 140px; object-fit: cover;">
-                                    <input type="file" name="foto" class="form-control" required>
+                                    <input type="file" name="foto" class="form-control rounded 4" required>
                                 </div>
 
                                 <!-- FORM PROFIL -->
@@ -120,7 +120,7 @@
                                     </div>
 
                                     <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary px-4 rounded">Update</button>
+                                        <button type="submit" class="btn btn-primary px-4 rounded" style="height: 40px; width: 150px;">Update</button>
                                     </div>
 
                                 </div>

@@ -102,7 +102,7 @@
                                     </ul>
                                 </li>
                                 <li class="menu-item"><a href="#featured-books" class="nav-link">Featured</a></li>
-                                <li class="menu-item"><a href="#popular-books" class="nav-link">Popular</a></li>
+                                <li class="menu-item"><a href="#subscribe" class="nav-link">Kritik</a></li>
                             </ul>
 
                             <div class="hamburger">
