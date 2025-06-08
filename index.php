@@ -66,7 +66,7 @@ $buku = $stmt->get_result();
 											class="icon icon-ns-arrow-right"></i></a>
 								</div>
 							</div><!--banner-content-->
-							<img src="images/banner21.png" alt="banner" class="banner-image">
+							<img src="images/banner3.png" alt="banner" class="banner-image">
 						</div><!--slider-item-->
 
 					</div><!--slider-->
