@@ -2738,7 +2738,6 @@ img.book-cover {
   color: #74642f;
   text-decoration: none;
 }
-
 .card-title {
     font-weight: 600;
 }
@@ -2844,5 +2843,4 @@ input[type="file"] {
     border-top-left-radius: 0.375rem; /* Bootstrap default border radius */
     border-bottom-left-radius: 0.375rem;
 }
-
 

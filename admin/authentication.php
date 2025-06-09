@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="../style.css">
     </head>
     <header>
-      <?php include "header.php" ?>
+      <?php include "../header.php" ?>
     </header>
 <body>
     <div class="auth-container">
