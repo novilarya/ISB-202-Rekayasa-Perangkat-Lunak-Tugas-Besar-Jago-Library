@@ -80,7 +80,7 @@
     <?php include "header.php" ?>
 </header>
 
-<body>
+<>
     <main class="container my-5">
         <h2 class="mb-4">My Book</h2>
         <div class="row">
@@ -104,7 +104,7 @@
                                 <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
                                 <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
                                 <input type="hidden" name="tanggal_kembali" value="<?php echo $row['tanggal_pengembalian']; ?>">
-                                <button type="submit" name="kembalikan" class="btn btn-outline-info btn-sm mt-3" style="height: 50px; width: 200px;">Kembalikan</button>
+                                <button type="submit" name="kembalikan" class="btn btn-secondary btn-sm mt-3 rounded 4" style="height: 50px; width: 200px;">Kembalikan</button>
                             </form>
                         </div>
                     </div>
@@ -217,7 +217,6 @@
       </script>
     <?php unset($_SESSION['denda']); endif; ?>
 
-</body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 

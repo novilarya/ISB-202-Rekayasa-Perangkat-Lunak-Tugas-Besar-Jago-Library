@@ -16,31 +16,43 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
-        $username_new = $_POST['username'] ?? '';
-        $email_new = $_SESSION['email'];
-        $password_new = $_POST['password'] ?? '';
-        $foto = $_FILES['foto'];
-        $uploadDir = "images/user/";
+    $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
+    $username_new = $_POST['username'] ?? '';
+    $email_new = $_POST['email'] ?? '';
+    $password_new = $_POST['password'] ?? '';
+    $email_lama = $_SESSION['email']; // untuk WHERE
+
+    $foto = $_FILES['foto'];
+    $uploadDir = "images/user/";
+    $fotoBaru = $row['foto']; // default gunakan yang lama
+
+    // Jika user upload file baru
+    if (!empty($foto['name'])) {
         $nama_file = basename($foto['name']);
         $filePath = $uploadDir . $nama_file;
 
         if (move_uploaded_file($foto['tmp_name'], $filePath)) {
-            $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, password = ?, foto = ? WHERE email = ?");
-            $stmt->bind_param("sssss", $nrp_nidn_new, $username_new, $password_new, $nama_file, $email_new);
-
-            if ($stmt->execute()) {
-                echo '<script>
-                        alert("Akun berhasil diperbarui!");
-                        window.location.href = "profile.php";
-                    </script>';
-            } else {
-                echo '<script>alert("Gagal mengupdate data.");</script>';
-            }
+            $fotoBaru = $nama_file;
         } else {
-            echo "Gagal mengupload file foto.";
+            echo '<script>alert("Gagal mengupload file foto.");</script>';
         }
     }
+
+    // Update database
+    $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, email = ?, password = ?, foto = ? WHERE email = ?");
+    $stmt->bind_param("ssssss", $nrp_nidn_new, $username_new, $email_new, $password_new, $fotoBaru, $email_lama);
+
+    if ($stmt->execute()) {
+        $_SESSION['email'] = $email_new; // update session jika email berubah
+        echo '<script>
+            alert("Akun berhasil diperbarui!");
+            window.location.href = "profile.php";
+        </script>';
+    } else {
+        echo '<script>alert("Gagal mengupdate data.");</script>';
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -70,65 +82,73 @@
     <header>
         <?php include "header.php" ?>
     </header>
-    <div class="container py-5">
+    <!-- PROFILE SECTION -->
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="container py-4">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-
+            <div class="col-lg-10">
                 <div class="card shadow border-0">
                     <div class="row g-0">
-                        <!-- FOTO PROFIL -->
-                        <form method="POST" action="" enctype="multipart/form-data">
-                            <div class="col-md-4 text-center bg-light d-flex flex-column align-items-center justify-content-center p-3">
-                                <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                                <input type="file" name="foto" class="form-control" required>
+
+                        <!-- FORM / DISPLAY -->
+                        <form method="POST" action="" enctype="multipart/form-data" class="d-flex flex-wrap w-100 rounded 4" id="profileForm">
+
+                            <!-- FOTO PROFIL -->
+                            <div class="col-md-4 text-center d-flex flex-column align-items-center justify-content-center p-4 border-end">
+                                <img src="/images/user/<?php echo $row['foto']; ?>" alt="Foto Profil" class="img-fluid mb-3 rounded 4" style="width: auto; height: 400px; object-fit: cover;">
+                                <input type="file" name="foto" id="fotoInput" class="form-control rounded 4 d-none">
                             </div>
 
-                            <!-- FORM PROFIL -->
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h3 class="card-title mb-3">My Profile <?php echo ucfirst($row['role']); ?></h3>
-                                        <div class="mb-3">
-                                            <label for="nrp_nidn" class="form-label">
-                                                <?php echo ($row['role'] === 'mahasiswa') ? 'NRP' : (($row['role'] === 'dosen') ? 'NIDN' : 'NRP/NIDN'); ?>
-                                            </label>
-                                            <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>" required>
-                                        </div>
+                            <!-- INFO + FORM -->
+                            <div class="col-md-8 p-4">
+                                <h3 class="card-title mb-4">My Profile <?php echo ucfirst($row['role']); ?></h3>
 
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>" disabled>
-                                        </div>
+                                <!-- DISPLAY MODE -->
+                                <div id="displayMode">
+                                    <p><strong><?= ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN' ?>:</strong> <?= $row['nrp_nidn'] ?></p>
+                                    <p><strong>Email:</strong> <?= $row['email'] ?></p>
+                                    <p><strong>Username:</strong> <?= $row['username'] ?></p>
+                                    <p><strong>Password:</strong> ********</p>
+                                    <button type="button" class="btn btn-outline-primary rounded 4" style="height: 50px;" onclick="toggleEdit(true)">Edit Profile</button>
+                                </div>
 
-                                        <div class="mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <?php if ($message): ?>
-                                                <div class="text-danger small mb-1"><?= $message ?></div>
-                                            <?php endif; ?>
-                                            <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username']; ?>" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="password" class="form-label">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password" value="<?php echo $row['password']; ?>" disabled>
-                                        </div>
-
-                                        <div class="form-check mb-3">
+                                <!-- EDIT MODE -->
+                                <div id="editMode" class="d-none">
+                                    <div class="mb-3">
+                                        <label for="nrp_nidn" class="form-label"><?= ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN' ?></label>
+                                        <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?= $row['nrp_nidn'] ?>" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" class="form-control" name="email" id="email" value="<?= $row['email'] ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" name="username" id="username" value="<?= $row['username'] ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" value="<?= $row['password'] ?>" required>
+                                        <div class="form-check mt-1">
                                             <input type="checkbox" class="form-check-input" id="tampilkanPassword" onclick="togglePassword()">
                                             <label for="tampilkanPassword" class="form-check-label">Tampilkan Password</label>
                                         </div>
-
-                                        <button type="submit" class="btn btn-primary px-4">Update</button>
-                                    
-
+                                    </div>
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button type="submit" class="btn btn-outline-primary rounded 4" style="height: 50px;">Simpan Perubahan</button>
+                                        <button type="button" class="btn btn-secondary rounded 4" style="height: 50px;" onclick="toggleEdit(false)">Cancel</button>
+                                    </div>
                                 </div>
+
                             </div>
                         </form>
+
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+</div>
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -141,11 +161,26 @@
         ?>
     </footer>
     <script>
-        function togglePassword() {
-            var pwd = document.getElementById('password');
-            pwd.type = (pwd.type === 'password') ? 'text' : 'password';
+    function togglePassword() {
+        var pwd = document.getElementById('password');
+        pwd.type = (pwd.type === 'password') ? 'text' : 'password';
+    }
+
+    function toggleEdit(edit) {
+        const displayMode = document.getElementById('displayMode');
+        const editMode = document.getElementById('editMode');
+        const fotoInput = document.getElementById('fotoInput');
+        if (edit) {
+            displayMode.classList.add('d-none');
+            editMode.classList.remove('d-none');
+            fotoInput.classList.remove('d-none');
+        } else {
+            displayMode.classList.remove('d-none');
+            editMode.classList.add('d-none');
+            fotoInput.classList.add('d-none');
         }
-    </script>
+    }
+</script>
 </body>
 
 </html>

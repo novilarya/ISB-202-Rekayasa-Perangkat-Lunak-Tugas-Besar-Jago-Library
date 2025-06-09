@@ -50,7 +50,7 @@ Version: 1.1
 /* Bootstrap variables */
 :root,
 [data-bs-theme="light"] {
-  --heading-font: "Prata", Georgia, serif;
+  --heading-font: "Helvetica", Georgia, serif;
   --heading-font-weight: 400;
   --heading-color: var(--bs-dark);
   --heading-line-height: 1.1;
@@ -378,7 +378,7 @@ button,
 input,
 select,
 textarea {
-  font-family: inherit;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: inherit;
   line-height: inherit;
   outline: 0;
@@ -391,7 +391,7 @@ figure {
 img {
   display: inline-block;
   border: 0;
-  max-width: 100%;
+  max-width: 600px;
   height: auto;
   vertical-align: middle;
 }
@@ -1006,8 +1006,8 @@ fieldset[disabled] a.btn {
 
 .btn.btn-outline-accent {
   background: transparent;
-  border-color: var(--accent-color);
-  color: var(--accent-color);
+  border-color: #5A72A0;
+  color: #5A72A0;
 }
 
 .btn.btn-outline-accent:hover {
@@ -1859,12 +1859,13 @@ img.post-image {
 }
 
 .banner-content h2.banner-title {
-  font-size: 4.5em;
+  font-size: 3.0em;
   font-weight: 500;
   color: #222;
 }
 
 .banner-content p {
+  font-size: 1.5em;
   margin: 0 0 30px 0;
 }
 
@@ -2020,6 +2021,7 @@ img.post-image {
 }
 
 .tabs {
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
   flex-wrap: wrap;
   margin: 55px 0;
@@ -2066,7 +2068,7 @@ img.books-image {
 }
 
 #quotation .author-name {
-  font-family: "Prata", Georgia, serif;
+  font-family: "Helvetica", Georgia, serif;
   font-size: 1.4em;
 }
 
@@ -2209,7 +2211,7 @@ span.prev-price {
 }
 
 #latest-blog .meta-date {
-  font-family: "Prata", Georgia, serif;
+  font-family: "Helvetica", Georgia, serif;
   color: #74642f;
   padding-bottom: 20px;
 }
@@ -2355,6 +2357,11 @@ footer#footer {
 .product-style {
   position: relative;
   overflow: hidden;
+  background: #efeee8;
+  border: 1px solid #eae8df;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
 }
 
 .slick-slider .product-style {
@@ -2366,33 +2373,35 @@ footer#footer {
 }
 
 .product-style img.product-item {
-  position: relative;
-  background: #efeee8;
-  border: 1px solid #eae8df;
-  padding: 15%;
-  cursor: pointer;
   width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
 }
 
 .product-style button.add-to-cart {
   position: absolute;
-  background: #000;
-  color: #fff;
-  width: 100%;
-  margin: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222323;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
   text-transform: uppercase;
-  text-align: center;
-  line-height: 3;
-  bottom: 300px;
-  bottom: -65px;
-  left: 0;
-  z-index: 9;
-  transition: 0.3s ease-out;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .product-style:hover button.add-to-cart {
-  bottom: 380px;
-  bottom: 0;
+  opacity: 1;
+  bottom: 15px;
 }
 
 .product-item figcaption {
@@ -2404,7 +2413,7 @@ footer#footer {
 .product-item figcaption > h3 {
   font-size: 1.4em;
   font-weight: 500;
-  color: #74642f;
+  color: #131313;
   margin: 0;
 }
 
@@ -2438,10 +2447,10 @@ img.book-cover {
   height: 60px;
   line-height: 60px;
   border-radius: 50%;
-  border: 1px solid #daa556;
+  border: 1px solid #5A72A0;
   display: inline-block;
   font-size: 24px;
-  color: #daa556;
+  color: #5A72A0;
 }
 
 .form-label {
@@ -2452,7 +2461,7 @@ img.book-cover {
 .product-item figcaption > span {
   font-size: 1.2em;
   font-weight: 400;
-  color: #74642f;
+  color: #4a4a47;
   margin: 0;
 }
 
@@ -2590,6 +2599,7 @@ img.book-cover {
 }
 
 .btn-primary-1 {
+  height: 50px;
   width: 100%;
   padding: 10px;
   font-weight: 600;
@@ -2600,6 +2610,21 @@ img.book-cover {
 
 .btn-primary-1:hover {
   background-color: #daa556;
+  color: #f1f1f0;
+}
+
+.btn-primary-12 {
+  height: 50px;
+  width: 150px;
+  padding: 10px;
+  font-weight: 300;
+  background-color: #7882A4;
+  color: #f1f1f0;
+  border: none;
+}
+
+.btn-primary-12:hover {
+  background-color: #C0A080;
   color: #f1f1f0;
 }
 
@@ -2712,5 +2737,110 @@ img.book-cover {
 .signin-link a {
   color: #74642f;
   text-decoration: none;
+}
+.card-title {
+    font-weight: 600;
+}
+
+input[type="file"] {
+    font-size: 14px;
+    padding: 5px;
+}
+
+.scroll-btn {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .scroll-btn:hover {
+    background-color: #eee;
+  }
+
+  #scrollContainer {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #scrollContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-style-buku {
+  position: relative;
+  overflow: hidden;
+}
+
+.slick-slider .product-style-buku {
+  margin: 0 15px 25px;
+}
+
+.product-style-buku figcaption p {
+  margin-bottom: 20px;
+}
+
+.product-style-buku img.product-item {
+  position: relative;
+  background: #EFEEE8;
+  border: 1px solid #EAE8DF;
+  padding: 15%;
+  cursor: pointer;
+  width: 100%;
+}
+
+.product-style-buku button.add-to-cart {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222323;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-style-buku:hover button.add-to-cart {
+  opacity: 1;
+  bottom: 15px;
+}
+
+.product-item-buku figcaption {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.product-item-buku figcaption>h3 {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: #74642F;
+  margin: 0;
+}
+
+.daftar-pinjam-section {
+  background-color: #edebe4;
+}
+
+.daftar-pinjam-section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.profile-cover {
+    border-top-left-radius: 0.375rem; /* Bootstrap default border radius */
+    border-bottom-left-radius: 0.375rem;
 }
 
