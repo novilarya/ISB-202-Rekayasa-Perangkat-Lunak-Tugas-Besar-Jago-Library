@@ -38,7 +38,7 @@
           <li>
             <a href="/admin/manajemen-buku.php">
               <i class="nc-icon nc-tile-56"></i>
-              <p>Daftar Peminjaman Buku</p>
+              <p>Manajemen Buku</p>
             </a>
           </li>
           <li>

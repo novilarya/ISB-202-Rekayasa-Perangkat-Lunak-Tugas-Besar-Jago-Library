@@ -16,6 +16,11 @@
             INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
             WHERE peminjaman.status = 'pembayaran'";
 
+  $query3 = "SELECT * FROM buku";
+  $stmt = $conn->prepare($query3);
+  $stmt->execute();
+  $daftar_buku = $stmt->get_result();          
+
   if ($_SERVER["REQUEST_METHOD"] == "GET") {
       $search_username = $_GET['search_username'] ?? '';
       $search_peminjaman = $_GET['search_tanggal_peminjaman'] ?? '';
@@ -120,6 +125,7 @@
   <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body class="">
@@ -136,7 +142,7 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:;">Paper Dashboard 2</a>
+            <a class="navbar-brand" href="javascript:;">Manajemen Buku</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -189,7 +195,85 @@
         </div>
       </nav>
 
-      <div class="content">
+
+    <div class="content">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('buku')">Daftar Buku</button>
+        <button class="tab" onclick="switchTab('peminjaman')">Daftar Peminjaman Buku</button>
+        <button class="tab" onclick="switchTab('konfirmasi')">Daftar Konfirmasi Buku</button>
+      </div>
+
+      <!-- Daftar Buku -->
+      <div id="buku" class="tab-content active">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Daftar Peminjaman Buku</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        Kode Buku
+                      </th>  
+                      <th>
+                        Nama Buku
+                      </th>
+                      <th>
+                        Jenis Buku
+                      </th>
+                      <th>
+                        Pengarang
+                      </th>
+                      <th>
+                        Penerbit
+                      </th>
+                      <th>
+                        Jumlah Buku
+                      </th>
+                      <th>
+                        Status
+                      </th>
+                    </thead>
+                    <tbody>
+                      <?php if ($buku): while($row = $daftar_buku->fetch_assoc()) { ?>
+                        <tr>
+                          <td>
+                            <?php echo $row['kode_buku']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['nama_buku']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['jenis_buku']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['pengarang']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['penerbit']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['jumlah_buku']; ?>
+                          </td>
+                          <td>
+                            <?php echo $row['status']; ?>
+                          </td>
+                        </tr>
+                      <?php } endif; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daftar Peminjaman -->
+      <div id="peminjaman" class="tab-content">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -234,10 +318,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- End Navbar -->
-      <div class="content">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -285,11 +366,15 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Daftar Konfirmasi -->
+      <div id="konfirmasi" class="tab-content">
         <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Daftar Pengemblian Buku</h4>
+                <h4 class="card-title">Daftar Konfirmasi Buku</h4>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -348,6 +433,27 @@
             </div>
           </div>
         </div>
+    </div>
+
+    <script>
+      function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+      }
+    </script>
+
+
+
+      <div class="content">
+        
+      </div>
+
+      <!-- End Navbar -->
+      <div class="content">
+        
       </div>
       <footer class="footer footer-black  footer-white ">
         <div class="container-fluid">
