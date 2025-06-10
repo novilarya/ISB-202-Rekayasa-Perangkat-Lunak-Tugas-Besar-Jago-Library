@@ -54,7 +54,7 @@
             </a>
           </li>
           <li class="active-pro">
-            <a href="/admin//logout.php">
+            <a href="../logout.php">
               <i class="nc-icon nc-spaceship"></i>
               <p>Logout</p>
             </a>

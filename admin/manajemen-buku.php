@@ -3,6 +3,7 @@
   include('../database/connection.php');
   $buku = null;
   $buku_terlambat = null;
+  $jenis_buku = '';
 
   $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian, peminjaman.kode_buku, peminjaman.nrp_nidn
             FROM users
@@ -31,7 +32,7 @@
                     FROM users
                     INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
                     INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
-                    WHERE peminjaman.status = 'dipinjam'";
+                    WHERE 1=1";
                   
           $query2 = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
                     FROM users
@@ -104,6 +105,64 @@
     $stmt->execute();
   }
 
+  if (isset($_POST['search_peminjaman']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    $search_username = $_POST['search_peminjaman'] ?? '';
+    $search_peminjaman = $_POST['search_tanggal_peminjaman'] ?? '';
+    $search_pengembalian = $_POST['search_tanggal_pengembalian'] ?? '';
+
+    if (!empty($search_peminjaman) || !empty($search_peminjaman) || !empty($search_pengembalian)) {
+            $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian 
+                      FROM users
+                      INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
+                      INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
+                      WHERE 1=1";
+                    
+            
+            $params = [];
+            $types = '';
+
+            if (!empty($search_username)) {
+                $query .= " AND users.nama LIKE ?";
+                $params[] = "%$search_username%";
+                $types .= 's';
+            }
+
+            if (!empty($search_peminjaman)) {
+                $query .= " AND peminjaman.tanggal_peminjaman >= ?";
+                $params[] = $search_peminjaman;
+                $types .= 's';
+            }
+
+            if (!empty($search_pengembalian)) {
+                $query .= " AND peminjaman.tanggal_pengembalian <= ?";
+                $params[] = $search_pengembalian;
+                $types .= 's';
+            }
+
+            $stmt = $conn->prepare($query);
+            if ($params) {
+                $stmt->bind_param($types, ...$params);
+            }
+            $stmt->execute();
+            $buku = $stmt->get_result();
+        } else {
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $buku = $stmt->get_result();
+        }
+
+
+      while ($row = $buku->fetch_assoc()) {
+          echo "<tr>
+                  <td>{$row['nama_buku']}</td>
+                  <td>{$row['nama']}</td>
+                  <td>{$row['tanggal_peminjaman']}</td>
+                  <td>{$row['tanggal_pengembalian']}</td>
+                </tr>";
+      }
+    exit;
+  }
+
   if (isset($_POST['search_buku']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     $search = $_POST['search_buku'];
     $query = "SELECT * FROM buku WHERE 
@@ -120,7 +179,6 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Output HTML rows
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
                 <td>{$row['kode_buku']}</td>
@@ -135,40 +193,52 @@
     exit;
   }
 
-  $kode_buku = $_POST['kode_buku'] ?? '';
-  $jenis_buku = $_POST['jenis_buku'] ?? '';
-  $nama_buku = $_POST['nama_buku'] ?? '';
-  $pengarang = $_POST['pengarang'] ?? '';
-  $penerbit = $_POST['penerbit'] ?? '';
-  $jumlah_halaman = $_POST['jumlah_halaman'] ?? '';
-  $tahun_terbit = $_POST['tahun_terbit'] ?? '';
-  $deskripsi_buku = $_POST['deskripsi_buku'] ?? '';
-  $status = $_POST['status'] ?? '';
-  $jumlah_buku = $_POST['jumlah_buku'] ?? '';
-  $penyumbang = $_POST['penyumbang'] ?? '';
 
   if (isset($_POST['tambah'])) {
-      $cover_buku = $_FILES['cover_buku'];
-      $uploadDir = "../images/buku/";
-      $nama_file = basename($cover_buku['name']);
-      $filePath = $uploadDir . $nama_file;
+    $kode_buku = $_POST['kode_buku'] ?? '';
+    $jenis_buku = $_POST['jenis_buku'] ?? '';
+    $nama_buku = $_POST['nama_buku'] ?? '';
+    $pengarang = $_POST['pengarang'] ?? '';
+    $penerbit = $_POST['penerbit'] ?? '';
+    $jumlah_halaman = $_POST['jumlah_halaman'] ?? '';
+    $tahun_terbit = $_POST['tahun_terbit'] ?? '';
+    $deskripsi_buku = $_POST['deskripsi_buku'] ?? '';
+    $status = $_POST['status'] ?? 'Tersedia';
+    $jumlah_buku = $_POST['jumlah_buku'] ?? '';
+    $penyumbang = $_POST['penyumbang'] ?? '';
+    $cover_buku = $_FILES['cover_buku'];
+    $uploadDir = "../images/buku/";
+    $nama_file = basename($cover_buku['name']);
+    $filePath = $uploadDir . $nama_file;
 
-      if (move_uploaded_file($cover_buku['tmp_name'], $filePath)) {
-          $stmt = $conn->prepare("INSERT INTO buku (
-              kode_buku, jenis_buku, nama_buku, pengarang, penerbit, jumlah_halaman, 
-              tahun_terbit, deskripsi_buku, status, penyumbang, cover_buku, jumlah_buku
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-          
-          $stmt->bind_param(
-              "ssssssssssss",
-              $kode_buku, $jenis_buku, $nama_buku, $pengarang, $penerbit,
-              $jumlah_halaman, $tahun_terbit, $deskripsi_buku, $status,
-              $penyumbang, $nama_file, $jumlah_buku
-          );
-      } else {
-          echo "Gagal mengupload file cover.";
-      }
+    if (move_uploaded_file($cover_buku['tmp_name'], $filePath)) {
+        $stmt = $conn->prepare("INSERT INTO buku (
+            kode_buku, jenis_buku, nama_buku, pengarang, penerbit, jumlah_halaman, 
+            tahun_terbit, deskripsi_buku, status, penyumbang, cover_buku, jumlah_buku
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        if (!$stmt) {
+            echo "Prepare failed: " . $conn->error;
+            exit;
+        }
+
+        $stmt->bind_param(
+            "ssssssssssss",
+            $kode_buku, $jenis_buku, $nama_buku, $pengarang, $penerbit,
+            $jumlah_halaman, $tahun_terbit, $deskripsi_buku, $status,
+            $penyumbang, $nama_file, $jumlah_buku
+        );
+
+        if ($stmt->execute()) {
+            echo "Data berhasil ditambahkan.";
+        } else {
+            echo "Gagal menambahkan data: " . $stmt->error;
+        }
+    } else {
+        echo "Gagal mengupload file cover. Error code: " . $cover_buku['error'];
+    }
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -279,15 +349,11 @@
                 <h4 class="card-title">Daftar Peminjaman Buku</h4>
               </div>
               <form method="POST">
-                <div class="row">
-                  <div class="col-md-8 pr-1">
-                    <div class="form-group mb-0">
-                      <input type="text" id="search-buku" name="search_buku" class="form-control h-100"
-                        placeholder="Search..."
-                        value="<?= htmlspecialchars($_POST['search_buku'] ?? '') ?>">
-
-                    </div>
-                  </div>
+                <div class="form-group mb-0 w-100">
+                  <input type="text" id="search-buku" name="search_buku"
+                    class="form-control w-100"
+                    placeholder="Search..."
+                    value="<?= htmlspecialchars($_POST['search_buku'] ?? '') ?>">
                 </div>
               </form>
               <div class="card-body">
@@ -356,25 +422,32 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
               <div class="card-header">
                 <h4 class="card-title">Daftar Peminjaman Buku</h4>
+                <div class="row">
+                  <form method="POST" class="row mb-3">
+                    <div class="col-md-4">
+                      <input type="text" name="search_peminjaman" id="search_peminjaman"
+                        class="form-control" placeholder="Search..."
+                        value="<?= htmlspecialchars($_POST['search_peminjaman'] ?? '') ?>">
+                    </div>
+                    <div class="col-md-3">
+                      <input type="date" name="search_tanggal_peminjaman" id="search_tanggal_peminjaman"
+                        class="form-control"
+                        value="<?= htmlspecialchars($_POST['search_tanggal_peminjaman'] ?? '') ?>">
+                    </div>
+                    <div class="col-md-3">
+                      <input type="date" name="search_tanggal_pengembalian" id="search_tanggal_pengembalian"
+                        class="form-control"
+                        value="<?= htmlspecialchars($_POST['search_tanggal_pengembalian'] ?? '') ?>">
+                    </div>
+                  </form>
+                </div>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
+                  <table class="table" id="daftar-peminjaman">
+                    <thead class=" text-primary">                      
                       <th>
                         Nama Buku
                       </th>
@@ -389,22 +462,16 @@
                       </th>
                     </thead>
                     <tbody>
-                      <?php if ($buku): while($row = $buku->fetch_assoc()) { ?>
+                      <?php if ($buku && $buku->num_rows > 0): while($row = $buku->fetch_assoc()): ?>
                         <tr>
-                          <td>
-                            <?php echo $row['nama_buku']; ?>
-                          </td>
-                          <td>
-                            <?php echo $row['nama']; ?>
-                          </td>
-                          <td>
-                            <?php echo $row['tanggal_peminjaman']; ?>
-                          </td>
-                          <td>
-                            <?php echo $row['tanggal_pengembalian']; ?>
-                          </td>
+                          <td><?= htmlspecialchars($row['nama_buku']) ?></td>
+                          <td><?= htmlspecialchars($row['nama']) ?></td>
+                          <td><?= htmlspecialchars($row['tanggal_peminjaman']) ?></td>
+                          <td><?= htmlspecialchars($row['tanggal_pengembalian']) ?></td>
                         </tr>
-                      <?php } endif; ?>
+                      <?php endwhile; else: ?>
+                        <tr><td colspan="4">Tidak ada data ditemukan.</td></tr>
+                      <?php endif; ?>
                     </tbody>
                   </table>
                 </div>
@@ -483,7 +550,7 @@
 
     <div id="tambah" class="tab-content">
        <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-12">
             <div class="card card-user">
               <div class="card-header">
                 <h5 class="card-title">Tambah Buku</h5>
@@ -491,16 +558,22 @@
               <div class="card-body">
                 <form method="POST" action="" enctype="multipart/form-data">
                   <div class="row">
-                    <div class="col-md-5 pr-1">
+                    <div class="col-md-6 pr-1">
                       <div class="form-group">
                         <label>Kode Buku</label>
                         <input type="text" name="kode_buku" class="form-control" placeholder="Masukkan kode buku" required>
                       </div>
                     </div>
-                    <div class="col-md-4 pl-1">
+                    <div class="col-md-6 pl-1">
                       <div class="form-group">
                         <label>Jenis Buku</label>
-                        <input type="text" name="jenis_buku" class="form-control" placeholder="Masukkan jenis buku" required>
+                        <select class="form-control" name="jenis_buku" required>
+                            <option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
+                            <option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Praktik</option>
+                            <option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>SIP</option>
+                            <option value="MBKM" <?= $jenis_buku == 'MBKM' ? 'selected' : '' ?>>MBKM</option>
+                            <option value="Umum" <?= $jenis_buku == 'Umum' ? 'selected' : '' ?>>Umum</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -513,13 +586,13 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-5 pr-1">
+                    <div class="col-md-6 pr-1">
                       <div class="form-group">
                         <label>Pengarang</label>
                         <input type="text" name="pengarang" class="form-control" placeholder="Masukkan pengarang buku" required>
                       </div>
                     </div>
-                    <div class="col-md-4 pl-1">
+                    <div class="col-md-6 pl-1">
                       <div class="form-group">
                         <label>Penerbit</label>
                         <input type="text" name="penerbit" class="form-control" placeholder="Masukkan penerbit buku" required>
@@ -527,13 +600,13 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-5 pr-1">
+                    <div class="col-md-6 pr-1">
                       <div class="form-group">
                         <label>Jumlah Halaman</label>
                         <input type="text" name="jumlah_halaman" class="form-control" placeholder="Masukkan jumlah halaman buku" required>
                       </div>
                     </div>
-                    <div class="col-md-4 pl-1">
+                    <div class="col-md-6 pl-1">
                       <div class="form-group">
                         <label>Tahun Terbit</label>
                         <input type="text" name="tahun_terbit" class="form-control" placeholder="Masukkan tahun terbit buku" required>
@@ -549,13 +622,13 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-5 pr-1">
+                    <div class="col-md-6 pr-1">
                       <div class="form-group">
                         <label>Jumlah Buku</label>
                         <input type="text" name="jumlah_buku" class="form-control" placeholder="Masukkan jumlah buku" required>
                       </div>
                     </div>
-                    <div class="col-md-4 pl-1">
+                    <div class="col-md-6 pl-1">
                       <div class="form-group">
                         <label>Penyumbang</label>
                         <input type="text" name="penyumbang" class="form-control" placeholder="Masukkan siapa yang menyumbang" required>
@@ -563,15 +636,18 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-5 pr-1">
+                    <div class="col-md-6 pr-1">
                       <label>Cover Buku</label>
                       <input type="file" name="cover_buku" class="form-control" required>
+                    </div>  
+                    <div class="col-md-6 pr-1">
+                      <div class="update ml-auto mr-auto">
+                      <button type="submit" name="tambah" class="btn btn-primary">Tambah Buku</button>
+                      </div>
                     </div>                       
                   </div>
                   <div class="row">
-                    <div class="update ml-auto mr-auto">
-                      <button type="submit" name="tambah" class="btn btn-primary">Tambah Buku</button>
-                    </div>
+                    
                   </div>
                 </form>
               </div>
@@ -608,7 +684,37 @@
       });
     </script>
 
+    <script>
+      const searchInputs = [
+        document.getElementById("search_peminjaman"),
+        document.getElementById("search_tanggal_peminjaman"),
+        document.getElementById("search_tanggal_pengembalian")
+      ];
 
+      searchInputs.forEach(input => {
+        input.addEventListener("input", function () {
+          const search_peminjaman = document.getElementById("search_peminjaman").value;
+          const search_tanggal_peminjaman = document.getElementById("search_tanggal_peminjaman").value;
+          const search_tanggal_pengembalian = document.getElementById("search_tanggal_pengembalian").value;
+
+          const params = new URLSearchParams();
+          params.append("search_peminjaman", search_peminjaman);
+          params.append("search_tanggal_peminjaman", search_tanggal_peminjaman);
+          params.append("search_tanggal_pengembalian", search_tanggal_pengembalian);
+
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "<?= $_SERVER['PHP_SELF']; ?>", true);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+              document.querySelector("#daftar-peminjaman tbody").innerHTML = xhr.responseText;
+            }
+          };
+          xhr.send(params.toString());
+        });
+      });
+    </script>
 
       <div class="content">
         
