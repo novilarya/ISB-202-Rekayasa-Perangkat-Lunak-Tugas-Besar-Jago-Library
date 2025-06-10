@@ -160,7 +160,9 @@
             </div>
           </div>
         </div>
-        <div class="row">
+
+
+        <!--<div class="row">
           <div class="col-md-12">
             <div class="card ">
               <div class="card-header ">
@@ -223,7 +225,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
       <footer class="footer footer-black  footer-white ">
@@ -248,6 +250,8 @@
       </footer>
     </div>
   </div>
+
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>

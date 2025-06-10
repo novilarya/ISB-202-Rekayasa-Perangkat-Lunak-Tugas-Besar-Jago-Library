@@ -103,6 +103,72 @@
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
     $stmt->execute();
   }
+
+  if (isset($_POST['search_buku']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    $search = $_POST['search_buku'];
+    $query = "SELECT * FROM buku WHERE 
+                kode_buku LIKE ? OR 
+                nama_buku LIKE ? OR 
+                jenis_buku LIKE ? OR 
+                pengarang LIKE ? OR 
+                penerbit LIKE ? OR 
+                jumlah_buku LIKE ? OR 
+                status LIKE ?";
+    $stmt = $conn->prepare($query);
+    $param = "%" . $search . "%";
+    $stmt->bind_param("sssssss", $param, $param, $param, $param, $param, $param, $param);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Output HTML rows
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>{$row['kode_buku']}</td>
+                <td>{$row['nama_buku']}</td>
+                <td>{$row['jenis_buku']}</td>
+                <td>{$row['pengarang']}</td>
+                <td>{$row['penerbit']}</td>
+                <td>{$row['jumlah_buku']}</td>
+                <td>{$row['status']}</td>
+              </tr>";
+    }
+    exit;
+  }
+
+  $kode_buku = $_POST['kode_buku'] ?? '';
+  $jenis_buku = $_POST['jenis_buku'] ?? '';
+  $nama_buku = $_POST['nama_buku'] ?? '';
+  $pengarang = $_POST['pengarang'] ?? '';
+  $penerbit = $_POST['penerbit'] ?? '';
+  $jumlah_halaman = $_POST['jumlah_halaman'] ?? '';
+  $tahun_terbit = $_POST['tahun_terbit'] ?? '';
+  $deskripsi_buku = $_POST['deskripsi_buku'] ?? '';
+  $status = $_POST['status'] ?? '';
+  $jumlah_buku = $_POST['jumlah_buku'] ?? '';
+  $penyumbang = $_POST['penyumbang'] ?? '';
+
+  if (isset($_POST['tambah'])) {
+      $cover_buku = $_FILES['cover_buku'];
+      $uploadDir = "../images/buku/";
+      $nama_file = basename($cover_buku['name']);
+      $filePath = $uploadDir . $nama_file;
+
+      if (move_uploaded_file($cover_buku['tmp_name'], $filePath)) {
+          $stmt = $conn->prepare("INSERT INTO buku (
+              kode_buku, jenis_buku, nama_buku, pengarang, penerbit, jumlah_halaman, 
+              tahun_terbit, deskripsi_buku, status, penyumbang, cover_buku, jumlah_buku
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          
+          $stmt->bind_param(
+              "ssssssssssss",
+              $kode_buku, $jenis_buku, $nama_buku, $pengarang, $penerbit,
+              $jumlah_halaman, $tahun_terbit, $deskripsi_buku, $status,
+              $penyumbang, $nama_file, $jumlah_buku
+          );
+      } else {
+          echo "Gagal mengupload file cover.";
+      }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -201,6 +267,7 @@
         <button class="tab active" onclick="switchTab('buku')">Daftar Buku</button>
         <button class="tab" onclick="switchTab('peminjaman')">Daftar Peminjaman Buku</button>
         <button class="tab" onclick="switchTab('konfirmasi')">Daftar Konfirmasi Buku</button>
+        <button class="tab" onclick="switchTab('tambah')">Tambah Buku</button>
       </div>
 
       <!-- Daftar Buku -->
@@ -211,9 +278,21 @@
               <div class="card-header">
                 <h4 class="card-title">Daftar Peminjaman Buku</h4>
               </div>
+              <form method="POST">
+                <div class="row">
+                  <div class="col-md-8 pr-1">
+                    <div class="form-group mb-0">
+                      <input type="text" id="search-buku" name="search_buku" class="form-control h-100"
+                        placeholder="Search..."
+                        value="<?= htmlspecialchars($_POST['search_buku'] ?? '') ?>">
+
+                    </div>
+                  </div>
+                </div>
+              </form>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="daftar-buku">
                     <thead class=" text-primary">
                       <th>
                         Kode Buku
@@ -238,7 +317,7 @@
                       </th>
                     </thead>
                     <tbody>
-                      <?php if ($buku): while($row = $daftar_buku->fetch_assoc()) { ?>
+                      <?php if ($daftar_buku && $daftar_buku->num_rows > 0): while($row = $daftar_buku->fetch_assoc()) { ?>
                         <tr>
                           <td>
                             <?php echo $row['kode_buku']; ?>
@@ -279,40 +358,7 @@
             <div class="card">
               <div class="card-body">
                 <div class="row">
-                  <form method="GET">
-                    <div class="row">
-                      <div class="col-md-3 pr-1">
-                        <div class="form-group">
-                          <label>Username Peminjam</label>
-                          <input type="text" name="search_username" class="form-control"
-                                placeholder="Masukkan username"
-                                value="<?= htmlspecialchars($_GET['search_username'] ?? '') ?>">
-                        </div>
-                      </div>
-                      <div class="col-md-3 pl-1">
-                        <div class="form-group">
-                          <label for="tanggal_pinjam" class="form-label">Tanggal Pinjam</label>
-                          <input type="date" name="search_tanggal_peminjaman" id="tanggal_pinjam"
-                                class="form-control"
-                                value="<?= htmlspecialchars($_GET['search_tanggal_peminjaman'] ?? '') ?>">
-                        </div>
-                      </div>
-                      <div class="col-md-3 px-1">
-                        <div class="form-group">
-                          <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
-                          <input type="date" name="search_tanggal_pengembalian" id="tanggal_kembali"
-                                class="form-control"
-                                value="<?= htmlspecialchars($_GET['search_tanggal_pengembalian'] ?? '') ?>">
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <label>&nbsp;</label>
-                          <button type="submit" class="btn btn-primary d-block w-100">Cari</button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
+                  
                 </div>
               </div>
             </div>
@@ -435,6 +481,105 @@
         </div>
     </div>
 
+    <div id="tambah" class="tab-content">
+       <div class="row">
+          <div class="col-md-8">
+            <div class="card card-user">
+              <div class="card-header">
+                <h5 class="card-title">Tambah Buku</h5>
+              </div>
+              <div class="card-body">
+                <form method="POST" action="" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <div class="form-group">
+                        <label>Kode Buku</label>
+                        <input type="text" name="kode_buku" class="form-control" placeholder="Masukkan kode buku" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="form-group">
+                        <label>Jenis Buku</label>
+                        <input type="text" name="jenis_buku" class="form-control" placeholder="Masukkan jenis buku" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Nama Buku</label>
+                        <input type="text" name="nama_buku" class="form-control" placeholder="Masukkan nama buku" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <div class="form-group">
+                        <label>Pengarang</label>
+                        <input type="text" name="pengarang" class="form-control" placeholder="Masukkan pengarang buku" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="form-group">
+                        <label>Penerbit</label>
+                        <input type="text" name="penerbit" class="form-control" placeholder="Masukkan penerbit buku" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <div class="form-group">
+                        <label>Jumlah Halaman</label>
+                        <input type="text" name="jumlah_halaman" class="form-control" placeholder="Masukkan jumlah halaman buku" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="form-group">
+                        <label>Tahun Terbit</label>
+                        <input type="text" name="tahun_terbit" class="form-control" placeholder="Masukkan tahun terbit buku" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Deskripsi Buku</label>
+                        <textarea type="text" name="deskripsi_buku" class="form-control textarea"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <div class="form-group">
+                        <label>Jumlah Buku</label>
+                        <input type="text" name="jumlah_buku" class="form-control" placeholder="Masukkan jumlah buku" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="form-group">
+                        <label>Penyumbang</label>
+                        <input type="text" name="penyumbang" class="form-control" placeholder="Masukkan siapa yang menyumbang" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                      <label>Cover Buku</label>
+                      <input type="file" name="cover_buku" class="form-control" required>
+                    </div>                       
+                  </div>
+                  <div class="row">
+                    <div class="update ml-auto mr-auto">
+                      <button type="submit" name="tambah" class="btn btn-primary">Tambah Buku</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
     <script>
       function switchTab(tabName) {
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -443,6 +588,24 @@
         document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
         document.getElementById(tabName).classList.add('active');
       }
+    </script>
+
+
+    <script>
+      document.getElementById("search-buku").addEventListener("keyup", function () {
+        var search_buku = this.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "<?= $_SERVER['PHP_SELF']; ?>", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            // Pastikan target tbody benar
+            document.querySelector("#daftar-buku tbody").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send("search_buku=" + encodeURIComponent(search_buku));
+      });
     </script>
 
 
