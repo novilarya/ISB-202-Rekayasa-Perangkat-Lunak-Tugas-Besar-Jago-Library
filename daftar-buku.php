@@ -1,6 +1,10 @@
 <?php
 include('database/connection.php');
 session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: login.php');
+    exit();
+}
 
 $jenis_buku = '';
 $jenis_buku_dipilih = '';
