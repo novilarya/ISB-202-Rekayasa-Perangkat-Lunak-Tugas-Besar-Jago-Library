@@ -42,15 +42,9 @@
             </a>
           </li>
           <li>
-            <a href="/admin/tambah-buku.php">
+            <a href="/admin/manajemen-admin.php">
               <i class="nc-icon nc-tile-56"></i>
-              <p>Tambah Buku</p>
-            </a>
-          </li>
-          <li>
-            <a href="/admin/tambah-admin.php">
-              <i class="nc-icon nc-tile-56"></i>
-              <p>Tambah Admin</p>
+              <p>Manajemen Admin</p>
             </a>
           </li>
           <li class="active-pro">
