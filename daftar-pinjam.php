@@ -3,10 +3,29 @@
     include('database/connection.php');
     $success ='';
     $email = $_SESSION['email'];
-    $stmt = $conn->prepare("SELECT * FROM peminjaman 
+    $stmt = $conn->prepare("SELECT peminjaman.status AS status_peminjaman, 
+                  buku.status AS status_buku,
+                  peminjaman.kode_buku,
+                  peminjaman.nrp_nidn,
+                  peminjaman.tanggal_peminjaman,
+                  peminjaman.tanggal_pengembalian,
+                  peminjaman.denda,
+                  peminjaman.metode_pembayaran,
+                  buku.kode_buku,
+                  buku.jenis_buku,
+                  buku.nama_buku,
+                  buku.pengarang,
+                  buku.penerbit,
+                  buku.jumlah_halaman,
+                  buku.tahun_terbit,
+                  buku.deskripsi_buku,
+                  buku.cover_buku,
+                  buku.jumlah_buku,
+                  users.email
+                  FROM peminjaman 
                   INNER JOIN users ON peminjaman.nrp_nidn = users.nrp_nidn
                   INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
-                  WHERE users.email = ? AND peminjaman.status = 'dipinjam'");
+                  WHERE users.email = ? AND (peminjaman.status = 'dipinjam' OR peminjaman.status = 'menunggu diambil' OR peminjaman.status = 'konfirmasi' OR peminjaman.status = 'dikembalikan' OR peminjaman.status = 'pembayaran')");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $buku = $stmt->get_result();
@@ -36,11 +55,11 @@
             header("Location: " . $_SERVER['PHP_SELF']);
             exit();
         } else {
-            $stmt = $conn->prepare("UPDATE peminjaman SET status = 'kembali' WHERE kode_buku = ? AND nrp_nidn = ? AND status = 'dipinjam'");
+            $stmt = $conn->prepare("UPDATE peminjaman SET status = 'konfirmasi' WHERE kode_buku = ? AND nrp_nidn = ? AND status = 'dipinjam'");
             $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
             $stmt->execute();
 
-            $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia' WHERE kode_buku = ?");
+            $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia', jumlah_buku = jumlah_buku + 1 WHERE kode_buku = ?");
             $stmtUpdateBuku->bind_param("s", $kode_buku);
 
             if ($stmtUpdateBuku->execute()) {
@@ -99,13 +118,16 @@
                             <p class="card-text mb-3"><strong>Tahun Terbit:</strong> <?php echo $row['tahun_terbit']; ?></p>
                             <p class="card-text mb-3"><strong>Tanggal Pinjam:</strong> <?php echo $row['tanggal_peminjaman']; ?></p>
                             <p class="card-text mb-3"><strong>Tanggal Kembali:</strong> <?php echo $row['tanggal_pengembalian']; ?></p>
+                            <p class="card-text mb-3"><strong>Status:</strong> <?php echo $row['status_peminjaman']; ?></p>
 
-                            <form method="POST" action="">
-                                <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
-                                <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
-                                <input type="hidden" name="tanggal_kembali" value="<?php echo $row['tanggal_pengembalian']; ?>">
-                                <button type="submit" name="kembalikan" class="btn btn-secondary btn-sm mt-3 rounded 4" style="height: 50px; width: 200px;">Kembalikan</button>
-                            </form>
+                            <?php if( $row['status_peminjaman'] === 'dipinjam') :?>
+                              <form method="POST" action="">
+                                  <input type="hidden" name="kode_buku" value="<?php echo $row['kode_buku']; ?>">
+                                  <input type="hidden" name="nrp_nidn" value="<?php echo $row['nrp_nidn']; ?>">
+                                  <input type="hidden" name="tanggal_kembali" value="<?php echo $row['tanggal_pengembalian']; ?>">
+                                  <button type="submit" name="kembalikan" class="btn btn-secondary btn-sm mt-3 rounded 4" style="height: 50px; width: 200px;">Kembalikan</button>
+                              </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -130,7 +152,7 @@
             <h5 class="modal-title" id="successModalLabel">Sukses</h5>
           </div>
           <div class="modal-body">
-            Buku berhasil dikembalikan!
+            Silakan Kembalikan ke Perpustakaan Secara Langsung!
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success rounded 4" data-bs-dismiss="modal">Tutup</button>
@@ -194,8 +216,11 @@
                 </div>
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="metode" id="va" value="Virtual Account" required>
-                  <label class="form-check-label" for="va">Virtual Account</label>
+                  <label class="form-check-label" for="va">Transfer</label>
+                  <p>BNI: 3022-xxxx-xxx-xx</p>
+                  <p>BRI: 3023-xxxx-xxx-xx</p>
                 </div>
+                <p>Harap Simpan Bukti Pembayaran dan Tunjukkan Saat Pengembalian Buku!</p>
 
                 <input type="hidden" name="kode_buku" value="<?= $_SESSION['denda']['kode_buku'] ?>">
                 <input type="hidden" name="nrp_nidn" value="<?= $_SESSION['denda']['nrp_nidn'] ?>">
