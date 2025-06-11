@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./database/connection.php');
 
 if (!isset($_SESSION['email'])) {
