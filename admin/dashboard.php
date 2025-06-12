@@ -27,12 +27,36 @@
   $jumlahMahasiswa = $stmt->get_result();
   $jumlahKeseluruhanMahasiswa = $jumlahMahasiswa->fetch_assoc();
 
+  $query = "SELECT count(id_peminjaman) FROM peminjaman";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDipinjam = $stmt2->get_result();
+  $jumlahKeseluruhanDipinjam = $jumlahDipinjam->fetch_assoc();
 
   $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'dipinjam'";
   $stmt2 = $conn->prepare($query);
   $stmt2->execute();
   $jumlahDipinjam = $stmt2->get_result();
   $jumlahKeseluruhanDipinjam = $jumlahDipinjam->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'menunggu diambil'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDiambil = $stmt2->get_result();
+  $jumlahKeseluruhanDiambil = $jumlahDiambil->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'pembayaran'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahPembayaran = $stmt2->get_result();
+  $jumlahKeseluruhanPembayaran = $jumlahPembayaran->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'dikembalikan'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDikembalikan = $stmt2->get_result();
+  $jumlahKeseluruhanDikembalikan = $jumlahDikembalikan->fetch_assoc();
+  
 
 
 ?>
@@ -144,6 +168,85 @@
               </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Sedang Dipinjam</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDipinjam['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Menunggu Buku Diambil</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDiambil['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Menunggu Pembayaran</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanPembayaran['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Buku Dikembalikan</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDikembalikan['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card card-stats">
@@ -162,13 +265,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update Now
-                </div>
-              </div>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6">
@@ -177,7 +273,7 @@
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-money-coins text-success"></i>
+                      <i class="nc-icon nc-globe text-warning"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
@@ -186,13 +282,6 @@
                       <p class="card-title"><?php echo $jumlahKeseluruhanDipinjam['count(id_peminjaman)']; ?><p>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar-o"></i>
-                  Last day
                 </div>
               </div>
             </div>

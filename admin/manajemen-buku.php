@@ -17,7 +17,11 @@
             FROM users
             INNER JOIN peminjaman ON users.nrp_nidn = peminjaman.nrp_nidn
             INNER JOIN buku ON peminjaman.kode_buku = buku.kode_buku
-            WHERE peminjaman.status = 'pembayaran' OR peminjaman.status = 'konfirmasi'";
+            WHERE peminjaman.status = 'pembayaran' OR peminjaman.status = 'konfirmasi' OR peminjaman.status = 'menunggu diambil'";
+
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $buku_peminjaman = $stmt->get_result();   
 
   $stmt = $conn->prepare($query2);
   $stmt->execute();
@@ -43,6 +47,17 @@
     $nrp_nidn = $_POST['nrp_nidn'];
 
     $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dikembalikan' WHERE kode_buku = ? AND nrp_nidn = ?");
+    $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
+    $stmt->execute();
+    
+    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+  }
+
+  if (isset($_POST['update_pengambilan'])){
+    $kode_buku = $_POST['kode_buku'];
+    $nrp_nidn = $_POST['nrp_nidn'];
+
+    $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dipinjam' WHERE kode_buku = ? AND nrp_nidn = ?");
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
     $stmt->execute();
     
@@ -750,6 +765,8 @@
                                   <button type="submit" name="update_konfirmasi" class="btn btn-primary d-block w-100">Konfirmasi Pengembalian</button>
                                 <?php elseif (htmlspecialchars($row['status']) === 'pembayaran') : ?>
                                   <button type="submit" name="update_pembayaran" class="btn btn-primary d-block w-100">Terima Pembayaran</button>
+                                <?php elseif (htmlspecialchars($row['status']) === 'menunggu diambil') : ?>
+                                  <button type="submit" name="update_pengambilan" class="btn btn-primary d-block w-100">Buku Diambil</button>
                                 <?php endif; ?>
                               </form>
                             </td>

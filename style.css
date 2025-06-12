@@ -313,6 +313,7 @@ body {
   background-color: var(--light-color);
 }
 
+
 body.no-scroll {
   overflow: hidden;
 }
