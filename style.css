@@ -2381,8 +2381,7 @@ footer#footer {
 }
 
 @media (max-width: 991px) {
-  #footer .footer-item,
-  #footer .footer-menu {
+  #footer .footer-item {
     margin-right: 0;
     margin-bottom: 30px;
   }
@@ -2392,6 +2391,16 @@ footer#footer {
   footer#footer {
     padding: 40px 0 20px 0;
     font-size: 15px;
+  }
+  #footer .footer-item {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #footer .text-md-end,
+  #footer .text-md-start {
+    text-align: center !important;
+  }
+}
 
 .login-container {
   max-width: 500px;
@@ -2667,7 +2676,4 @@ input[type="file"] {
     border-top-left-radius: 0.375rem; /* Bootstrap default border radius */
     border-bottom-left-radius: 0.375rem;
 
-}
-
-  }
 }
