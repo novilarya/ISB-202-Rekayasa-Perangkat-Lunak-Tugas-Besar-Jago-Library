@@ -2,7 +2,7 @@
     $host = "localhost";
     $dbname = "202_ta_silib";
     $username = "root";
-    $password = "basdat2024"; 
+    $password = ""; 
 
     $conn = new mysqli($host, $username, $password, $dbname);
 
