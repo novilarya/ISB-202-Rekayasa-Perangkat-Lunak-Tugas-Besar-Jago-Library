@@ -67,8 +67,8 @@ Version: 1.1
   --bs-body-color: #333;
   --bs-body-color-rgb: 51, 51, 51;
 
-  --bs-primary: #c5a992;
-  --bs-primary-dark: #c5a992;
+  --bs-primary: #5A72A0;
+  --bs-primary-dark: #1A2130;
   --bs-secondary: #c5a992;
   --bs-black: #111;
   --bs-light: #f1f1f0;
@@ -312,6 +312,7 @@ body {
   color: var(--body-text-color);
   background-color: var(--light-color);
 }
+
 
 body.no-scroll {
   overflow: hidden;
@@ -2391,6 +2392,192 @@ footer#footer {
   footer#footer {
     padding: 40px 0 20px 0;
     font-size: 15px;
+
+.login-container {
+  max-width: 500px;
+  margin: 100px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.login-container p {
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.btn-primary-1 {
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  font-weight: 600;
+  background-color: #74642f;
+  color: #f1f1f0;
+  border: none;
+}
+
+.btn-primary-1:hover {
+  background-color: #daa556;
+  color: #f1f1f0;
+}
+
+.btn-primary-12 {
+  height: 50px;
+  width: 150px;
+  padding: 10px;
+  font-weight: 300;
+  background-color: #7882A4;
+  color: #f1f1f0;
+  border: none;
+}
+
+.btn-primary-12:hover {
+  background-color: #C0A080;
+  color: #f1f1f0;
+}
+
+.message {
+  color: red;
+  font-size: 14px;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: #74642f;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.register-container {
+  max-width: 600px;
+  margin: 80px auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.register-container h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.register-container p {
+  color: #6c757d;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: #555;
+}
+
+.login {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login a {
+  color: #74642f;
+  text-decoration: none;
+}
+
+.login a:hover {
+  text-decoration: underline;
+}
+
+#successModal {
+  display: none;
+}
+
+.modal {
+  z-index: 1050;
+}
+.modal-backdrop {
+  z-index: 1040;
+}
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.auth-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+}
+.auth-card h2 {
+  margin-bottom: 25px;
+  text-align: center;
+}
+.form-label {
+  font-weight: 500;
+}
+.message {
+  color: red;
+  font-weight: 500;
+  margin-top: 15px;
+  text-align: center;
+}
+.signin-link {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+.signin-link a {
+  color: #74642f;
+  text-decoration: none;
+}
+.card-title {
+    font-weight: 600;
+}
+
+input[type="file"] {
+    font-size: 14px;
+    padding: 5px;
+}
+
+.scroll-btn {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
   #footer .footer-item,
   #footer .footer-menu {
@@ -2401,6 +2588,86 @@ footer#footer {
   #footer .text-md-start {
     text-align: center !important;
   }
+
+
+  #scrollContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-style-buku {
+  position: relative;
+  overflow: hidden;
 }
 
+.slick-slider .product-style-buku {
+  margin: 0 15px 25px;
+}
 
+.product-style-buku figcaption p {
+  margin-bottom: 20px;
+}
+
+.product-style-buku img.product-item {
+  position: relative;
+  background: #EFEEE8;
+  border: 1px solid #EAE8DF;
+  padding: 15%;
+  cursor: pointer;
+  width: 100%;
+  height: 350px;
+}
+
+.product-style-buku button.add-to-cart {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222323;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-style-buku:hover button.add-to-cart {
+  opacity: 1;
+  bottom: 15px;
+}
+
+.product-item-buku figcaption {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.product-item-buku figcaption>h3 {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: #74642F;
+  margin: 0;
+}
+
+.daftar-pinjam-section {
+  background-color: #edebe4;
+}
+
+.daftar-pinjam-section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.profile-cover {
+    border-top-left-radius: 0.375rem; /* Bootstrap default border radius */
+    border-bottom-left-radius: 0.375rem;
+
+}
+
+  }
+}

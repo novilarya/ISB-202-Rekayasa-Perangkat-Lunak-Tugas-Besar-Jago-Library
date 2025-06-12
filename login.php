@@ -1,15 +1,13 @@
 <?php
+session_start();
 include 'database/connection.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 $message = '';
 $kode = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
     $stmt->bind_param("ss", $email, $password);
@@ -18,13 +16,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result && $result->num_rows === 1) {
         $user = $result->fetch_assoc();
+
+        $_SESSION['email'] = $email;
+
         $stmt2 = $conn->prepare("UPDATE users SET status = 'logged' WHERE email = ?");
         $stmt2->bind_param("s", $email);
         $stmt2->execute();
-        $_SESSION['email'] = $email;
+
         $role = $user['role'];
         if ($role === 'dosen' || $role === 'mahasiswa') {
-            header("Location: index.php");
+            header("Location: index.php"); 
         } else {
             header("Location: ../admin/authentication.php");
         }
@@ -34,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

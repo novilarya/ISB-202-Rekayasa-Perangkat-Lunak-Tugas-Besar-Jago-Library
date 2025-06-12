@@ -9,11 +9,56 @@
   $jumlahBuku = $stmt->get_result();
   $jumlahKeseluruhanBuku = $jumlahBuku->fetch_assoc();
 
+  $query = "SELECT count(nrp_nidn) FROM users WHERE role = 'admin'";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $jumlahAdmin = $stmt->get_result();
+  $jumlahKeseluruhanAdmin = $jumlahAdmin->fetch_assoc();
+
+  $query = "SELECT count(nrp_nidn) FROM users WHERE role = 'dosen'";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $jumlahDosen = $stmt->get_result();
+  $jumlahKeseluruhanDosen = $jumlahDosen->fetch_assoc();
+
+  $query = "SELECT count(nrp_nidn) FROM users WHERE role = 'mahasiswa'";
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $jumlahMahasiswa = $stmt->get_result();
+  $jumlahKeseluruhanMahasiswa = $jumlahMahasiswa->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDipinjam = $stmt2->get_result();
+  $jumlahKeseluruhanDipinjam = $jumlahDipinjam->fetch_assoc();
+
   $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'dipinjam'";
   $stmt2 = $conn->prepare($query);
   $stmt2->execute();
   $jumlahDipinjam = $stmt2->get_result();
   $jumlahKeseluruhanDipinjam = $jumlahDipinjam->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'menunggu diambil'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDiambil = $stmt2->get_result();
+  $jumlahKeseluruhanDiambil = $jumlahDiambil->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'pembayaran'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahPembayaran = $stmt2->get_result();
+  $jumlahKeseluruhanPembayaran = $jumlahPembayaran->fetch_assoc();
+
+  $query = "SELECT count(id_peminjaman) FROM peminjaman WHERE status = 'dikembalikan'";
+  $stmt2 = $conn->prepare($query);
+  $stmt2->execute();
+  $jumlahDikembalikan = $stmt2->get_result();
+  $jumlahKeseluruhanDikembalikan = $jumlahDikembalikan->fetch_assoc();
+  
+
+
 ?>
 
 <!DOCTYPE html>
@@ -52,60 +97,156 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:;">Paper Dashboard 2</a>
+            <a class="navbar-brand" href="javascript:;">Dashboard</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <form>
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <i class="nc-icon nc-zoom-split"></i>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link btn-magnify" href="javascript:;">
-                  <i class="nc-icon nc-layout-11"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Stats</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="nc-icon nc-bell-55"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Some Actions</span>
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
-                  <i class="nc-icon nc-settings-gear-65"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Account</span>
-                  </p>
-                </a>
-              </li>
-            </ul>
-          </div>
+          
         </div>
       </nav>
       <!-- End Navbar -->
       <div class="content">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Admin</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanAdmin['count(nrp_nidn)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Dosen</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDosen['count(nrp_nidn)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Mahasiswa</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanMahasiswa['count(nrp_nidn)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Sedang Dipinjam</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDipinjam['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Menunggu Buku Diambil</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDiambil['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Menunggu Pembayaran</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanPembayaran['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-body ">
+                  <div class="row">
+                    <div class="col-5 col-md-4">
+                      <div class="icon-big text-center icon-warning">
+                        <i class="nc-icon nc-globe text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                      <div class="numbers">
+                        <p class="card-category">Jumlah Buku Dikembalikan</p>
+                        <p class="card-title"><?php echo $jumlahKeseluruhanDikembalikan['count(id_peminjaman)']; ?><p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card card-stats">
@@ -124,13 +265,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update Now
-                </div>
-              </div>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6">
@@ -139,7 +273,7 @@
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-money-coins text-success"></i>
+                      <i class="nc-icon nc-globe text-warning"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
@@ -150,17 +284,12 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar-o"></i>
-                  Last day
-                </div>
-              </div>
             </div>
           </div>
         </div>
-        <div class="row">
+
+
+        <!--<div class="row">
           <div class="col-md-12">
             <div class="card ">
               <div class="card-header ">
@@ -223,31 +352,13 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
-      <footer class="footer footer-black  footer-white ">
-        <div class="container-fluid">
-          <div class="row">
-            <nav class="footer-nav">
-              <ul>
-                <li><a href="https://www.creative-tim.com" target="_blank">Creative Tim</a></li>
-                <li><a href="https://www.creative-tim.com/blog" target="_blank">Blog</a></li>
-                <li><a href="https://www.creative-tim.com/license" target="_blank">Licenses</a></li>
-              </ul>
-            </nav>
-            <div class="credits ml-auto">
-              <span class="copyright">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
-              </span>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   </div>
+
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>

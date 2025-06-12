@@ -1,6 +1,11 @@
 <?php
-include 'header.php';
+session_start();
 include('./database/connection.php');
+
+if (!isset($_SESSION['email'])) {
+    header('Location: login.php');
+    exit();
+}
 $query = "SELECT * FROM buku";
 $stmt = $conn->prepare($query);
 $stmt->execute();
@@ -31,7 +36,9 @@ $buku = $stmt->get_result();
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
-
+<header>
+	<?php include "header.php" ?>
+</header>
 <body>
 
 	<section id="billboard">

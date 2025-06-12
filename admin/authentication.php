@@ -40,32 +40,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autentikasi Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../icomoon/icomoon.css">
-    <link rel="stylesheet" href="../css/vendor.css">
-    <link rel="stylesheet" href="../style.css">
-    </head>
-    <header>
-      <?php include "header.php" ?>
-    </header>
+	<link rel="stylesheet" type="text/css" href="/css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="/icomoon/icomoon.css">
+	<link rel="stylesheet" type="text/css" href="/css/vendor.css">
+	<link rel="stylesheet" type="text/css" href="../style.css">
+</head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <h2>Autentikasi Admin</h2>
+        <header>
+        <?php include "../header.php"; ?>
+    </header>
+
+    <div class="container">
+        <div class="auth-card login-container"> <!-- Tambah 'login-container' agar konsisten -->
+            <h2 class="text-center">Autentikasi Admin</h2>
+            <p class="text-center">Masukkan kode autentikasi yang telah dikirim ke email Anda.</p>
+
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="kode_autentikasi" class="form-label">Kode Autentikasi</label>
                     <input type="text" class="form-control" id="kode_autentikasi" name="kode_autentikasi" placeholder="Masukkan kode autentikasi" required>
                 </div>
+
                 <button type="submit" class="btn btn-primary-1 rounded 5">Masuk</button>
+
                 <?php if ($message): ?>
-                    <div class="message"><?= $message ?></div>
+                    <div class="text-center mt-3 message"><?= $message ?></div>
                 <?php endif; ?>
             </form>
-            <p class="signin-link">Belum punya akun? <a href="registration.php">Daftar</a></p>
+
+            <div class="signup-link text-center mt-3">
+                Belum punya akun? <a href="registration.php">Daftar</a>
+            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tambahan script dan JS seperti di login.php -->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="../js/plugins.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 
 </html>

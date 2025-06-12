@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" value="<?= htmlspecialchars($email) ?>" required>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="User123@gmail.com" required>
                 </div>
 
                 <div class="mb-3">
@@ -87,12 +87,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <span class="message"><?= $message ?></span>
                         <?php endif; ?>
                     </label>
-                    <input type="text" class="form-control" name="username" id="username" value="<?= htmlspecialchars($username) ?>" required>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" value="<?= htmlspecialchars($password) ?>" required>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                 </div>
 
                 <div class="form-check mb-3">

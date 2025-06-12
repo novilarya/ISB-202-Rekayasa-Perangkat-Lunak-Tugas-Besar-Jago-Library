@@ -32,13 +32,31 @@
       $tanggal_pinjam = $_POST['tanggal_pinjam'];
       $tanggal_kembali = $_POST['tanggal_kembali'];
 
-      $stmtInsert = $conn->prepare("INSERT INTO peminjaman (kode_buku, nrp_nidn, tanggal_peminjaman, tanggal_pengembalian, status) VALUES (?, ?, ?, ?, 'dipinjam')");
+      $stmtUpdate = $conn->prepare("UPDATE buku SET jumlah_buku = jumlah_buku - 1 WHERE kode_buku = '$kode_buku'");
+      $stmtUpdate->execute();
+
+      $query = "SELECT jumlah_buku FROM buku WHERE kode_buku = '$kode_buku'";
+      $stmt = $conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $row = $result->fetch_assoc();
+
+      $jumlah_buku = $row['jumlah_buku'];
+      if ((int)$jumlah_buku === 0) {
+        $stmtUpdate = $conn->prepare("UPDATE buku SET status = 'Tidak Tersedia' WHERE kode_buku = ?");
+        $stmtUpdate->bind_param("s", $kode_buku);
+        $stmtUpdate->execute();
+      }
+      $stmtInsert = $conn->prepare("INSERT INTO peminjaman (kode_buku, nrp_nidn, tanggal_peminjaman, tanggal_pengembalian, status) VALUES (?, ?, ?, ?, 'menunggu diambil')");
       $stmtInsert->bind_param("ssss", $kode_buku, $nrp_nidn, $tanggal_pinjam, $tanggal_kembali);
 
       if ($stmtInsert->execute()) {
         $success = true;
+      } else {
+        $success = false;
       }
     }
+
     ?>
 
 
@@ -89,11 +107,11 @@
               $status = $row['status'];
               $badgeClass = ($status === 'Tersedia') ? 'bg-success' : 'bg-danger';
               ?>
-              <span class="badge <?php echo $badgeClass; ?> py-2 px-3 mb-3"><?php echo $status; ?></span>
+              <span class="badge <?php echo $badgeClass; ?> py-3 px-3 mb-3"><?php echo $status; ?></span>
 
               <div>
-                <p class="text-info-1">Tersisa 5 buku lagi</p>
-                <button class="btn-primary-12 px-4 rounded 4 " data-bs-toggle="modal" data-bs-target="#exampleModal">Pinjam Buku</button>
+                <p class="text-info-1">Tersisa <?php echo $row['jumlah_buku']; ?> buku lagi</p>
+                <button class="btn btn-primary rounded 4 px-4" style="height: 50px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Pinjam Buku</button>
               </div>
             </div>
 
@@ -101,24 +119,24 @@
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content shadow-sm">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Peminjaman</h5>
+                  <div class="modal-header bg-light">
+                    <h4 class="modal-title" id="exampleModalLabel">Form Peminjaman</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                   </div>
                   <form method="POST" action="">
                     <div class="modal-body">
                       <div class="mb-3">
                         <label for="tanggal_pinjam" class="form-label">Tanggal Pinjam</label>
-                        <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" class="form-control" required>
+                        <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" class="form-control" required min="<?= date('Y-m-d') ?>">
                       </div>
                       <div class="mb-3">
                         <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
-                        <input type="date" name="tanggal_kembali" id="tanggal_kembali" class="form-control" required>
+                        <input type="date" name="tanggal_kembali" id="tanggal_kembali" class="form-control" required min="<?= date('Y-m-d') ?>">
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-outline-secondary rounded 4" data-bs-dismiss="modal">Batal</button>
-                      <button type="submit" class="btn btn-primary rounded 4">Konfirmasi Pinjam</button>
+                      <button type="button" class="btn btn-outline-secondary rounded 4" style="height: 50px;" data-bs-dismiss="modal">Batal</button>
+                      <button type="submit" class="btn btn-primary rounded 4 px-4" style="height: 50px;">Konfirmasi Pinjam</button>
                     </div>
                   </form>
 
@@ -131,14 +149,14 @@
       <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-light">
               <h5 class="modal-title" id="successModalLabel">Sukses</h5>
             </div>
             <div class="modal-body">
-              Buku berhasil dipinjam!
+              Buku Berhasil Dipinjam, Silakan Ambil di Perpustakaan!
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-success rounded 4" data-bs-dismiss="modal">Tutup</button>
+              <button type="button" class="btn btn-success rounded 4 px-4" style="height: 50px;" data-bs-dismiss="modal">Tutup</button>
             </div>
           </div>
         </div>
@@ -156,12 +174,29 @@
         <script>
           const successModal = new bootstrap.Modal(document.getElementById('successModal'));
           successModal.show();
+          
+          setTimeout(() => {
+            window.location.href = 'daftar-buku.php';
+          }, 3000);
         </script>
       <?php endif; ?>
 
       <?php
       include 'footer.php';
       ?>
+
+      <script>
+        const tanggalPinjam = document.getElementById('tanggal_pinjam');
+        const tanggalKembali = document.getElementById('tanggal_kembali');
+
+        tanggalPinjam.addEventListener('change', function() {
+          tanggalKembali.value = ''; // Kosongkan jika user ganti pinjam
+          tanggalKembali.min = this.value; // Set min ke tanggal pinjam
+        });
+      </script>
+
+      
+
     </body>
 
     </html>
