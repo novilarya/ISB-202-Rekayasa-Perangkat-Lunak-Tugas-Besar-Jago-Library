@@ -1,6 +1,6 @@
 <?php
     $host = "localhost";
-    $dbname = "202_ta_silib";
+    $dbname = "Esilib";
     $username = "root";
     $password = ""; 
 
