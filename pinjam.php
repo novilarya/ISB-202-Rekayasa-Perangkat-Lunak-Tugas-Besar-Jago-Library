@@ -52,9 +52,9 @@
 
       if ($stmtInsert->execute()) {
         $success = true;
+      } else {
+        $success = false;
       }
-      header("Location: daftar-buku.php");
-      exit();
     }
 
     ?>
@@ -153,7 +153,7 @@
               <h5 class="modal-title" id="successModalLabel">Sukses</h5>
             </div>
             <div class="modal-body">
-              Buku berhasil dipinjam!
+              Buku Berhasil Dipinjam, Silakan Ambil di Perpustakaan!
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-success rounded 4 px-4" style="height: 50px;" data-bs-dismiss="modal">Tutup</button>
@@ -174,6 +174,10 @@
         <script>
           const successModal = new bootstrap.Modal(document.getElementById('successModal'));
           successModal.show();
+          
+          setTimeout(() => {
+            window.location.href = 'daftar-buku.php';
+          }, 3000);
         </script>
       <?php endif; ?>
 
@@ -190,6 +194,8 @@
           tanggalKembali.min = this.value; // Set min ke tanggal pinjam
         });
       </script>
+
+      
 
     </body>
 
