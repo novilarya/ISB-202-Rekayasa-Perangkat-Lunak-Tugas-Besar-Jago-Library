@@ -53,13 +53,28 @@
     header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
   }
 
-  if (isset($_POST['update_pengambilan'])){
+  if (isset($_POST['update_pengambilan_diterima'])){
     $kode_buku = $_POST['kode_buku'];
     $nrp_nidn = $_POST['nrp_nidn'];
 
     $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dipinjam' WHERE kode_buku = ? AND nrp_nidn = ?");
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
     $stmt->execute();
+    
+    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+  }
+
+  if (isset($_POST['update_pengambilan_ditolak'])){
+    $kode_buku = $_POST['kode_buku'];
+    $nrp_nidn = $_POST['nrp_nidn'];
+
+    $stmt = $conn->prepare("UPDATE peminjaman SET status = 'ditolak' WHERE kode_buku = ? AND nrp_nidn = ?");
+    $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
+    $stmt->execute();
+
+    $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia', jumlah_buku = jumlah_buku + 1 WHERE kode_buku = ?");
+    $stmtUpdateBuku->bind_param("s", $kode_buku);
+    $stmtUpdateBuku->execute();
     
     header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
   }
@@ -766,7 +781,14 @@
                                 <?php elseif (htmlspecialchars($row['status']) === 'pembayaran') : ?>
                                   <button type="submit" name="update_pembayaran" class="btn btn-primary d-block w-100">Terima Pembayaran</button>
                                 <?php elseif (htmlspecialchars($row['status']) === 'menunggu diambil') : ?>
-                                  <button type="submit" name="update_pengambilan" class="btn btn-primary d-block w-100">Buku Diambil</button>
+                                <div class="d-flex justify-content-between gap-1">
+                                  <button type="submit" name="update_pengambilan_diterima" class="btn btn-primary w-100">
+                                    Terima Peminjaman
+                                  </button>
+                                  <button type="submit" name="update_pengambilan_ditolak" class="btn btn-danger w-100">
+                                    Tolak Peminjaman
+                                  </button>
+                                </div>
                                 <?php endif; ?>
                               </form>
                             </td>
