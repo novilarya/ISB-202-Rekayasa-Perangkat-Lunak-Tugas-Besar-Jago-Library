@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->num_rows > 0) {
         $message = ' (Username sudah ada!)';
     } else {
-        $conn->query("INSERT INTO users (role, email, username, password, nrp_nidn) VALUES ('$role', '$email', '$username', '$password', '$nrp_nidn')");
+        $conn->query("INSERT INTO users (role, email, username, password, nrp_nidn, nama) VALUES ('$role', '$email', '$username', '$password', '$nrp_nidn', '$username')");
         echo '<script>
             alert("Akun sudah berhasil dibuat!");
             window.location.href = "login.php";
