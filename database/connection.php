@@ -1,8 +1,8 @@
 <?php
     $host = "localhost";
-    $dbname = "Esilib";
+    $dbname = "202_ta_silib";
     $username = "root";
-    $password = ""; 
+    $password = "basdat2024"; 
 
     $conn = new mysqli($host, $username, $password, $dbname);
 

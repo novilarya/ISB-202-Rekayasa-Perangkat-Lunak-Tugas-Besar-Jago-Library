@@ -855,7 +855,7 @@ input[type="reset"],
 input[type="file"],
 button {
   background-image: none;
-  background: var(--accent-color);
+  background: var(--bs-primary);
   text-decoration: none !important;
   display: inline-block;
   position: relative;
@@ -2599,21 +2599,6 @@ img.book-cover {
   color: #555;
 }
 
-.btn-primary-1 {
-  height: 50px;
-  width: 100%;
-  padding: 10px;
-  font-weight: 600;
-  background-color: #74642f;
-  color: #f1f1f0;
-  border: none;
-}
-
-.btn-primary-1:hover {
-  background-color: #daa556;
-  color: #f1f1f0;
-}
-
 .btn-primary-12 {
   height: 50px;
   width: 150px;
@@ -2641,7 +2626,7 @@ img.book-cover {
 }
 
 .signup-link a {
-  color: #74642f;
+  color: #5A72A0;
   text-decoration: none;
 }
 
@@ -2684,7 +2669,7 @@ img.book-cover {
 }
 
 .login a {
-  color: #74642f;
+  color: #5A72A0;
   text-decoration: none;
 }
 

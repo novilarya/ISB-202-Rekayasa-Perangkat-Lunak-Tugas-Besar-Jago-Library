@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include "header.php"; ?>
     </header>
 
+
     <div class="container">
         <div class="login-container">
             <h1 class="text-center">Login</h1>
@@ -83,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-check-label" for="tampilkanPassword">Tampilkan Password</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary-1 rounded 5">Login</button>
+                <button type="submit" class="btn btn-primary rounded 5" style="width: 100%; height: 40px; " >Login</button>
 
                 <?php if ($message): ?>
                     <div class="text-center mt-3 message"><?= $message ?></div>

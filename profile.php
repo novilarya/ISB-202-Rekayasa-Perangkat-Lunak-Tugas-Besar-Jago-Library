@@ -18,6 +18,7 @@ $row = $user->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nrp_nidn_new = $_POST['nrp_nidn'] ?? '';
+    $nama_new = $_POST['nama'] ?? '';
     $username_new = $_POST['username'] ?? '';
     $email_new = $_POST['email'] ?? '';
     $password_new = $_POST['password'] ?? '';
@@ -48,11 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if ($row['role'] === 'mahasiswa') {
-        $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, email = ?, password = ?, foto = ?, semester = ? WHERE email = ?");
-        $stmt->bind_param("sssssis", $nrp_nidn_new, $username_new, $email_new, $password_new, $fotoBaru, $semester_new, $email_lama);
+        $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, nama = ?, username = ?, email = ?, password = ?, foto = ?, semester = ? WHERE email = ?");
+        $stmt->bind_param("sssssis", $nrp_nidn_new, $nama_new, $username_new, $email_new, $password_new, $fotoBaru, $semester_new, $email_lama);
     } else {
-        $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, username = ?, email = ?, password = ?, foto = ? WHERE email = ?");
-        $stmt->bind_param("ssssss", $nrp_nidn_new, $username_new, $email_new, $password_new, $fotoBaru, $email_lama);
+        $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, nama = ?, username = ?, email = ?, password = ?, foto = ? WHERE email = ?");
+        $stmt->bind_param("ssssss", $nrp_nidn_new, $nama_new, $username_new, $email_new, $password_new, $fotoBaru, $email_lama);
     }
 
     if ($stmt->execute()) {
@@ -103,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     <div id="displayMode">
                                         <p><strong><?= ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN' ?>:</strong> <?= $row['nrp_nidn'] ?></p>
+                                        <p><strong>Nama:</strong> <?= $row['nama'] ?></p>
                                         <p><strong>Email:</strong> <?= $row['email'] ?></p>
                                         <p><strong>Username:</strong> <?= $row['username'] ?></p>
                                         <p><strong>Password:</strong> ********</p>
@@ -116,6 +118,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div class="mb-3">
                                             <label for="nrp_nidn" class="form-label"><?= ($row['role'] === 'mahasiswa') ? 'NRP' : 'NIDN' ?></label>
                                             <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?= $row['nrp_nidn'] ?>" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nama" class="form-label">Nama</label>
+                                            <input type="text" class="form-control" name="nama" id="nama" value="<?= $row['nama'] ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email</label>

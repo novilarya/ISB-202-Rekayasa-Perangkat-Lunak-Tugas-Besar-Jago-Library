@@ -9,6 +9,7 @@ $email = $_POST['email'] ?? '';
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 $nrp_nidn = $_POST['nrp_nidn'] ?? '';
+$nama = $_POST['nama'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare("SELECT username FROM users WHERE username = ?");
@@ -18,14 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->num_rows > 0) {
         $message = ' (Username sudah ada!)';
     } else {
-        $conn->query("INSERT INTO users (role, email, username, password, nrp_nidn, nama) VALUES ('$role', '$email', '$username', '$password', '$nrp_nidn', '$username')");
-        echo '<script>
-            alert("Akun sudah berhasil dibuat!");
-            window.location.href = "login.php";
-        </script>';
+        if ($conn->query("INSERT INTO users (role, email, username, password, nrp_nidn, nama) VALUES ('$role', '$email', '$username', '$password', '$nrp_nidn', '$nama')"));{
+        $success = true;
+        }
         $conn->close();
-        exit();
     }
+
+    
 }
 ?>
 
@@ -74,6 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="nrp_nidn" class="form-label">NRP/NIDN</label>
                     <input type="text" class="form-control" name="nrp_nidn" id="nrp_nidn" value="<?= htmlspecialchars($nrp_nidn) ?>" required>
                 </div>
+                
+                <div class="mb-3" id="nrp-group">
+                    <label for="nama" class="form-label">Nama</label>
+                    <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama anda" required>
+                </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -102,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary-1 rounded 5">Sign Up</button>
+                <button type="submit" class="btn btn-primary rounded 5" style="width: 100%; height: 40px;">Sign Up</button>
             </form>
 
             <div class="login">
@@ -110,6 +115,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-light">
+              <h5 class="modal-title" id="successModalLabel">Sukses</h5>
+            </div>
+            <div class="modal-body">
+              Daftar berhasil, Silakan login!
+            </div>
+          </div>
+        </div>
+      </div>
+
 <script src="js/jquery-1.11.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -123,5 +142,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             pass.type = pass.type === "password" ? "text" : "password";
         }
     </script>
+
+    <?php if ($success): ?>
+        <script>
+          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+          successModal.show();
+          
+          setTimeout(() => {
+            window.location.href = 'login.php';
+          }, 2000);
+        </script>
+      <?php endif; ?>
 </body>
 </html>
