@@ -1,7 +1,9 @@
 <?php
   include 'layout/sidebar.php';
   include '../database/connection.php';
-  session_start();
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
 
   $query = "SELECT count(kode_buku) FROM buku";
   $stmt = $conn->prepare($query);

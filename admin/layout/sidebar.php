@@ -1,5 +1,19 @@
 <?php
+  include '../database/connection.php';
+  
   $currentPage = basename($_SERVER['PHP_SELF']);
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
+
+  if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $user = $stmt->get_result();
+    $row = $user->fetch_assoc();
+  } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +22,7 @@
   <div class="logo">
     <a href="https://www.creative-tim.com" class="simple-text logo-mini">
       <div class="logo-image-small">
-        <img src="assets/img/logo-small.png" alt="logo">
+        <img src="../images/user/<?php echo $row['foto']; ?>" alt="logo">
       </div>
     </a>
     <a href="https://www.creative-tim.com" class="simple-text logo-normal">
