@@ -111,7 +111,7 @@
 
               <div>
                 <p class="text-info-1">Tersisa <?php echo $row['jumlah_buku']; ?> buku lagi</p>
-                <p class="text-info-1">Tersisa <?php echo $row['deskripsi_buku']; ?></p>
+                <p class="text-info-1"><?php echo $row['deskripsi_buku']; ?></p>
                 <button class="btn btn-primary rounded 4 px-4" style="height: 50px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Pinjam Buku</button>
               </div>
             </div>
