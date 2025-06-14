@@ -397,6 +397,9 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="style.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body class="">
@@ -1017,7 +1020,34 @@
     
     </div>
   </div>
+
+    <script>
+  $(document).ready(function() {
+    $('#daftar-buku').DataTable({
+      "order": [[1, "asc"]], 
+      "columnDefs": [
+        { "orderable": false, "targets": 7 }
+      ],
+      "language": {
+        "search": "Cari:",
+        "lengthMenu": "Tampilkan _MENU_ entri",
+        "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "paginate": {
+          "first": "Pertama",
+          "last": "Terakhir",
+          "next": "→",
+          "previous": "←"
+        }
+      }
+    });
+  });
+</script>
+
+
   <!--   Core JS Files   -->
+     
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap.min.js"></script>
@@ -1063,6 +1093,8 @@
       });
       });
     </script>
+
+
 
 </body>
 
