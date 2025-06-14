@@ -28,7 +28,7 @@
 
             <div class="col-md-4 mb-4">
                 <div class="footer-item">
-                    <img src="images/Group.png" alt="logo" class="footer-logo mb-3" style="max-width: 120px;">
+                    <img src="images/Group 2.png" alt="logo" class="footer-logo mb-3" style="max-width: 120px;">
                     <p class="small">
                         Jl. Khp Hasan Mustopa No.23, Neglasari, Kec. Cibeunying Kaler, Kota Bandung, Jawa Barat 40124
                     </p>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-md-2 mb-4">
-                <h5 class="mb-3">Tentang Kami</h5>
+                <h5 class="text-light text-decoration-none">Jelajahi</h5>
                 <ul class="list-unstyled">
                     <li><a href="daftar-buku.php" class="text-light text-decoration-none">Daftar Buku</a></li>
                     <li><a href="daftar-pinjam.php" class="text-light text-decoration-none">Peminjaman Buku</a></li>
@@ -46,33 +46,18 @@
             </div>
 
             <div class="col-md-2 mb-4">
-                <h5 class="mb-3">Jelajahi</h5>
+                <h5 class="text-light text-decoration-none">Akun Saya</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-light text-decoration-none">Home</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Books</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Authors</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Subjects</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Advanced Search</a></li>
+                    <li><a href="registration.php" class="text-light text-decoration-none">Sign In</a></li>
+                    <li><a href="login.php" class="text-light text-decoration-none">Log In</a></li>
                 </ul>
             </div>
 
             <div class="col-md-2 mb-4">
-                <h5 class="mb-3">Akun Saya</h5>
+                <h5 class="text-light text-decoration-none">Informasi</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-light text-decoration-none">Sign In</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">View Cart</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">My Wishlist</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Track My Order</a></li>
-                </ul>
-            </div>
-
-            <div class="col-md-2 mb-4">
-                <h5 class="mb-3">Bantuan</h5>
-                <ul class="list-unstyled">
-                    <li><a href="#" class="text-light text-decoration-none">Help Center</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Report a Problem</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Suggesting Edits</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
+                    <li><a href="https://www.instagram.com/sisteminformasiitenas" class="text-light text-decoration-none">Instagram Official</a></li>
+                    <li><a href="https://www.instagram.com/himsitenas?utm_source" class="text-light text-decoration-none">Instagram Himpunan</a></li>
                 </ul>
             </div>
 
