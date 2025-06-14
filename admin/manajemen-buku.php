@@ -39,8 +39,10 @@
 
     $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dikembalikan' WHERE kode_buku = ? AND nrp_nidn = ?");
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
-    $stmt->execute();
-    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+    $successUpdateStatus = false;
+    if ($stmt->execute()) {
+        $successUpdateStatus = true;
+    }
   }
 
   if (isset($_POST['update_konfirmasi'])){
@@ -49,9 +51,10 @@
 
     $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dikembalikan' WHERE kode_buku = ? AND nrp_nidn = ?");
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
-    $stmt->execute();
-    
-    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+    $successUpdateStatus = false;
+    if ($stmt->execute()) {
+        $successUpdateStatus = true;
+    }
   }
 
   if (isset($_POST['update_pengambilan_diterima'])){
@@ -60,9 +63,11 @@
 
     $stmt = $conn->prepare("UPDATE peminjaman SET status = 'dipinjam' WHERE kode_buku = ? AND nrp_nidn = ?");
     $stmt->bind_param("ss", $kode_buku, $nrp_nidn);
-    $stmt->execute();
-    
-    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+
+    $successUpdateStatus = false;
+    if ($stmt->execute()) {
+        $successUpdateStatus = true;
+    }
   }
 
   if (isset($_POST['update_pengambilan_ditolak'])){
@@ -75,9 +80,11 @@
 
     $stmtUpdateBuku = $conn->prepare("UPDATE buku SET status = 'Tersedia', jumlah_buku = jumlah_buku + 1 WHERE kode_buku = ?");
     $stmtUpdateBuku->bind_param("s", $kode_buku);
-    $stmtUpdateBuku->execute();
-    
-    header("Location: " . $_SERVER['PHP_SELF'] . "?tab=konfirmasi");
+
+    $successUpdateStatus = false;
+    if ($stmtUpdateBuku->execute()) {
+        $successUpdateStatus = true;
+    }
   }
 
   if (isset($_POST['search_peminjaman']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
@@ -259,9 +266,9 @@
             $penyumbang, $nama_file, $jumlah_buku
         );
 
+        $successTambahBuku = false;
         if ($stmt->execute()) {
-            echo "Data berhasil ditambahkan.";
-            header("Location: " . $_SERVER['PHP_SELF'] . "?tab=daftar-buku");
+            $successTambahBuku = true;
         } else {
             echo "Gagal menambahkan data: " . $stmt->error;
         }
@@ -330,8 +337,9 @@
         $penyumbang, $nama_file_final, $jumlah_buku, $kode_buku_lama
     );
 
+    $successUpdate = false;
     if ($stmt->execute()) {
-        header("Location: " . $_SERVER['PHP_SELF'] . "?tab=daftar-buku");
+        $successUpdate = true;
     } else {
         echo "Gagal memperbarui data: " . $stmt->error;
     }
@@ -365,8 +373,9 @@
 
     $stmt_delete->bind_param("s", $kode_buku_lama);
 
+    $successDelete = false;
     if ($stmt_delete->execute()) {
-        header("Location: " . $_SERVER['PHP_SELF'] . "?tab=daftar-buku");
+        $successDelete = true;
     } else {
         echo "Gagal menghapus data: " . $stmt_delete->error;
     }
@@ -384,22 +393,22 @@
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    Paper Dashboard 2 by Creative Tim
-  </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
+  <title>Manajemen Buku</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" />
+
+  <!-- Fonts and icons -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-  <!-- CSS Files -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap and Paper Dashboard CSS -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="assets/demo/demo.css" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="style.css">
 
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <!-- Custom Style -->
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 </head>
 
 <body class="">
@@ -543,7 +552,7 @@
                         </div>
                         <div class="modal-body">
 
-                        <form method="POST" action="" enctype="multipart/form-data">
+                        <form action="<?= $_SERVER['PHP_SELF'] . '?tab=daftar-buku' ?>" method="POST" enctype="multipart/form-data">
                           <div class="row">
                             <div class="col-md-6 pr-1">
                               <div class="form-group">
@@ -648,6 +657,31 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-light">
+              <h5 class="modal-title" id="updateModalLabel">Sukses</h5>
+            </div>
+            <div class="modal-body">
+              Update Buku Berhasil!
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-light">
+              <h5 class="modal-title" id="deleteModalLabel">Sukses</h5>
+            </div>
+            <div class="modal-body">
+              Hapus Buku Berhasil!
             </div>
           </div>
         </div>
@@ -777,7 +811,7 @@
                               Rp. <?= number_format((float)($row['denda'] ?? 0), 0, ',', '.') ?>
                             </td>
                             <td>
-                              <form method="POST">
+                              <form action="<?= $_SERVER['PHP_SELF'] . '?tab=konfirmasi' ?>" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="kode_buku" value="<?= htmlspecialchars($row['kode_buku']) ?>">
                                 <input type="hidden" name="nrp_nidn" value="<?= htmlspecialchars($row['nrp_nidn']) ?>">
                                 <?php if (htmlspecialchars($row['status']) === 'konfirmasi') : ?>
@@ -810,6 +844,19 @@
         </div>
     </div>
 
+    <div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="updateStatusModalLabel">Sukses</h5>
+          </div>
+          <div class="modal-body">
+            Update Status Berhasil!
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="tambah" class="tab-content">
        <div class="row">
           <div class="col-md-12">
@@ -818,7 +865,7 @@
                 <h5 class="card-title">Tambah Buku</h5>
               </div>
               <div class="card-body">
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="<?= $_SERVER['PHP_SELF'] . '?tab=tambah' ?>" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-6 pr-1">
                       <div class="form-group">
@@ -915,6 +962,19 @@
             </div>
           </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="tambahModalLabel">Sukses</h5>
+          </div>
+          <div class="modal-body">
+            Tambah Buku Berhasil!
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -1043,24 +1103,35 @@
   });
 </script>
 
+      <!-- Core JS Files -->
+      <script src="assets/js/core/jquery.min.js"></script> <!-- jQuery harus di-load dulu -->
+      <script src="assets/js/core/popper.min.js"></script>
+      <script src="assets/js/core/bootstrap.min.js"></script>
 
-  <!--   Core JS Files   -->
-     
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="assets/js/core/jquery.min.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
-  <script src="assets/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-  <script src="assets/demo/demo.js"></script>
+      <!-- DataTables CSS & JS (Load setelah jQuery) -->
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+      <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+      <!-- Perfect Scrollbar Plugin -->
+      <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+
+      <!-- Google Maps Plugin (Opsional, hanya aktifkan jika kamu butuh peta) -->
+      <!-- Ganti 'YOUR_KEY_HERE' dengan API Key Google Maps-mu jika digunakan -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+      <!-- Chart JS (Opsional jika kamu pakai chart) -->
+      <script src="assets/js/plugins/chartjs.min.js"></script>
+
+      <!-- Notifications Plugin (Opsional untuk notifikasi bootstrap-notify) -->
+      <script src="assets/js/plugins/bootstrap-notify.js"></script>
+
+      <!-- Paper Dashboard JS -->
+      <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+
+      <!-- Demo script (sebaiknya tidak digunakan di produksi) -->
+      <script src="assets/demo/demo.js"></script>
+
+
 
       <script>
       $(document).ready(function() {
@@ -1094,7 +1165,49 @@
       });
     </script>
 
+    <?php if (isset($successUpdate) && $successUpdate): ?>
+      <script>
+        $(document).ready(function() {
+          $('#updateModal').modal('show');
+          setTimeout(function() {
+            window.location.href = 'manajemen-buku.php?tab=daftar-buku';
+          }, 2000);
+        });
+      </script>
+    <?php endif; ?>
 
+    <?php if (isset($successDelete) && $successDelete): ?>
+      <script>
+        $(document).ready(function() {
+          $('#deleteModal').modal('show');
+          setTimeout(function() {
+            window.location.href = 'manajemen-buku.php?tab=daftar-buku';
+          }, 2000);
+        });
+      </script>
+    <?php endif; ?>
+
+    <?php if (isset($successUpdateStatus) && $successUpdateStatus): ?>
+      <script>
+        $(document).ready(function() {
+          $('#updateStatusModal').modal('show');
+          setTimeout(function() {
+            window.location.href = 'manajemen-buku.php?tab=konfirmasi';
+          }, 2000);
+        });
+      </script>
+    <?php endif; ?>
+
+    <?php if (isset($successTambahBuku) && $successTambahBuku): ?>
+      <script>
+        $(document).ready(function() {
+          $('#tambahModal').modal('show');
+          setTimeout(function() {
+            window.location.href = 'manajemen-buku.php?tab=tambah';
+          }, 2000);
+        });
+      </script>
+    <?php endif; ?>
 
 </body>
 

@@ -14,6 +14,7 @@
         header('location: ../scripts/login.php');
     }
 
+
  if (isset($_POST['update'])) {
     $email_baru = $_POST['email_baru'] ?? '';
     $username_baru = $_POST['username_baru'] ?? '';
@@ -39,7 +40,11 @@
 
     $stmt = $conn->prepare("UPDATE users SET email = ?, username = ?, password = ?, nama = ?, foto = ? WHERE nrp_nidn = ?");
     $stmt->bind_param("ssssss", $email_baru, $username_baru, $password_baru, $nama_baru, $foto_final, $id);
-    $stmt->execute();
+    
+    $success = false;
+    if($stmt->execute()){
+      $success = true;
+    }
 
   }
 
@@ -134,7 +139,8 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Kode Autentikasi</label>
-                        <input type="text" nama="kode-autentikasi" class="form-control" value="<?php echo $row['kode_autentikasi']; ?>">
+                        <input type="text" name="kode_autentikasi" class="form-control" value="<?php echo $row['kode_autentikasi']; ?>">
+
                       </div>
                     </div>
                   </div>
@@ -150,6 +156,19 @@
                     </div>
                   </div>
                 </form>
+
+                <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header bg-light">
+                        <h5 class="modal-title" id="successModalLabel">Sukses</h5>
+                      </div>
+                      <div class="modal-body">
+                        Update Berhasil!
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -157,6 +176,9 @@
       </div>
     </div>
   </div>
+
+
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>
@@ -171,6 +193,18 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
+
+  <?php if (isset($success) && $success): ?>
+    <script>
+      $(document).ready(function() {
+        $('#successModal').modal('show');
+        setTimeout(function() {
+          window.location.href = 'user.php';
+        }, 2000);
+      });
+    </script>
+    <?php endif; ?>
+
 </body>
 
 </html>

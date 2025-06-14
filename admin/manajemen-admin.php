@@ -65,18 +65,20 @@ $next_admin = (string)($last_admin + 1);
     $nama_file = basename($foto['name']);
     $filePath = $uploadDir . $nama_file;
 
+    $successTambah = false;
+
     if (move_uploaded_file($foto['tmp_name'], $filePath)) {
         $stmt = $conn->prepare("INSERT INTO users (nrp_nidn, role, email, username, password, kode_autentikasi, nama, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $role = 'admin';
         $stmt->bind_param("ssssssss", $next_admin, $role, $email, $username, $password, $kode, $nama, $nama_file);
         if ($stmt->execute()) {
             $admin_baru_ditambahkan = true;
+            $successTambah = true;
             $email = '';
             $username = '';
             $password = '';
             $nama = '';
             $kode = '';
-            header("Location: " . $_SERVER['PHP_SELF'] . "?tab=admin");
         }
     } else {
         echo "Gagal mengupload file foto.";
@@ -92,19 +94,22 @@ $next_admin = (string)($last_admin + 1);
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    Paper Dashboard 2 by Creative Tim
-  </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
+  <title>Manajemen Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" />
+
+  <!-- Fonts and icons -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-  <!-- CSS Files -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap and Paper Dashboard CSS -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="assets/demo/demo.css" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- Custom Style -->
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 </head>
 
 <body class="">
@@ -198,7 +203,7 @@ $next_admin = (string)($last_admin + 1);
                 <h5 class="card-title">Tambah Admin</h5>
               </div>
               <div class="card-body">
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="<?= $_SERVER['PHP_SELF'] . '?tab=tambah' ?>" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-5 pr-1">
                       <div class="form-group">
@@ -252,6 +257,19 @@ $next_admin = (string)($last_admin + 1);
             </div>
           </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="tambahModalLabel">Sukses</h5>
+          </div>
+          <div class="modal-body">
+            Tambah Admin Berhasil!
+          </div>
+        </div>
+      </div>
     </div>
 
   <script>
@@ -376,20 +394,46 @@ $next_admin = (string)($last_admin + 1);
       
     </div>
   </div>
-  <!--   Core JS Files   -->
-  <script src="assets/js/core/jquery.min.js"></script>
+
+  <!-- Core JS Files -->
+  <script src="assets/js/core/jquery.min.js"></script> <!-- jQuery harus di-load dulu -->
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap.min.js"></script>
+
+  <!-- DataTables CSS & JS (Load setelah jQuery) -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+  <!-- Perfect Scrollbar Plugin -->
   <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
+
+  <!-- Google Maps Plugin (Opsional, hanya aktifkan jika kamu butuh peta) -->
+  <!-- Ganti 'YOUR_KEY_HERE' dengan API Key Google Maps-mu jika digunakan -->
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
+
+  <!-- Chart JS (Opsional jika kamu pakai chart) -->
   <script src="assets/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
+
+  <!-- Notifications Plugin (Opsional untuk notifikasi bootstrap-notify) -->
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+
+  <!-- Paper Dashboard JS -->
+  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+
+  <!-- Demo script (sebaiknya tidak digunakan di produksi) -->
   <script src="assets/demo/demo.js"></script>
+
+  
+  <?php if (isset($successTambah) && $successTambah): ?>
+      <script>
+        $(document).ready(function() {
+          $('#tambahModal').modal('show');
+          setTimeout(function() {
+            window.location.href = 'manajemen-admin.php?tab=tambah';
+          }, 2000);
+        });
+      </script>
+  <?php endif; ?>
 </body>
 
 </html>
