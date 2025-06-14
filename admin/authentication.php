@@ -46,31 +46,25 @@
 	<link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
-        <header>
-        <?php include "../header.php"; ?>
-    </header>
-
     <div class="container">
         <div class="auth-card login-container"> <!-- Tambah 'login-container' agar konsisten -->
             <h2 class="text-center">Autentikasi Admin</h2>
-            <p class="text-center">Masukkan kode autentikasi yang telah dikirim ke email Anda.</p>
+            <p class="text-center">Masukkan kode autentikasi yang Anda punya.</p>
 
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="kode_autentikasi" class="form-label">Kode Autentikasi</label>
-                    <input type="text" class="form-control" id="kode_autentikasi" name="kode_autentikasi" placeholder="Masukkan kode autentikasi" required>
-                </div>
+                    <input type="text" class="form-control mb-3" id="kode_autentikasi" name="kode_autentikasi" placeholder="Masukkan kode autentikasi" required>
+ 
+                    <button type="submit" class="btn btn-primary w-100 rounded-1" style="height:50px">Masuk</button>
 
-                <button type="submit" class="btn btn-primary-1 rounded 5">Masuk</button>
+                    <p class="text-center">Jika lupa, silakan tanya kepada Admin yang lainnya.</p>
+                </div>
 
                 <?php if ($message): ?>
                     <div class="text-center mt-3 message"><?= $message ?></div>
                 <?php endif; ?>
             </form>
-
-            <div class="signup-link text-center mt-3">
-                Belum punya akun? <a href="registration.php">Daftar</a>
-            </div>
         </div>
     </div>
 
