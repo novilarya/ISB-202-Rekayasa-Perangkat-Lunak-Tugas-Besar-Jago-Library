@@ -22,7 +22,7 @@
 <body>
     
     <!-- Footer Start -->
-<footer id="footer" class="bg-dark text-light pt-5 pb-4">
+<footer id="footer" class="bg-dark text-light pt-5">
     <div class="container">
         <div class="row">
 

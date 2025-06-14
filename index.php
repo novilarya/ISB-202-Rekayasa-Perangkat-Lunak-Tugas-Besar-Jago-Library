@@ -1,34 +1,36 @@
 <?php
-	session_start();
-	include('./database/connection.php');
+session_start();
+include('./database/connection.php');
 
-	if (!isset($_SESSION['email'])) {
-		header('Location: login.php');
-		exit();
-	}
-	$query = "SELECT * FROM buku";
-	$stmt = $conn->prepare($query);
-	$stmt->execute();
-	$buku = $stmt->get_result();
+if (!isset($_SESSION['email'])) {
+	header('Location: login.php');
+	exit();
+}
+$query = "SELECT * FROM buku";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$buku = $stmt->get_result();
 
-	if (isset($_POST['kritsar'])) {
-		$kritsar = $_POST['kritik_saran'] ?? '';
-		$query2 = "INSERT INTO kritik_saran (kritik_saran) VALUES (?)";
-		$stmt = $conn->prepare($query2);
-		$stmt->bind_param("s", $kritsar);
-		if ($stmt->execute()) {
-			echo "<script>alert('Kritik dan saran berhasil dikirim!');</script>";
-		} else {
-			echo "<script>alert('Gagal mengirim kritik: " . $stmt->error . "');</script>";
-		}
+$success = false;
+
+if (isset($_POST['kritsar'])) {
+	$kritsar = $_POST['kritik_saran'] ?? '';
+	$query2 = "INSERT INTO kritik_saran (kritik_saran) VALUES (?)";
+	$stmt = $conn->prepare($query2);
+	$stmt->bind_param("s", $kritsar);
+	if ($stmt->execute()) {
+		$success = true;
+	} else {
+		echo "<script>alert('Gagal mengirim kritik: " . $stmt->error . "');</script>";
 	}
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>BookSaw - Free Book Store HTML CSS Template</title>
+	<title>E-Silib</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +53,7 @@
 <header>
 	<?php include "header.php" ?>
 </header>
+
 <body>
 
 	<section id="billboard">
@@ -131,9 +134,6 @@
 				<div class="col-md-12">
 
 					<div class="section-header align-center">
-						<div class="title">
-							<span>Some quality items</span>
-						</div>
 						<h2 class="section-title">Featured Books</h2>
 					</div>
 					<div class="position-relative">
@@ -225,6 +225,19 @@
 		</div>
 	</section>
 
+	<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-light">
+					<h5 class="modal-title" id="successModalLabel">Sukses</h5>
+				</div>
+				<div class="modal-body">
+					Kritik dan saran berhasil dikirim!
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<?php
 	include 'footer.php';
 	?>
@@ -248,6 +261,17 @@
 		crossorigin="anonymous"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/script.js"></script>
+
+	<?php if ($success): ?>
+		<script>
+			const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+			successModal.show();
+
+			setTimeout(() => {
+				window.location.href = 'index.php';
+			}, 2000);
+		</script>
+	<?php endif; ?>
 
 </body>
 
