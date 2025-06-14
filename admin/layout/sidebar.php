@@ -55,6 +55,12 @@
           <p>Manajemen Admin</p>
         </a>
       </li>
+      <li class="<?= ($currentPage == 'kritik-saran.php') ? 'active' : '' ?>">
+        <a href="/admin/kritik-saran.php">
+          <i class="nc-icon nc-tile-56"></i>
+          <p>Kritik dan Saran</p>
+        </a>
+      </li>
       <li class="active-pro">
         <a href="../logout.php">
           <i class="nc-icon nc-spaceship"></i>
