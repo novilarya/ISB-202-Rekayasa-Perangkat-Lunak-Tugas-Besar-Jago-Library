@@ -6,6 +6,7 @@
   $buku_terlambat = null;
   $buku_konfirmasi = null;
   $jenis_buku = '';
+  $penerbit = '';
 
   $query = "SELECT users.nama, buku.nama_buku, peminjaman.tanggal_peminjaman, peminjaman.tanggal_pengembalian, peminjaman.kode_buku, peminjaman.nrp_nidn
             FROM users
@@ -831,7 +832,7 @@
                     <div class="col-md-6 pl-1">
                       <div class="form-group">
                         <label>Penerbit</label>
-                        <input type="text" name="penerbit" class="form-control" placeholder="Masukkan penerbit buku" required>
+                        <input type="text" name="penerbit" class="form-control" placeholder="Masukkan penerbit buku">
                       </div>
                     </div>
                   </div>

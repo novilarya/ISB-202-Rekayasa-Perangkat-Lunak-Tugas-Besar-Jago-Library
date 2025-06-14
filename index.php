@@ -1,15 +1,27 @@
 <?php
-session_start();
-include('./database/connection.php');
+	session_start();
+	include('./database/connection.php');
 
-if (!isset($_SESSION['email'])) {
-    header('Location: login.php');
-    exit();
-}
-$query = "SELECT * FROM buku";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$buku = $stmt->get_result();
+	if (!isset($_SESSION['email'])) {
+		header('Location: login.php');
+		exit();
+	}
+	$query = "SELECT * FROM buku";
+	$stmt = $conn->prepare($query);
+	$stmt->execute();
+	$buku = $stmt->get_result();
+
+	if (isset($_POST['kritsar'])) {
+		$kritsar = $_POST['kritik_saran'] ?? '';
+		$query2 = "INSERT INTO kritik_saran (kritik_saran) VALUES (?)";
+		$stmt = $conn->prepare($query2);
+		$stmt->bind_param("s", $kritsar);
+		if ($stmt->execute()) {
+			echo "<script>alert('Kritik dan saran berhasil dikirim!');</script>";
+		} else {
+			echo "<script>alert('Gagal mengirim kritik: " . $stmt->error . "');</script>";
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -195,9 +207,9 @@ $buku = $stmt->get_result();
 
 							<div class="subscribe-content" data-aos="fade-up">
 								<p>Berikan kritik dan saran dari pengalaman anda menggunakan website kami</p>
-								<form id="form">
-									<input type="text" name="text" placeholder="Masukan kritik anda">
-									<button class="btn-subscribe">
+								<form method="POST" id="form">
+									<input type="text" name="kritik_saran" placeholder="Masukan kritik anda" required>
+									<button type="submit" name="kritsar" class="btn-subscribe">
 										<span>kirim</span>
 										<i class="icon icon-send"></i>
 									</button>
