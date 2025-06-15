@@ -2,8 +2,8 @@
 include('database/connection.php');
 session_start();
 if (!isset($_SESSION['email'])) {
-    header('Location: login.php');
-    exit();
+	header('Location: login.php');
+	exit();
 }
 
 $jenis_buku = '';
@@ -35,11 +35,40 @@ $status_buku = $_GET['status'] ?? '';
 $jenis_buku = $_GET['jenis_buku'] ?? '';
 
 // Pencarian judul atau pengarang
-if (!empty($search)) {
-	$query .= " AND (nama_buku LIKE ? OR pengarang LIKE ?)";
-	$params[] = "%$search%";
-	$params[] = "%$search%";
-	$types .= "ss";
+if (isset($_POST['search'])) {
+	include('database/connection.php');
+	$search = $_POST['search'];
+	$query = "SELECT * FROM buku WHERE nama_buku LIKE ? OR pengarang LIKE ?";
+	$stmt = $conn->prepare($query);
+	$likeSearch = "%$search%";
+	$stmt->bind_param("ss", $likeSearch, $likeSearch);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	while ($row = $result->fetch_assoc()) {
+		echo '<div class="col-md-3 mb-4">
+			<div class="product-item-buku">
+				<figure class="product-style-buku">
+					<img src="/images/buku/' . htmlspecialchars($row['cover_buku']) . '" alt="' . htmlspecialchars($row['nama_buku']) . '" class="product-item">';
+		if ($row['status'] === 'Tersedia') {
+			echo '<a href="pinjam.php?kode_buku=' . $row['kode_buku'] . '">
+					<button type="button" class="add-to-cart">Pinjam</button>
+				  </a>';
+		} else {
+			echo '<button class="add-to-cart" onclick="showModal()">Pinjam</button>';
+		}
+		echo '</figure>
+			<figcaption>
+				<h3>' . htmlspecialchars($row['nama_buku']) . '</h3>
+				<span>' . htmlspecialchars($row['pengarang']) . '</span>
+				<div class="item-price">
+					<span class="' . ($row['status'] === 'Tersedia' ? 'badge-green' : 'badge-red') . '">' . $row['status'] . '</span>
+				</div>
+			</figcaption>
+		</div>
+	</div>';
+	}
+	exit();
 }
 
 // Filter status
@@ -96,7 +125,7 @@ $buku = $stmt2->get_result();
 </header>
 
 <body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
-
+	<div>
 	<div class="container">
 		<h2 class="section-title text-center mb-4" style="font-family: Arial, Helvetica, sans-serif;">Daftar Buku</h2>
 
@@ -109,7 +138,7 @@ $buku = $stmt2->get_result();
 			<li data-tab-target="#mbkm" class="tab">MBKM</li>
 			<li data-tab-target="#umum" class="tab">UMUM</li>
 		</ul>
-		
+
 		<form method="GET" class="d-flex justify-content-center align-items-center mb-5">
 			<div class="search-filter-wrapper d-flex align-items-center gap-3" style="width: 60%; margin-left: 80px;">
 				<!-- Input Search -->
@@ -177,6 +206,7 @@ $buku = $stmt2->get_result();
 					</div>
 				</div>
 			<?php endforeach; ?>
+		</div>
 		</div>
 
 		<!-- Modal Tidak Tersedia -->
@@ -247,6 +277,31 @@ $buku = $stmt2->get_result();
 				});
 			});
 		</script>
+
+		<script>
+			document.getElementById('searchInput').addEventListener('keyup', function() {
+				const search = this.value;
+				const xhr = new XMLHttpRequest();
+				xhr.open('POST', window.location.href, true);
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						// Tampilkan hasil hanya di tab "Semua"
+						const allTab = document.querySelector('#all .row');
+						if (allTab) {
+							allTab.innerHTML = xhr.responseText;
+							// Aktifkan tab "Semua"
+							document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+							document.querySelector('[data-tab-target="#all"]').classList.add('active');
+							document.querySelectorAll('[data-tab-content]').forEach(content => content.classList.remove('active'));
+							document.querySelector('#all').classList.add('active');
+						}
+					}
+				};
+				xhr.send('search=' + encodeURIComponent(search));
+			});
+		</script>
+
 
 </body>
 
