@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($row['role'] === 'mahasiswa') {
         $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, nama = ?, username = ?, email = ?, password = ?, foto = ?, semester = ? WHERE email = ?");
-        $stmt->bind_param("sssssis", $nrp_nidn_new, $nama_new, $username_new, $email_new, $password_new, $fotoBaru, $semester_new, $email_lama);
+        $stmt->bind_param("ssssssis", $nrp_nidn_new, $nama_new, $username_new, $email_new, $password_new, $fotoBaru, $semester_new, $email_lama);
     } else {
         $stmt = $conn->prepare("UPDATE users SET nrp_nidn = ?, nama = ?, username = ?, email = ?, password = ?, foto = ? WHERE email = ?");
         $stmt->bind_param("ssssss", $nrp_nidn_new, $nama_new, $username_new, $email_new, $password_new, $fotoBaru, $email_lama);
