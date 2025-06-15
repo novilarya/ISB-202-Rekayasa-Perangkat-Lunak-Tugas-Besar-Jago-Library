@@ -1,52 +1,54 @@
 <?php
-    session_start();
-    include '../database/connection.php';
-    include 'layout/sidebar.php';
+session_start();
+include '../database/connection.php';
+include 'layout/sidebar.php';
 
-    if (isset($_SESSION['email'])) {
-        $email = $_SESSION['email'];
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $user = $stmt->get_result();
-        $row = $user->fetch_assoc();
-    } else {
-        header('location: ../scripts/login.php');
-    }
+if (isset($_SESSION['email'])) {
+  $email = $_SESSION['email'];
+  $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $user = $stmt->get_result();
+  $row = $user->fetch_assoc();
+} else {
+  header('location: ../scripts/login.php');
+}
 
 
- if (isset($_POST['update'])) {
-    $email_baru = $_POST['email_baru'] ?? '';
-    $username_baru = $_POST['username_baru'] ?? '';
-    $password_baru = $_POST['password_baru'] ?? '';
-    $nama_baru = $_POST['nama_baru'] ?? '';
+if (isset($_POST['update'])) {
+  $email_baru = $_POST['email_baru'] ?? '';
+  $password_baru = $_POST['password_baru'] ?? '';
+  $nama_baru = $_POST['nama_baru'] ?? '';
 
-    $email_session = $_SESSION['email'];
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email_session);
-    $stmt->execute();
-    $user = $stmt->get_result();
+  $email_session = $_SESSION['email'];
+  $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+  $stmt->bind_param("s", $email_session);
+  $stmt->execute();
+  $user = $stmt->get_result();
+  if ($user && $user->num_rows > 0) {
     $row = $user->fetch_assoc();
-    $id = $row['nrp_nidn'];
-
-    if ($_FILES['foto_baru']['error'] == UPLOAD_ERR_OK) {
-        $nama_file = basename($_FILES['foto_baru']['name']);
-        $filePath = "../images/user/" . $nama_file;
-        move_uploaded_file($_FILES['foto_baru']['tmp_name'], $filePath);
-        $foto_final = $nama_file;
-    } else {
-        $foto_final = $row['foto'];
-    }
-
-    $stmt = $conn->prepare("UPDATE users SET email = ?, username = ?, password = ?, nama = ?, foto = ? WHERE nrp_nidn = ?");
-    $stmt->bind_param("ssssss", $email_baru, $username_baru, $password_baru, $nama_baru, $foto_final, $id);
-    
-    $success = false;
-    if($stmt->execute()){
-      $success = true;
-    }
-
+  } else {
+    $row = null;
   }
+  $id = $row['nrp_nidn'];
+
+  if ($_FILES['foto_baru']['error'] == UPLOAD_ERR_OK) {
+    $nama_file = basename($_FILES['foto_baru']['name']);
+    $filePath = "../images/user/" . $nama_file;
+    move_uploaded_file($_FILES['foto_baru']['tmp_name'], $filePath);
+    $foto_final = $nama_file;
+  } else {
+    $foto_final = $row['foto'];
+  }
+
+  $stmt = $conn->prepare("UPDATE users SET email = ?, password = ?, nama = ?, foto = ? WHERE nrp_nidn = ?");
+  $stmt->bind_param("sssss", $email_baru, $password_baru, $nama_baru, $foto_final, $id);
+
+  $success = false;
+  if ($stmt->execute()) {
+    $success = true;
+  }
+}
 
 ?>
 
@@ -74,7 +76,7 @@
 
 <body class="">
   <div class="wrapper">
-    <div class="main-panel">
+    <div class="main-panel bg-light">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
@@ -111,19 +113,19 @@
                     <div class="col-md-5 pr-1">
                       <div class="form-group">
                         <label>Username</label>
-                        <input type="text" name="username_baru" class="form-control" disabled="" value="<?php echo $row['username']; ?>">
+                        <input type="text" name="username_baru" class="form-control" value="<?php echo $row['username'] ?? ''; ?>">
                       </div>
                     </div>
                     <div class="col-md-4 pl-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" name="email_baru" class="form-control" value="<?php echo $row['email']; ?>">
+                        <input type="email" name="email_baru" class="form-control" value="<?php echo $row['email'] ?? ''; ?>">
                       </div>
                     </div>
                     <div class="col-md-3 px-1">
                       <div class="form-group">
                         <label>Password</label>
-                        <input type="text" name="password_baru" class="form-control" value="<?php echo $row['password']; ?>">
+                        <input type="text" name="password_baru" class="form-control" value="<?php echo $row['password'] ?? ''; ?>">
                       </div>
                     </div>
                   </div>
@@ -131,7 +133,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Nama</label>
-                        <input type="text" name="nama_baru" class="form-control" value="<?php echo $row['nama']; ?>">
+                        <input type="text" name="nama_baru" class="form-control" value="<?php echo $row['nama'] ?? ''; ?>">
                       </div>
                     </div>
                   </div>
@@ -139,8 +141,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Kode Autentikasi</label>
-                        <input type="text" name="kode_autentikasi" class="form-control" value="<?php echo $row['kode_autentikasi']; ?>">
-
+                        <input type="text" name="kode_autentikasi" class="form-control" value="<?php echo $row['kode_autentikasi'] ?? ''; ?>">
                       </div>
                     </div>
                   </div>
@@ -148,7 +149,7 @@
                     <div class="col-md-12 pr-1">
                       <label>Foto</label>
                       <input type="file" name="foto_baru" class="form-control">
-                    </div>                     
+                    </div>
                   </div>
                   <div class="row">
                     <div class="update ml-auto mr-auto">
@@ -203,7 +204,7 @@
         }, 2000);
       });
     </script>
-    <?php endif; ?>
+  <?php endif; ?>
 
 </body>
 

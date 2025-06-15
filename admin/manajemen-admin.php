@@ -114,7 +114,7 @@ $next_admin = (string)($last_admin + 1);
 
 <body class="">
   <div class="wrapper ">
-    <div class="main-panel">
+    <div class="main-panel bg-light">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
