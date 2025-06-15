@@ -26,7 +26,7 @@
       </div>
     </a>
     <a href="https://www.creative-tim.com" class="simple-text logo-normal">
-      Admin Jago
+      Admin
     </a>
   </div>
   <div class="sidebar-wrapper">

@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="register-container">
             <h1 class="text-center">Sign Up</h1>
-            <p class="text-center">Join our Jago Library!</p>
+            <p class="text-center">Join our Library!</p>
 
             <form method="POST" action="">
                 <div class="mb-3">
