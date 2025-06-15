@@ -409,11 +409,20 @@
 
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <!-- jQuery dulu -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body class="">
   <div class="wrapper ">
-    <div class="main-panel">
+    <div class="main-panel bg-light">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
@@ -455,14 +464,6 @@
               <div class="card-header">
                 <h4 class="card-title">Daftar Peminjaman Buku</h4>
               </div>
-              <form method="POST">
-                <div class="form-group mb-0 w-100">
-                  <input type="text" id="search-buku" name="search_buku"
-                    class="form-control w-100"
-                    placeholder="Search..."
-                    value="<?= htmlspecialchars($_POST['search_buku'] ?? '') ?>">
-                </div>
-              </form>
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table" id="daftar-buku">
@@ -563,7 +564,7 @@
                             <div class="col-md-6 pl-1">
                               <div class="form-group">
                                 <label>Jenis Buku</label>
-                                <select class="form-control" name="jenis_buku_baru" id="inut-jenis">
+                                <select class="form-control" name="jenis_buku_baru" id="input-jenis">
                                     <option value="TA" <?= $jenis_buku == 'TA' ? 'selected' : '' ?>>Tugas Akhir</option>
                                     <option value="KP" <?= $jenis_buku == 'KP' ? 'selected' : '' ?>>Kuliah Praktik</option>
                                     <option value="SIP" <?= $jenis_buku == 'SIP' ? 'selected' : '' ?>>SIP</option>
@@ -951,7 +952,7 @@
                     </div>  
                     <div class="col-md-6 pr-1">
                       <div class="update ml-auto mr-auto">
-                      <button type="submit" name="tambah" class="btn btn-primary">Tambah Buku</button>
+                      <button type="submit" name="tambah" class="btn btn-primary" style="height: 50px; width: 150px;" >Tambah Buku</button>
                       </div>
                     </div>                       
                   </div>
@@ -1082,25 +1083,26 @@
   </div>
 
     <script>
-  $(document).ready(function() {
-    $('#daftar-buku').DataTable({
-      "order": [[1, "asc"]], 
-      "columnDefs": [
-        { "orderable": false, "targets": 7 }
-      ],
-      "language": {
-        "search": "Cari:",
-        "lengthMenu": "Tampilkan _MENU_ entri",
-        "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-        "paginate": {
-          "first": "Pertama",
-          "last": "Terakhir",
-          "next": "→",
-          "previous": "←"
-        }
+ $(document).ready(function () {
+  $('#daftar-buku').DataTable({
+    responsive: true,
+    autoWidth: false,
+    language: {
+      search: "Cari:",
+      lengthMenu: "Tampilkan _MENU_",
+      info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+      paginate: {
+        first: "Pertama",
+        last: "Terakhir",
+        next: "→",
+        previous: "←"
       }
-    });
+    },
+    columnDefs: [
+      { orderable: false, targets: [7] }
+    ]
   });
+});
 </script>
 
       <!-- Core JS Files -->
